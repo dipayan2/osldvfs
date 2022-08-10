@@ -10,7 +10,7 @@ import subprocess
 
 # starting with a single object for each resource
 class OSLScheduler:
-    def __init__(self, cpu_dev=0, gpu_dev=0, polling_s=1):
+    def __init__(self, cpu_dev=0, gpu_dev=0, polling_s=10):
         self.cpu_id = cpu_dev
         self.gpu_id = gpu_dev
         self.polling = polling_s
