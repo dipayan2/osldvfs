@@ -14,7 +14,8 @@ class GPUClock:
 		gpu_freq = subprocess.check_output(cmd,shell=True)
 		gpu_freq = gpu_freq.decode('ascii')
 		gpu_freq = int(gpu_freq)
-		print(f"The GPU frequency is {gpu_freq}")
+		print("GPUFreq is : "+str(gpu_freq))
+		# print(f"The GPU frequency is {gpu_freq}")
 		if len(gpu_freq) < 2:
 			return -1
 		self.gpu_freq = int(gpu_freq[:-1])
