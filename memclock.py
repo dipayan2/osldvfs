@@ -13,7 +13,7 @@ class MemClock:
 		cmd = path 
 		mem_freq = subprocess.check_output(cmd,shell=True)
 		mem_freq = mem_freq.decode('ascii')
-		print(f"The memory frequency is {mem_freq}")
+		print("The memory frequency is:"+ str (mem_freq))
 		if len(mem_freq) < 2:
 			return -1
 		self.mem_freq = int(mem_freq[:-1])
@@ -24,24 +24,24 @@ class MemClock:
 		path = os.path.join(os.getcwd() + "/scripts/mem_set_clock.sh")
 		cmd = path+" "+str(freq)
 		subprocess.check_call(cmd, shell=True)
-		print(f"The clock is in Mem to {freq}")
+		print("The clock is in Mem to "+str(freq))
 		self.mem_freq = freq
 		return
 	
 	def get_all_clock(self):
-		print(f"... Getting the mem all frequency")
+		print("... Getting the mem all frequency")
 		path = os.path.join(os.getcwd() + "/scripts/mem_get_all_clock.sh")
 		cmd = path
 		freq_list = subprocess.check_output(cmd,shell=True)
 		freq_list = freq_list.split(" ")
-		print(f"The frequency list of {freq_list}")
+		print("The mem frequency list of "+str(repr(freq_list)))
 		# self.cpu_freq = curr_freq
 		if len(freq_list) <= 0:
 			return []
 		return freq_list
 
 	def get_utilization(self):
-		print(f"... Getting the utilization of the memory")
+		print("... Getting the utilization of the memory")
 		cmd = "top -n1 -1|grep "
 		cmd = cmd+ " "+str("\'MiB Mem \'")
 		mem_util  = subprocess.check_output(cmd,shell=True)

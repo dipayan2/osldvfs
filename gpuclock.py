@@ -22,16 +22,16 @@ class GPUClock:
 		return self.gpu_freq
 	
 	def set_clock(self, freq):
-		print(f"... Setting the GPU to {freq} ")
+		print("... Setting the GPU to"+str(freq))
 		path = os.path.join(os.getcwd() + "/scripts/gpu_set_clock.sh")
 		cmd = path+" "+str(freq)
 		subprocess.check_call(cmd, shell=True)
-		print(f"The clock is in GPU to {freq}")
+		print("The clock is in GPU to"+str(freq))
 		self.gpu_freq = freq
 		return
 	
 	def get_all_clock(self):
-		print(f"... Getting the GPU all frequency")
+		print("... Getting the GPU all frequency")
 		# path = os.path.join(os.getcwd() + "/scripts/gpu_get_all_clock.sh")
 		# cmd = path
 		# freq_list = subprocess.check_output(cmd,shell=True)
@@ -44,7 +44,7 @@ class GPUClock:
 		return []
 
 	def get_utilization(self):
-		print(f"... Getting the utilization of the gpu")
+		print("... Getting the utilization of the gpu")
 		# path = os.path.join(os.getcwd() + "/scripts/gpu_get_util.sh")
 		# cmd = path
 		# gpu_util  = subprocess.check_output(cmd,shell=True)
