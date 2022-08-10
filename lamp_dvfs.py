@@ -19,6 +19,7 @@ class OSLScheduler:
         self.gpu_man = gpuclock.GPUClock()
         self.mem_man = memclock.MemClock()
         self.cluster = {} # We will hardcode this
+        self.my_thread = None
 
     
     def policy(self):
@@ -40,8 +41,10 @@ class OSLScheduler:
 
     def schedule(self):
         print("Starting the scheduler")
+        self.my_thread = threading.Timer(10, self.schedule)
+        self.my_thread.daemon = True
+        self.my_thread.start()
         self.policy()
-        threading.Timer(10000, self.schedule()).start()
         
     def run(self):
         self.schedule()
