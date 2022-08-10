@@ -20,7 +20,7 @@ class MemClock:
 		return self.mem_freq
 	
 	def set_clock(self, freq):
-		print(f"... Setting the mem to {freq} ")
+		print("... Setting the mem to{}".format{freq})
 		path = os.path.join(os.getcwd() + "/scripts/mem_set_clock.sh")
 		cmd = path+" "+str(freq)
 		subprocess.check_call(cmd, shell=True)
