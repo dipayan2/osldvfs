@@ -1,3 +1,3 @@
 #!/bin/sh
-# sudo taskset -c 7 python profile_dvfs.py
-python profile_dvfs.py
+sudo taskset -c 7 python3 profile_dvfs.py
+# python3 profile_dvfs.py

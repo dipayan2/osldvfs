@@ -1,6 +1,6 @@
 import subprocess
 import os
-from common import parser
+import common.parser
 
 class CPUClock:
 	def __init__(self,cpu_id=0):
