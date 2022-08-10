@@ -32,7 +32,7 @@ class OSLScheduler:
         mem_freq = self.cluster[cpu_freq]['mem']
         self.gpu_man.set_clock(gpu_freq)
         self.mem_man.set_clock(mem_freq)
-        print(f"The freq are , cpu : {}, gpu: {} and mem: {}".format(cpu_freq,gpu_freq,mem_freq))  
+        print("The freq are , cpu : {}, gpu: {} and mem: {}".format(cpu_freq,gpu_freq,mem_freq))  
         return
 
     def set_cluster(self, clk_cluster):
