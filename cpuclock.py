@@ -20,7 +20,8 @@ class CPUClock:
 		if len(curr_freq) <2:
 			return -1
 		self.cpu_freq = int(curr_freq[:-1])
-		return self.curr_freq
+		self.cpu_freq = curr_freq
+		return curr_freq
 	
 	def set_clock(self, freq):
 		print("The frequency of id and cpu"+str(self.cpu_id)+" is"+str(freq))
