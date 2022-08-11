@@ -11,23 +11,23 @@ class CPUClock:
 		self.cpu_util = 0
 	
 	def get_clock(self):
-		print("... Getting the cpu "+str(self.cpu_id)+"frequency")
+		# print("... Getting the cpu "+str(self.cpu_id)+"frequency")
 		path = os.path.join(os.getcwd() + "/scripts/cpu_get_clock.sh")
 		cmd = path+ " " + str(self.cpu_id)
 		curr_freq = subprocess.check_output(cmd,shell=True)
 		curr_freq = curr_freq.decode('ascii')
-		print("The frequency of id and cpu"+str(self.cpu_id)+" is"+str(curr_freq))
+		# print("The frequency of id and cpu"+str(self.cpu_id)+" is"+str(curr_freq))
 		if len(curr_freq) <2:
 			return -1
 		self.cpu_freq = int(curr_freq[:-1])
 		return self.cpu_freq
 	
 	def set_clock(self, freq):
-		print("The frequency of id and cpu"+str(self.cpu_id)+" is"+str(freq))
+		# print("The frequency of id and cpu"+str(self.cpu_id)+" is"+str(freq))
 		path = os.path.join(os.getcwd() + "/scripts/cpu_set_clock.sh")
 		cmd = path+ " "+str(self.cpu_id)+" "+str(freq)
 		subprocess.check_call(cmd, shell=True)
-		print("The set freq of id and cpu"+str(self.cpu_id)+" is"+str(freq))
+		# print("The set freq of id and cpu"+str(self.cpu_id)+" is"+str(freq))
 		self.cpu_freq = freq
 		return
 	

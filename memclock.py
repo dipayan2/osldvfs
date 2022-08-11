@@ -8,23 +8,23 @@ class MemClock:
 		self.mem_util = 0
 	
 	def get_clock(self):
-		print("... Getting the memory frequency")
+		# print("... Getting the memory frequency")
 		path = os.path.join(os.getcwd() + "/scripts/mem_get_clock.sh")
 		cmd = path 
 		mem_freq = subprocess.check_output(cmd,shell=True)
 		mem_freq = mem_freq.decode('ascii')
-		print("The memory frequency is:"+ str (mem_freq))
+		# print("The memory frequency is:"+ str (mem_freq))
 		if len(mem_freq) < 2:
 			return -1
 		self.mem_freq = int(mem_freq[:-1])
 		return self.mem_freq
 	
 	def set_clock(self, freq):
-		print("... Setting the mem to{}".format(freq))
+		# print("... Setting the mem to{}".format(freq))
 		path = os.path.join(os.getcwd() + "/scripts/mem_set_clock.sh")
 		cmd = path+" "+str(freq)
 		subprocess.check_call(cmd, shell=True)
-		print("The clock is in Mem to "+str(freq))
+		# print("The clock is in Mem to "+str(freq))
 		self.mem_freq = freq
 		return
 	
