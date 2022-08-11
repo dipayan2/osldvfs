@@ -44,7 +44,9 @@ class OSLScheduler:
         self.my_thread = threading.Timer(10, self.schedule)
         # self.my_thread.daemon = True
         self.my_thread.start()
+        start_time = time.time()
         self.policy()
+        print(" Overhead is {} second".format(time.time()-start_time))
         
     def run(self):
         self.schedule()
