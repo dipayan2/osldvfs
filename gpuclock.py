@@ -23,11 +23,13 @@ class GPUClock:
 	
 	def set_clock(self, freq):
 		# print("... Setting the GPU to"+str(freq))
-		path = os.path.join(os.getcwd() + "/scripts/gpu_set_clock.sh")
-		cmd = path+" "+str(freq)
-		subprocess.check_call(cmd, shell=True)
+		if freq != self.gpu_freq:
+			path = os.path.join(os.getcwd() + "/scripts/gpu_set_clock.sh")
+			cmd = path+" "+str(freq)
+			subprocess.check_call(cmd, shell=True)
+			self.gpu_freq = freq
 		# print("The clock is in GPU to"+str(freq))
-		self.gpu_freq = freq
+		
 		return
 	
 	def get_all_clock(self):
