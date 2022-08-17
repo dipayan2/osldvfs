@@ -29,8 +29,8 @@ class OSLScheduler:
 
         cpu_freq = self.cpu_man.get_clock() # we have the CPU freq 
         # Set the rest of the two frequency
-        gpu_freq = self.cluster[cpu_freq]['gpu']
-        mem_freq = self.cluster[cpu_freq]['mem']
+        gpu_freq = int(self.cluster[cpu_freq]['gpu'])
+        mem_freq = int(self.cluster[cpu_freq]['mem'])
         self.gpu_man.set_clock(gpu_freq)
         self.mem_man.set_clock(mem_freq)
         # print("The freq are , cpu : {}, gpu: {} and mem: {}".format(cpu_freq,self.gpu_man.get_clock(),self.mem_man.get_clock()))

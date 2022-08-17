@@ -28,7 +28,7 @@ class GPUClock:
 			cmd = path+" "+str(freq)
 			subprocess.check_call(cmd, shell=True)
 			self.gpu_freq = freq
-			print("The clock is in GPU to"+str(freq))
+			# print("The clock is in GPU to"+str(freq))
 		
 		return
 	
