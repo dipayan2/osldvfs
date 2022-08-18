@@ -8,6 +8,18 @@ import lamp_dvfs
 cpu_freq_list = [200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000]
 gpu_freq_list = [600000000,543000000,480000000,420000000,350000000,266000000,177000000]
 mem_freq_list = [165000000,206000000,275000000,413000000,543000000,633000000,728000000,825000000]
+
+# gpu driven governor setting
+ gpu_cluster = {
+     600000000: {'cpu':1400000 , 'mem':825000000},
+     543000000: {'cpu':1200000 , 'mem':728000000},
+     480000000: {'cpu':1000000 , 'mem':633000000},
+     420000000: {'cpu':800000 , 'mem':543000000},
+     350000000: {'cpu':600000 , 'mem':413000000},
+     266000000: {'cpu':400000 , 'mem':275000000},
+     177000000: {'cpu':200000 , 'mem':165000000}
+ }
+
 # memory driven governor setting
 mem_cluster = {
     165000000: {'gpu':177000000, 'cpu':200000},
@@ -37,12 +49,13 @@ cpu_cluster = {
 }
 
 
-
 power_policy = lamp_dvfs.OSLScheduler()
 ## CPU driven governor
 # power_policy.set_cluster(cpu_cluster)
 ## Memory driven governor
-power_policy.set_cluster(mem_cluster)
+# power_policy.set_cluster(mem_cluster)
+# GPU driven governor
+power_policy.set_cluster(gpu_cluster)
 ## run
 power_policy.run()
  

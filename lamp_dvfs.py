@@ -50,6 +50,20 @@ class OSLScheduler:
         # print("The freq are , mem: {}, cpu : {}, gpu: {} ".format(mem_freq,self.cpu_man.get_clock(),self.gpu_man.get_clock()))
         return
 
+    def policy_gpu(self):
+        '''
+        In this code: we are selecting the best configuration for all the resources based on the state of memory operating point
+        '''
+
+        gpu_freq = self.gpu_man.get_clock() # we have the CPU freq 
+        # Set the rest of the two frequency
+        mem_freq = int(self.cluster[gpu_freq]['mem'])
+        cpu_freq = int(self.cluster[gpu_freq]['cpu'])
+        self.mem_man.set_clock(mem_freq)
+        self.cpu_man.set_clock(cpu_freq)
+        print("The freq are  gpu: {}, cpu: {}, mem : {} ".format(gpu_freq,self.cpu_man.get_clock(),self.mem_man.get_clock()))
+        return
+
     def set_cluster(self, clk_cluster):
         self.cluster = clk_cluster
 
@@ -60,7 +74,8 @@ class OSLScheduler:
         self.my_thread.start()
         start_time = time.time()
         # self.policy_cpu()
-        self.policy_mem()
+        #self.policy_mem()
+        self.policy_gpu()
         print(" Overhead is {} second".format(time.time()-start_time))
         
     def run(self):
