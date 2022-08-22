@@ -51,11 +51,11 @@ cpu_cluster = {
 
 power_policy = lamp_dvfs.OSLScheduler()
 ## CPU driven governor
-# power_policy.set_cluster(cpu_cluster)
+power_policy.set_cluster(cpu_cluster)
 ## Memory driven governor
 # power_policy.set_cluster(mem_cluster)
 # GPU driven governor
-power_policy.set_cluster(gpu_cluster)
+# power_policy.set_cluster(gpu_cluster)
 ## run
 power_policy.run()
  
