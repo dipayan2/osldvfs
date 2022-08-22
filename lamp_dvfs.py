@@ -43,6 +43,7 @@ class OSLScheduler:
         '''
 
         mem_freq = self.mem_man.get_clock() # we have the CPU freq 
+        print("Util : "+str(self.mem_man.get_utilization()))
         # Set the rest of the two frequency
         gpu_freq = int(self.cluster[mem_freq]['gpu'])
         cpu_freq = int(self.cluster[mem_freq]['cpu'])
@@ -74,8 +75,8 @@ class OSLScheduler:
         # self.my_thread.daemon = True
         self.my_thread.start()
         start_time = time.time()
-        self.policy_cpu()
-        #self.policy_mem()
+        # self.policy_cpu()
+        self.policy_mem()
         #self.policy_gpu()
         print(" Overhead is {} second".format(time.time()-start_time))
         
