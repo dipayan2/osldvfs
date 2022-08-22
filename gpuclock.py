@@ -25,7 +25,10 @@ class GPUClock:
 		# print("... Setting the GPU to"+str(freq))
 		if freq != self.gpu_freq:
 			path = os.path.join(os.getcwd() + "/scripts/gpu_set_clock.sh")
-			cmd = path+" "+str(freq)
+			inc_flag = 0
+			if freq > self.gpu_freq:
+				inc_flag = 1
+			cmd = path+" "+str(freq)+" "+str(inc_flag)
 			subprocess.check_call(cmd, shell=True)
 			self.gpu_freq = freq
 			# print("The clock is in GPU to"+str(freq))

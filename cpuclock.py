@@ -25,7 +25,10 @@ class CPUClock:
 	def set_clock(self, freq):
 		# print("The frequency of id and cpu"+str(self.cpu_id)+" is"+str(freq))
 		path = os.path.join(os.getcwd() + "/scripts/cpu_set_clock.sh")
-		cmd = path+ " "+str(self.cpu_id)+" "+str(freq)
+		inc_flag = 0
+		if freq > self.cpu_freq:
+			inc_flag = 1
+		cmd = path+ " "+str(self.cpu_id)+" "+str(freq)+" "+str(inc_flag)
 		subprocess.check_call(cmd, shell=True)
 		# print("The set freq of id and cpu"+str(self.cpu_id)+" is"+str(freq))
 		self.cpu_freq = freq

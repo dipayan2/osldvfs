@@ -23,7 +23,10 @@ class MemClock:
 		# print("... Setting the mem to{}".format(freq))
 		if self.mem_freq != freq:
 			path = os.path.join(os.getcwd() + "/scripts/mem_set_clock.sh")
-			cmd = path+" "+str(freq)
+			inc_flag = 0
+			if freq > self.mem_freq:
+				inc_flag = 1
+			cmd = path+" "+str(freq)+" "+str(inc_flag)
 			subprocess.check_call(cmd, shell=True)
 			# print("The clock is in Mem to "+str(freq))
 			self.mem_freq = freq
