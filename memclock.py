@@ -57,8 +57,6 @@ class MemClock:
 		util_list = mem_util.split(",")
 		tot_mem = float(util_list[0][:-5])
 		used_mem = float(util_list[2][:-4])
-		if mem_util < 0:
-			return -1
 		self.mem_util = used_mem/tot_mem
 		return self.mem_util
 
