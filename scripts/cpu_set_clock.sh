@@ -2,7 +2,7 @@
 # cpu_id = "$1"
 # cpu_clock = "$2"
 
-if [ $3 == 1 ]
+if [ "$3" -eq "1" ]
 then 
     echo "Increase"
     sudo echo $2 > /sys/devices/system/cpu/cpu$1/cpufreq/scaling_max_freq
