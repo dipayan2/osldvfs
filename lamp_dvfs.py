@@ -54,7 +54,7 @@ class OSLScheduler:
 
     def policy_gpu(self):
         '''
-        In this code: we are selecting the best configuration for all the resources based on the state of memory operating point
+        In this code: we are selecting the best configuration for all the resources based on the state of gpu operating point
         '''
 
         gpu_freq = self.gpu_man.get_clock() # we have the CPU freq 

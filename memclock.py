@@ -46,7 +46,7 @@ class MemClock:
 		return freq_list
 
 	def get_utilization(self):
-		print("... Getting the utilization of the memory")
+		# print("... Getting the utilization of the memory")
 		cmd = "top -n1 -1|grep "
 		cmd = cmd+ " "+str("\'MiB Mem \'")
 		mem_util  = subprocess.check_output(cmd,shell=True)
