@@ -49,7 +49,7 @@ class CPUClock:
 		return freq_list
 
 	def get_utilization(self):
-		print("... Getting the utilization of the cpu")
+		# print("... Getting the utilization of the cpu")
 		cmd = "top -n1 -1|grep "
 		cmd = cmd+ " "+str("\'Cpu")+str(self.cpu_id)+str("\'")
 		util_out  = subprocess.check_output(cmd,shell=True)
