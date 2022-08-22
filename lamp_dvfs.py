@@ -73,9 +73,9 @@ class OSLScheduler:
         # self.my_thread.daemon = True
         self.my_thread.start()
         start_time = time.time()
-        # self.policy_cpu()
+        self.policy_cpu()
         #self.policy_mem()
-        self.policy_gpu()
+        #self.policy_gpu()
         print(" Overhead is {} second".format(time.time()-start_time))
         
     def run(self):
