@@ -29,8 +29,8 @@ def processCPU(inp):
     util_list = []
     for idx in range(len(out)-1):
         idle_val = out[idx].split(":")[1].split(",")[3]
-		idle_val = idle_val[:-2]
-		cpu_util = (100.0 - float(idle_val))/100.0
+        idle_val = idle_val[:-2]
+        cpu_util = (100.0 - float(idle_val))/100.0
         util_list.append(cpu_util)
     return util_list
 
