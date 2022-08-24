@@ -65,6 +65,16 @@ class OSLScheduler:
         self.cpu_man.set_clock(cpu_freq)
         print("The freq are  gpu: {}, cpu: {}, mem : {} ".format(gpu_freq,self.cpu_man.get_clock(),self.mem_man.get_clock()))
         return
+    
+    def policy_util(self):
+        ''' 
+        In this we will start to analyze the frequency transition along with other states of the resources
+        1. start with the optimization
+        2. find a clustering method
+        '''
+
+        
+
 
     def set_cluster(self, clk_cluster):
         self.cluster = clk_cluster

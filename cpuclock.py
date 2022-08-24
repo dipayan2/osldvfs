@@ -1,6 +1,6 @@
 import subprocess
 import os
-from common.parser import processShell
+from common.parser import processShell, processCPU
 
 class CPUClock:
 	def __init__(self,cpu_id=0):
@@ -51,12 +51,19 @@ class CPUClock:
 	def get_utilization(self):
 		# print("... Getting the utilization of the cpu")
 		cmd = "top -n1 -1|grep "
-		cmd = cmd+ " "+str("\'Cpu")+str(self.cpu_id)+str("\'")
+		id_str = "[0-3]"
+		if self.cpu_id > 3:
+			id_str = "[4-7]"
+
+		# cmd = cmd+ " "+str("\'Cpu")+str(self.cpu_id)+str("\'")
+		cmd = cmd + " "+str("\'Cpu")+id_str+str("\'")
+		# util_out  = subprocess.check_output(cmd,shell=True)
+		# util_list = processShell(util_out)
+		# idle_val = util_list.split(":")[1].split(",")[3]
+		# idle_val = idle_val[:-2]
+		# cpu_util = (100.0 - float(idle_val))/100.0
 		util_out  = subprocess.check_output(cmd,shell=True)
-		util_list = processShell(util_out)
-		idle_val = util_list.split(":")[1].split(",")[3]
-		idle_val = idle_val[:-2]
-		cpu_util = (100.0 - float(idle_val))/100.0
-		self.cpu_util = cpu_util
+		util_list = processCPU(util_out)
+		self.cpu_util = max(util_list)
 		return cpu_util
 
