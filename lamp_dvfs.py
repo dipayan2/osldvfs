@@ -68,12 +68,28 @@ class OSLScheduler:
     
     def policy_util(self):
         ''' 
+        Currently uses mem_cluster
         In this we will start to analyze the frequency transition along with other states of the resources
         1. start with the optimization
         2. find a clustering method
         '''
 
-        
+        # get memory util and set the rest as follows
+        mem_util  = self.mem_man.get_utilization()
+        mem_freq_list = [165000000,206000000,275000000,413000000,543000000,633000000,728000000,825000000]
+        mem_freq = mem_freq_list[3]
+        if mem_util > 0.6:
+            mem_freq = mem_freq_list[5]
+        elif mem_util > 0.3:
+            mem_freq = mem_freq_list[3]
+        else:
+            mem_freq = mem_freq_list[0]
+        self.mem_man.set_clock(mem_freq)
+        gpu_freq = int(self.cluster[mem_freq]['gpu'])
+        cpu_freq = int(self.cluster[mem_freq]['cpu'])
+        self.gpu_man.set_clock(gpu_freq)
+        self.cpu_man.set_clock(cpu_freq)
+            
 
 
     def set_cluster(self, clk_cluster):
