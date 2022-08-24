@@ -119,7 +119,7 @@ class OSLScheduler:
         # self.policy_cpu()
         # self.policy_mem()
         #self.policy_gpu()
-        self.policy_util()
+        self.policy_test()
         print(" Overhead is {} second".format(time.time()-start_time))
         
     def run(self):
