@@ -90,6 +90,21 @@ class OSLScheduler:
         self.gpu_man.set_clock(gpu_freq)
         self.cpu_man.set_clock(cpu_freq)
             
+    def policy_test(self):
+        cpu_util = self.cpu_man.get_utilization()
+        cpu_freq_list = [200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000]
+        cpu_freq = cpu_freq_list[5]
+        if cpu_util > 0.5:
+            cpu_freq = cpu_freq_list[10]
+        elif cpu_util > 0.3:
+            cpu_freq = cpu_freq_list[5]
+        else:
+            cpu_freq = cpu_freq_list[0]
+        self.cpu_man.set_clock(cpu_freq)
+        gpu_freq = int(self.cluster[cpu_freq]['gpu'])
+        mem_freq = int(self.cluster[cpu_freq]['mem'])
+        self.gpu_man.set_clock(gpu_freq)
+        self.mem_man.set_clock(mem_freq)
 
 
     def set_cluster(self, clk_cluster):
