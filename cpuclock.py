@@ -65,5 +65,5 @@ class CPUClock:
 		util_out  = subprocess.check_output(cmd,shell=True)
 		util_list = processCPU(util_out)
 		self.cpu_util = max(util_list)
-		return cpu_util
+		return self.cpu_util
 
