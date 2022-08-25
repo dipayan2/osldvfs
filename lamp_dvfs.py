@@ -76,6 +76,7 @@ class OSLScheduler:
 
         # get memory util and set the rest as follows
         mem_util  = self.mem_man.get_utilization()
+        print(mem_util)
         mem_freq_list = [165000000,206000000,275000000,413000000,543000000,633000000,728000000,825000000]
         mem_freq = mem_freq_list[3]
         if mem_util > 0.6:
@@ -119,7 +120,7 @@ class OSLScheduler:
         # self.policy_cpu()
         # self.policy_mem()
         #self.policy_gpu()
-        self.policy_test()
+        self.policy_util()
         print(" Overhead is {} second".format(time.time()-start_time))
         
     def run(self):
