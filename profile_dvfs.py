@@ -57,9 +57,9 @@ Run more clustetring to find the optimal power performance
 
 power_policy = lamp_dvfs.OSLScheduler()
 ## CPU driven governor
-# power_policy.set_cluster(cpu_cluster)
+power_policy.set_cluster(cpu_cluster)
 ## Memory driven governor
-power_policy.set_cluster(mem_cluster)
+# power_policy.set_cluster(mem_cluster)
 # GPU driven governor
 # power_policy.set_cluster(gpu_cluster)
 ## run
