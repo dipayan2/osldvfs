@@ -48,7 +48,7 @@ cpu_cluster = {
     1400000: {'gpu':600000000, 'mem':825000000}
 }
 
-cpu_new_cluster = {
+cpu_nu05_cluster0 = {
     200000: {'gpu':600000000, 'mem':543000000},
     300000: {'gpu':350000000, 'mem':633000000},
     400000: {'gpu':177000000, 'mem':825000000},
@@ -64,7 +64,16 @@ cpu_new_cluster = {
     1400000: {'gpu':177000000, 'mem':165000000}
 }
 
-
+mem_cluster0 = {
+    165000000: {'gpu':177000000, 'cpu':1400000},
+    206000000: {'gpu':480000000, 'cpu':1200000},
+    275000000: {'gpu':420000000, 'cpu':1000000},
+    413000000: {'gpu':177000000, 'cpu':900000},
+    543000000: {'gpu':543000000, 'cpu':700000},
+    633000000: {'gpu':350000000, 'cpu':600000},
+    728000000: {'gpu':350000000, 'cpu':500000},
+    825000000: {'gpu':177000000, 'cpu':400000}
+}
 
 
 '''
@@ -75,9 +84,9 @@ Run more clustetring to find the optimal power performance
 
 power_policy = lamp_dvfs.OSLScheduler()
 ## CPU driven governor
-power_policy.set_cluster(cpu_new_cluster)
+# power_policy.set_cluster(cpu_new_cluster)
 ## Memory driven governor
-# power_policy.set_cluster(mem_cluster)
+power_policy.set_cluster(mem_cluster0)
 # GPU driven governor
 # power_policy.set_cluster(gpu_cluster)
 ## run
