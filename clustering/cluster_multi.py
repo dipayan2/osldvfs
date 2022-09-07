@@ -10,7 +10,7 @@ DATA_PATH = "./powerDVFS.csv"
 
 NUM_CLUSTER = 4
 col_max = {} #stores the max value of the column
-NU = 0.5 # importance of power
+NU = 2 # importance of power
 
 #Eddie, Ryan, Sam
 def get_cmap(n, name='hsv'):
@@ -34,15 +34,18 @@ def pca_analysis(df):
 
 def clustering_data(df):
     # we need to find a way to get clustering based on 
-    df['EDP'] = df['MemPower']*pow(df["Mem"],NU)+ df['CPUPower']*pow(df["CPU"],NU)+  df['GPUPower']*pow(df["GPU"],NU)
-    kmeanModel = KMeans(n_clusters=NUM_CLUSTER).fit(df[['Mem','CPU','GPU']])
+    df['EDPCPU'] = df['CPUPower']*pow(df["CPU"],NU)
+    df['EDPMem'] = df['MemPower']*pow(df["Mem"],NU)
+    df['EDPGPU'] = df['GPUPower']*pow(df["GPU"],NU)
+
+    kmeanModel = KMeans(n_clusters=NUM_CLUSTER).fit(df[['EDPCPU','EDPMem','EDPGPU']])
     df['cluster'] = kmeanModel.labels_.tolist()
     return df
 
 def print_cluster(df):
     cluster = [ [] for i in range(NUM_CLUSTER)]
     for idx, row in df.iterrows():
-        cluster[int(row['cluster'])].append((row['CPUBig']*col_max['CPUBig'], row['CPUSmall']*col_max['CPUSmall'], row['MemFreq']*col_max['MemFreq'], row['GPUFreq']*col_max['GPUFreq'], row['EDP']))
+        cluster[int(row['cluster'])].append((row['CPUBig']*col_max['CPUBig'], row['CPUSmall']*col_max['CPUSmall'], row['MemFreq']*col_max['MemFreq'], row['GPUFreq']*col_max['GPUFreq']))
     
     for cl_idx in range(NUM_CLUSTER):
         for val in cluster[cl_idx]:
