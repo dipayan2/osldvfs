@@ -1,6 +1,9 @@
 #pragma once
 #include <vector>
 
+// Decode from ASCII???
+// Makefile?????
+
 /**
  * An class for representing the clock of a GPU
  *
@@ -19,7 +22,7 @@ public:
 	 
 	 * @return The current GPU frequency
 	 */
-	int GetClock();
+	int GetClock(); //What is type of gpu_freq????? string???? -> we get all but last character
 	
 	/**
 	 * Sets the GPU's frequency
@@ -29,7 +32,7 @@ public:
 	 */
 	void SetClock(int new_freq);
 
-	std::vector<int> GetAllClock();
+	std::vector<int> GetAllClock(); // Returning [] right now??? All commented out??? Script being invoked does not exist????
 	
-	int GetUtilization();
+	int GetUtilization();// Returning -1 right now??? All commented out??? Script being invoked does not exist????
 }
