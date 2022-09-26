@@ -15,7 +15,9 @@ int CpuClock::GetClock() {
     // char* command = "bash ../scripts/1_test_get_num_script.sh";
 
     // DO NOT KNOW IF THIS WORKS!!!!?????
-    char* command = "bash ../scripts/cpu_get_clock.sh";
+    // Relative path???? Python got absolute path????
+    char command[100];
+    sprintf(command, "bash ../scripts/cpu_get_clock.sh %d", this->cpu_id_);
 
     char buffer[128];
     memset(buffer, 0, 128);
