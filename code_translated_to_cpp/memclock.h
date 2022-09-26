@@ -31,8 +31,8 @@ public:
 	/**
 	 * Sets the memory's frequency
 	 *
-	 * @param new_freq If this is greater than mem_freq_, we set the memory frequency to this value,
-	 *				   and store it in mem_freq_
+	 * @param new_freq We set the memory frequency to this value and store it in mem_freq_
+	 *				   
 	 */
 	void SetClock(int new_freq);
 

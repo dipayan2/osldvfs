@@ -33,8 +33,7 @@ public:
 	/**
 	 * Sets the GPU's frequency
 	 *
-	 * @param new_freq If this is greater than gpu_freq_, we set the GPU frequency to this value,
-	 *				   and store it in gpu_freq_
+	 * @param new_freq We set the GPU frequency to this value and store it in gpu_freq_
 	 */
 	void SetClock(int new_freq);
 

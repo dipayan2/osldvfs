@@ -42,8 +42,8 @@ public:
 	/**
 	 * Sets this CPU's frequency
 	 *
-	 * @param new_freq If this is greater than cpu_freq_, we set the CPU frequency to this value,
-	 *				   and store it in cpu_freq_
+	 * @param new_freq We set the CPU frequency to this value and store it in cpu_freq_
+	 *				   
 	 */
     void SetClock(int new_freq);
 

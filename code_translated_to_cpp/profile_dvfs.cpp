@@ -9,8 +9,8 @@ int main(int argc, char** argv) {
     // On here, it says that there is no such file or directory????
     // cat: /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq: No such file or directory
     // sudo requires password?????
-    std::cout << cpu_clock.GetClock() << std::endl;
-    std::cout << cpu_clock.cpu_freq_ << std::endl;
+    // std::cout << cpu_clock.GetClock() << std::endl;
+    // std::cout << cpu_clock.cpu_freq_ << std::endl;
 
     return 0;
 }
