@@ -24,7 +24,7 @@ int CpuClock::GetClock() {
     // Based on https://stackoverflow.com/a/478960
     FILE* pipe = popen(command, "r");
     if (pipe == NULL) {
-        std::cout << "popen() failed!" << std::endl;
+        std::cout << "popen() failed while trying to get the CPU frequency for CPU number " << this->cpu_id_ << std::endl;
         exit(1); //Right????
     }
     else {
@@ -34,7 +34,7 @@ int CpuClock::GetClock() {
             // std::cout << "The frequency for cpu number " << this->cpu_id_ << " is " << this->cpu_freq_ << std::endl;
         }
         else {
-            std::cout << "fgets() failed!" << std::endl; 
+            std::cout << "fgets() failed while trying to get the CPU frequency for CPU number " << this->cpu_id_ << std::endl; 
             exit(1);
         }
     }

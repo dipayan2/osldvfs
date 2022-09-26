@@ -18,7 +18,7 @@ int GpuClock::GetClock() {
     // Based on https://stackoverflow.com/a/478960
     FILE* pipe = popen(command, "r");
     if (pipe == NULL) {
-        std::cout << "popen() failed!" << std::endl;
+        std::cout << "popen() failed while trying to get the GPU frequency" << std::endl;
         exit(1); //Right????
     }
     else {
@@ -28,7 +28,7 @@ int GpuClock::GetClock() {
             // std::cout << "The GPU frequency is " << this->gpu_freq_ << std::endl;
         }
         else {
-            std::cout << "fgets() failed!" << std::endl; 
+            std::cout << "fgets() failed while trying to get the GPU frequency" << std::endl; 
             exit(1);
         }
     }
