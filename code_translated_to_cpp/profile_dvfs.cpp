@@ -6,11 +6,15 @@
 // path member variable is the same for all three clocks
 // And is never used?????
 
+// File paths in scripts????
+
+// Did not label inc_flag in scripts, though other variables defined????
+// Why -eq instead of == in scripts???
+
 int main(int argc, char** argv) {
     CpuClock cpu_clock(1);
     GpuClock gpu_clock;
     MemClock mem_clock;
-
 
     // CONSTRUCTORS SEEM RIGHT:
 
@@ -58,6 +62,32 @@ int main(int argc, char** argv) {
 
     // Returns 0 if succeeds
     // std::cout << system("bash ../scripts/1_test_get_num_script.sh") << std::endl;
+
+    // Testing SetClock analogue on example script and file
+    
+    // Increase works!!!!
+    // int cpu_num = 1;
+    // int new_freq = 12345;
+    // int increase_flag = 1;
+
+    // char command[256];
+    // sprintf(command, "bash ../scripts/2_test_add_to_file.sh %d %d %d", cpu_num, new_freq, increase_flag);
+    // if (system(command) != 0) {
+    //     std::cout << "Could not use example clock setting script from C++!" << std::endl;
+    // }
+
+    // Decrease Works!!!!
+    // int cpu_num = 1;
+    // int new_freq = 3579;
+    // int increase_flag = 0;
+
+    // char command[256];
+    // sprintf(command, "bash ../scripts/2_test_add_to_file.sh %d %d %d", cpu_num, new_freq, increase_flag);
+    // if (system(command) != 0) {
+    //     std::cout << "Could not use example clock setting script from C++!" << std::endl;
+    // }
+
+
 
     return 0;
 }
