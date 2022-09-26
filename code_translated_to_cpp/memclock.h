@@ -1,5 +1,9 @@
 #pragma once
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -9,11 +13,13 @@
  */
 class MemClock {
 private:
+public:
 	// Meanings???? Types????
+	// Move to private
 	std::string path_;
 	int         mem_freq_;
 	int         mem_util_;
-public:
+
 	/**
 	 * Creates a MemClock object with a path_ of "/sys/devices/system/cpu",
 	 * a mem_freq_ of 0, and a mem_util_ of 0.

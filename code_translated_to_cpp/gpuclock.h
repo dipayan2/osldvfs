@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
 
 /**
  * An class for representing the clock of a GPU

@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
 
 /**
  * An class for representing the clock of a CPU
@@ -16,7 +16,7 @@ private:
 public:
 	// Meanings???? Types???
     // TODO: MOVE TO PRIVATE
-	std::string path_; //Never used????
+	std::string path_;
     int         cpu_id_;
     int         dev_count_;
 	int         cpu_freq_;
