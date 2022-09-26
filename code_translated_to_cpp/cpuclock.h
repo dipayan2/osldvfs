@@ -16,7 +16,7 @@ private:
 public:
 	// Meanings???? Types???
     // TODO: MOVE TO PRIVATE
-	std::string path_;
+	std::string path_; //Never used????
     int         cpu_id_;
     int         dev_count_;
 	int         cpu_freq_;

@@ -45,16 +45,21 @@ int CpuClock::GetClock() {
 
 void CpuClock::SetClock(int new_freq) {
     // Increase flag????? Will frequency change outside these functions?????
-    // std::cout << "The old frequency of cpu number " << this->cpu_id_ << " is " << this->cpu_freq_ << std::endl;
+    // std::cout << "Setting frequency of cpu number " << this->cpu_id_ << " to " << new_freq << std::endl;
 
-    int inc_flag = 0;
+    int increase_flag = 0;
     if (new_freq > this->cpu_freq_) {
-        inc_flag = 1;
+        increase_flag = 1;
     }
 
     char command[256];
-    sprintf(command, "bash ../scripts/cpu_set_clock.sh %d %d %d", this->cpu_id_, new_freq, inc_flag);
-    system(command);
+    sprintf(command, "bash ../scripts/cpu_set_clock.sh %d %d %d", this->cpu_id_, new_freq, increase_flag);
+    
+    // Right????
+    if (system(command) != 0) {
+        std::cout << "Could not set clock frequency for CPU number " << this->cpu_id_ << std::endl;
+        exit(1);
+    }
 
     this->cpu_freq_ = new_freq;
 

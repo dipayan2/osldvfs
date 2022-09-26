@@ -2,8 +2,12 @@
 
 // !!! Related Header, C system headers, C++ standard library headers, 
 // other library headers, your project's headers.
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <string>
 #include <vector>
+#include <iostream>
 
 /**
  * An class for representing the clock of a GPU
@@ -11,11 +15,13 @@
  */
 class GpuClock {
 private:
+public:
+	// MOVE TO PRIVATE!!!
 	// Meanings???? Types????
 	std::string path_;
 	int         gpu_freq_;
 	int         gpu_util_;
-public:
+
 	/**
 	 * Creates a GpuClock object with a path_ of "/sys/devices/system/cpu",
 	 * a gpu_freq_ of 0, and a gpu_util_ of 0.
