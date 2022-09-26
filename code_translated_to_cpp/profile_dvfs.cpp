@@ -1,5 +1,7 @@
 #include "ols_scheduler.h"
 
+// Compile to exe????
+
 int main(int argc, char** argv) {
     CpuClock cpu_clock(1);
     // Works with 1_test_get_num_script.sh and 1_EXAMPLE_NUM_FILE.txt
