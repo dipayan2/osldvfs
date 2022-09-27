@@ -14,11 +14,10 @@
 class CpuClock {
 private:
 public:
-	// Meanings???? Types???
     // TODO: MOVE TO PRIVATE
 	std::string path_;
     int         cpu_id_;
-    int         dev_count_;
+    int         dev_count_; // The number of CPU cores
 	int         cpu_freq_;
 	int         cpu_util_;
 

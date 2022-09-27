@@ -1,7 +1,5 @@
 #pragma once
 
-// !!! Related Header, C system headers, C++ standard library headers, 
-// other library headers, your project's headers.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -25,7 +25,7 @@ int CpuClock::GetClock() {
     FILE* pipe = popen(command, "r");
     if (pipe == NULL) {
         std::cout << "popen() failed while trying to get the CPU frequency for CPU number " << this->cpu_id_ << std::endl;
-        exit(1); //Right????
+        exit(1);
     }
     else {
         if (fgets(buffer, sizeof(buffer), pipe) != NULL) {
@@ -44,8 +44,9 @@ int CpuClock::GetClock() {
 }
 
 void CpuClock::SetClock(int new_freq) {
-    // Increase flag????? Will frequency change outside these functions?????
     // std::cout << "Setting frequency of cpu number " << this->cpu_id_ << " to " << new_freq << std::endl;
+
+    // Did not check if new_freq is different because it was not causing issues
 
     int increase_flag = 0;
     if (new_freq > this->cpu_freq_) {
@@ -55,7 +56,6 @@ void CpuClock::SetClock(int new_freq) {
     char command[256];
     sprintf(command, "bash ../scripts/cpu_set_clock.sh %d %d %d", this->cpu_id_, new_freq, increase_flag);
     
-    // Right????
     if (system(command) != 0) {
         std::cout << "Could not set clock frequency for CPU number " << this->cpu_id_ << std::endl;
         exit(1);

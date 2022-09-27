@@ -19,7 +19,7 @@ int GpuClock::GetClock() {
     FILE* pipe = popen(command, "r");
     if (pipe == NULL) {
         std::cout << "popen() failed while trying to get the GPU frequency" << std::endl;
-        exit(1); //Right????
+        exit(1);
     }
     else {
         if (fgets(buffer, sizeof(buffer), pipe) != NULL) {
@@ -40,7 +40,6 @@ int GpuClock::GetClock() {
 void GpuClock::SetClock(int new_freq) {
     // std::cout << "Setting GPU frequency to " << new_freq << std::endl;
 
-    // Did not check if new_frequency was different for CpuClock::SetClock()????
     if (new_freq != this->gpu_freq_) {
         int increase_flag = 0;
         if (new_freq > this->gpu_freq_) {

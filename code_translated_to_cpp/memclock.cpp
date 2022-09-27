@@ -19,7 +19,7 @@ int MemClock::GetClock() {
     FILE* pipe = popen(command, "r");
     if (pipe == NULL) {
         std::cout << "popen() failed when trying to get the memory frequency" << std::endl;
-        exit(1); //Right????
+        exit(1); 
     }
     else {
         if (fgets(buffer, sizeof(buffer), pipe) != NULL) {
