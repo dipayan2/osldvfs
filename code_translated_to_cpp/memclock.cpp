@@ -3,10 +3,10 @@
 MemClock::MemClock() {
     this->path_     = "/sys/devices/system/cpu";
     this->mem_freq_ = 0;
-    this->mem_util_ = 0;
+    this->mem_util_ = 0.0;
 }
 
-int MemClock::GetClock() {
+long long MemClock::GetClock() {
     // std::cout << "Getting the memory frequency" << std::endl;
 
     char command[256];
@@ -24,7 +24,7 @@ int MemClock::GetClock() {
     else {
         if (fgets(buffer, sizeof(buffer), pipe) != NULL) {
             // There was some error checking here in Python code?????
-            this->mem_freq_ = atoi(buffer); // Newline at end is fine???? Format of files being read???
+            this->mem_freq_ = atoll(buffer); // Newline at end is fine???? Format of files being read???
             // std::cout << "The memory frequency is " << this->mem_freq_ << std::endl;
         }
         else {
@@ -37,7 +37,7 @@ int MemClock::GetClock() {
     return this->mem_freq_;
 }
 
-void MemClock::SetClock(int new_freq) {
+void MemClock::SetClock(long long new_freq) {
     // std::cout << "Setting the memory frequency to " << new_freq << std::endl;
 
     if (new_freq != this->mem_freq_) {
@@ -47,7 +47,7 @@ void MemClock::SetClock(int new_freq) {
         }
 
         char command[256];
-        sprintf(command, "bash ../scripts/mem_set_clock.sh %d %d", new_freq, increase_flag);
+        sprintf(command, "bash ../scripts/mem_set_clock.sh %lld %d", new_freq, increase_flag);
 
         if (system(command) != 0) {
             std::cout << "Could not set memory clock frequency" << std::endl;

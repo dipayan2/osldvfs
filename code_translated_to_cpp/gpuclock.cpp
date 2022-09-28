@@ -3,10 +3,10 @@
 GpuClock::GpuClock() {
     this->path_     = "/sys/devices/system/cpu";
     this->gpu_freq_ = 0;
-    this->gpu_util_ = 0;
+    this->gpu_util_ = 0.0;
 }
 
-int GpuClock::GetClock() {
+long long GpuClock::GetClock() {
     std::cout << "Getting the GPU frequency" << std::endl;
 
     char command[256];
@@ -24,7 +24,7 @@ int GpuClock::GetClock() {
     else {
         if (fgets(buffer, sizeof(buffer), pipe) != NULL) {
             // There was some error checking here in Python code?????
-            this->gpu_freq_ = atoi(buffer); // Newline at end is fine???? Format of files being read???
+            this->gpu_freq_ = atoll(buffer); // Newline at end is fine???? Format of files being read???
             // std::cout << "The GPU frequency is " << this->gpu_freq_ << std::endl;
         }
         else {
@@ -37,7 +37,7 @@ int GpuClock::GetClock() {
     return this->gpu_freq_;
 }
 
-void GpuClock::SetClock(int new_freq) {
+void GpuClock::SetClock(long long new_freq) {
     // std::cout << "Setting GPU frequency to " << new_freq << std::endl;
 
     if (new_freq != this->gpu_freq_) {
@@ -47,7 +47,7 @@ void GpuClock::SetClock(int new_freq) {
         }
 
         char command[256];
-        sprintf(command, "bash ../scripts/gpu_set_clock.sh %d %d", new_freq, increase_flag);
+        sprintf(command, "bash ../scripts/gpu_set_clock.sh %lld %d", new_freq, increase_flag);
 
         if (system(command) != 0) {
             std::cout << "Could not set GPU clock frequency" << std::endl;

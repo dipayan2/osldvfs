@@ -1,7 +1,6 @@
 #include "ols_scheduler.h"
 #include <assert.h>
 
-
 int main(int argc, char** argv) {
     CpuClock cpu_clock(1);
     GpuClock gpu_clock;
@@ -53,22 +52,22 @@ int main(int argc, char** argv) {
     
     // Increase works!!!!
     // int cpu_num = 1;
-    // int new_freq = 12345;
+    // long long new_freq = 12345;
     // int increase_flag = 1;
 
     // char command[256];
-    // sprintf(command, "bash ../scripts/2_test_add_to_file.sh %d %d %d", cpu_num, new_freq, increase_flag);
+    // sprintf(command, "bash ../scripts/2_test_add_to_file.sh %d %lld %d", cpu_num, new_freq, increase_flag);
     // if (system(command) != 0) {
     //     std::cout << "Could not use example clock setting script from C++!" << std::endl;
     // }
 
     // Decrease Works!!!!
     // int cpu_num = 1;
-    // int new_freq = 3579;
+    // long long new_freq = 3579;
     // int increase_flag = 0;
 
     // char command[256];
-    // sprintf(command, "bash ../scripts/2_test_add_to_file.sh %d %d %d", cpu_num, new_freq, increase_flag);
+    // sprintf(command, "bash ../scripts/2_test_add_to_file.sh %d %lld %d", cpu_num, new_freq, increase_flag);
     // if (system(command) != 0) {
     //     std::cout << "Could not use example clock setting script from C++!" << std::endl;
     // }

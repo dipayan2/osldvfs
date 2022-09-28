@@ -14,11 +14,10 @@
 class MemClock {
 private:
 public:
-	// Meanings???? Types????
 	// Move to private
 	std::string path_;
-	int         mem_freq_;
-	int         mem_util_;
+	long long   mem_freq_;
+	double      mem_util_;
 
 	/**
 	 * Creates a MemClock object with a path_ of "/sys/devices/system/cpu",
@@ -32,7 +31,7 @@ public:
 	 *
 	 * @return The current memory frequency
 	 */
-	int GetClock();
+	long long GetClock();
 	
 	/**
 	 * Sets the memory's frequency
@@ -40,10 +39,10 @@ public:
 	 * @param new_freq We set the memory frequency to this value and store it in mem_freq_
 	 *				   
 	 */
-	void SetClock(int new_freq);
+	void SetClock(long long new_freq);
 
-	std::vector<int> GetAllClock(); // Not implemented
+	std::vector<long long> GetAllClock(); // Not implemented
 	
-	int GetUtilization(); // Not implemented
+	double GetUtilization(); // Not implemented
 
 };

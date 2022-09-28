@@ -5,10 +5,10 @@ CpuClock::CpuClock(int set_cpu_id) {
     this->cpu_id_    = set_cpu_id;
     this->dev_count_ = 8;
     this->cpu_freq_  = 0;
-    this->cpu_util_  = 0;
+    this->cpu_util_  = 0.0;
 }
 
-int CpuClock::GetClock() {
+long long CpuClock::GetClock() {
     // std::cout << "Getting the frequency for cpu number " << this->cpu_id_ << std::endl;
 
     // Seems to work:
@@ -30,7 +30,7 @@ int CpuClock::GetClock() {
     else {
         if (fgets(buffer, sizeof(buffer), pipe) != NULL) {
             // There was some error checking here in Python code?????
-            this->cpu_freq_ = atoi(buffer); // Newline at end is fine???? Format of files being read???
+            this->cpu_freq_ = atoll(buffer); // Newline at end is fine???? Format of files being read???
             // std::cout << "The frequency for cpu number " << this->cpu_id_ << " is " << this->cpu_freq_ << std::endl;
         }
         else {
@@ -43,7 +43,7 @@ int CpuClock::GetClock() {
     return this->cpu_freq_;
 }
 
-void CpuClock::SetClock(int new_freq) {
+void CpuClock::SetClock(long long new_freq) {
     // std::cout << "Setting frequency of cpu number " << this->cpu_id_ << " to " << new_freq << std::endl;
 
     // Did not check if new_freq is different because it was not causing issues
@@ -54,7 +54,7 @@ void CpuClock::SetClock(int new_freq) {
     }
 
     char command[256];
-    sprintf(command, "bash ../scripts/cpu_set_clock.sh %d %d %d", this->cpu_id_, new_freq, increase_flag);
+    sprintf(command, "bash ../scripts/cpu_set_clock.sh %d %lld %d", this->cpu_id_, new_freq, increase_flag);
     
     if (system(command) != 0) {
         std::cout << "Could not set clock frequency for CPU number " << this->cpu_id_ << std::endl;

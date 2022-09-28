@@ -15,14 +15,13 @@ class GpuClock {
 private:
 public:
 	// MOVE TO PRIVATE!!!
-	// Meanings???? Types????
 	std::string path_;
-	int         gpu_freq_;
-	int         gpu_util_;
+	long long   gpu_freq_;
+	double      gpu_util_;
 
 	/**
 	 * Creates a GpuClock object with a path_ of "/sys/devices/system/cpu",
-	 * a gpu_freq_ of 0, and a gpu_util_ of 0.
+	 * a gpu_freq_ of 0, and a gpu_util_ of 0.0.
 	 *
 	 */
 	GpuClock();
@@ -32,16 +31,16 @@ public:
 	 *
 	 * @return The current GPU frequency
 	 */
-	int GetClock(); //What is type of gpu_freq????? string???? -> we get all but last character
+	long long GetClock(); //What is type of gpu_freq????? string???? -> we get all but last character
 	
 	/**
 	 * Sets the GPU's frequency
 	 *
 	 * @param new_freq We set the GPU frequency to this value and store it in gpu_freq_
 	 */
-	void SetClock(int new_freq);
+	void SetClock(long long new_freq);
 
-	std::vector<int> GetAllClock(); // Not implemented
+	std::vector<long long> GetAllClock(); // Not implemented
 	
-	int GetUtilization(); // Not implemented
+	double GetUtilization(); // Not implemented
 };
