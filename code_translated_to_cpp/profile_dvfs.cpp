@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     };
     
     // memory driven governor setting
-    governor_settings mem_cluster = mem_cluster = {
+    governor_settings mem_cluster = {
         {165000000, {{"gpu", 177000000}, {"cpu", 200000}}},
         {206000000, {{"gpu", 177000000}, {"cpu", 400000}}},
         {275000000, {{"gpu", 266000000}, {"cpu", 600000}}},
