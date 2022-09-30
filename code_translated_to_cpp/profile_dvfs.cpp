@@ -1,7 +1,29 @@
-#include "ols_scheduler.h"
 #include <assert.h>
 
+#include "ols_scheduler.h"
+
 int main(int argc, char** argv) {
+    // Lists of the permitted frequencies for the CPU, GPU, and memory
+    std::vector<long long> cpu_freq_list{200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1100000, 1200000, 1300000, 1400000};
+    std::vector<long long> gpu_freq_list{600000000, 543000000, 480000000, 420000000, 350000000, 266000000, 177000000};
+    std::vector<long long> mem_freq_list{165000000, 206000000, 275000000, 413000000, 543000000, 633000000, 728000000, 825000000};
+
+    // These maps are descriptions of what should be done in certain situations
+    // You enter a value (something's frequency????)
+    // and it tells you what values the frequencies of the
+    // other components should be set to.
+
+    // gpu driven governor setting
+    governor_settings gpu_cluster = {
+        {600000000, {{"cpu", 1400000}, {"mem", 825000000}}},
+        {543000000, {{"cpu", 1200000}, {"mem", 728000000}}},
+        {480000000, {{"cpu", 1000000}, {"mem", 633000000}}},
+        {420000000, {{"cpu", 800000},  {"mem", 543000000}}},
+        {350000000, {{"cpu", 600000},  {"mem", 413000000}}},
+        {266000000, {{"cpu", 400000},  {"mem", 275000000}}},
+        {177000000, {{"cpu", 200000},  {"mem", 165000000}}}
+    };
+    
     CpuClock cpu_clock(1);
     GpuClock gpu_clock;
     MemClock mem_clock;
