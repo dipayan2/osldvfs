@@ -97,9 +97,48 @@ int main(int argc, char** argv) {
         {1400000, {{"gpu", 177000000}, {"mem", 633000000}}}
     };
 
-    CpuClock cpu_clock(1);
-    GpuClock gpu_clock;
-    MemClock mem_clock;
+    // Seems right
+    OlsScheduler ols_scheduler(1, 2, 1000, cpu_cluster);
+
+    // //should be 1
+    // std::cout << "ols_scheduler.cpu_id_: " << ols_scheduler.cpu_id_ << std::endl;
+    // //should be 2
+    // std::cout << "ols_scheduler.gpu_id_: " << ols_scheduler.gpu_id_ << std::endl;
+    // // Should be 1000
+    // std::cout << "ols_scheduler.polling_time_: " << ols_scheduler.polling_time_ << std::endl;
+    // // Should be 420000000
+    // std::cout << "ols_scheduler.cluster_[1000000][\"gpu\"]: " << ols_scheduler.cluster_[1000000]["gpu"] << std::endl;
+    // // Should be 275000000
+    // std::cout << "ols_scheduler.cluster_[500000][\"mem\"]: " << ols_scheduler.cluster_[500000]["mem"] << std::endl;
+
+    // // Should be "/sys/devices/system/cpu"
+    // std::cout << ols_scheduler.cpu_man_.path_ << std::endl;
+    // // Should be 1
+    // std::cout << ols_scheduler.cpu_man_.cpu_id_ << std::endl;
+    // // Should be 8
+    // std::cout << ols_scheduler.cpu_man_.dev_count_ << std::endl;
+    // // Should be 0
+    // std::cout << ols_scheduler.cpu_man_.cpu_freq_ << std::endl;
+    // // Should be 0
+    // std::cout << ols_scheduler.cpu_man_.cpu_util_ << std::endl;
+
+    // // Should be "/sys/devices/system/cpu"
+    // std::cout << ols_scheduler.gpu_man_.path_ << std::endl;
+    // // Should be 0
+    // std::cout << ols_scheduler.gpu_man_.gpu_freq_ << std::endl;
+    // // Should be 0
+    // std::cout << ols_scheduler.gpu_man_.gpu_util_ << std::endl;
+
+    // // Should be "/sys/devices/system/cpu"
+    // std::cout << ols_scheduler.mem_man_.path_ << std::endl;
+    // // Should be 0
+    // std::cout << ols_scheduler.mem_man_.mem_freq_ << std::endl;
+    // // Should be 0
+    // std::cout << ols_scheduler.mem_man_.mem_util_ << std::endl;
+
+    // CpuClock cpu_clock(1);
+    // GpuClock gpu_clock;
+    // MemClock mem_clock;
 
     // CONSTRUCTORS SEEM RIGHT:
 
