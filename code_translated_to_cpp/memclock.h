@@ -45,5 +45,4 @@ public:
 	std::vector<long long> GetAllClock(); // Not implemented
 	
 	double GetUtilization(); // Not implemented
-
 };

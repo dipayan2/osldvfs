@@ -59,3 +59,7 @@ void GpuClock::SetClock(long long new_freq) {
 
     return;
 }
+
+double GpuClock::GetUtilization() {
+    return -1.0;
+}

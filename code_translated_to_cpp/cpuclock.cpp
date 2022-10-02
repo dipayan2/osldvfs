@@ -65,3 +65,7 @@ void CpuClock::SetClock(long long new_freq) {
 
     return;
 }
+
+double CpuClock::GetUtilization() {
+    return -1.0;
+}

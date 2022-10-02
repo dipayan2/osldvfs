@@ -58,3 +58,7 @@ void MemClock::SetClock(long long new_freq) {
     }
     return;
 }
+
+double MemClock::GetUtilization() {
+    return -1.0;
+}

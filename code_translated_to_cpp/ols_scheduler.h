@@ -26,5 +26,69 @@ public:
     governor_settings cluster_;
 
     // Allow setting cluster here????
+    /**
+     * Creates an OlsScheduler object containing a cpu_id_ of set_cpu_id,
+     * a CpuClock with a cpu_id_ of set_cpu_id, a gpu_id_ of set_gpu_id
+     * (even though GpuClock has no gpu_id_ member variable), a polling_time_
+     * of set_polling_time, a GpuClock and a MemClock created with the default
+     * constructors, and a a cluster_ of cluster
+     * 
+     * @param set_cpu_id       Set cpu_id_ to this value.
+     *     Also makes cpu_man_ have this value as its cpu_id_.
+     * @param set_gpu_id       Set gpu_id_ to this value.
+     * @param set_polling_time Set polling_time_ to this value.
+     * @param set_cluster      Set cluster_ to this value.
+     *
+     */
     OlsScheduler(int set_cpu_id, int set_gpu_id, int set_polling_time, governor_settings set_cluster);
+
+    // Naming??? 
+
+    /**
+     * We select the best configuration for all resources based
+     * on the current CPU frequency
+     * 
+     */
+    void SetPolicyCpuFreq();
+
+    /**
+     * We select the best configuration for all resources based
+     * on the current GPU frequency
+     * 
+     */
+    void SetPolicyGpuFreq();
+
+    /**
+     * We select the best configuration for all resources based
+     * on the current memory frequency
+     * 
+     */
+    void SetPolicyMemFreq();
+
+    /**
+     * We select the best configuration for all resources based
+     * on the current CPU utilization
+     * 
+     */
+    void SetPolicyCpuUtil(); // Getting utilization is not implemented???? Name different????
+
+    /**
+     * We select the best configuration for all resources based
+     * on the current memory utilization
+     * 
+     */
+    void SetPolicyMemUtil(); // Getting utilization is not implemented???? Name different????
+    
+    
+    // No policy for setting frequencies based on GPU utilization???
+    
+    /**
+     * Setter for cluster_
+     * 
+     * @param set_cluster      Set cluster_ to this value.
+     *
+     */
+    void SetCluster(governor_settings new_cluster);
+    
+    void Schedule();
 };
