@@ -90,5 +90,10 @@ public:
      */
     void SetCluster(governor_settings new_cluster);
     
+    /**
+     * Sets frequencies based on the current cluster_ 
+     * every polling_time_ milliseconds
+     *
+     */
     void Schedule();
 };

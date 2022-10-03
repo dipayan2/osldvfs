@@ -1,5 +1,11 @@
 #include "ols_scheduler.h"
 
+using std::chrono::duration;
+using std::chrono::milliseconds;
+using std::chrono::steady_clock;
+using std::chrono::time_point;
+using std::this_thread::sleep_until;
+
 OlsScheduler::OlsScheduler(int set_cpu_id, int set_gpu_id, int set_polling_time, governor_settings set_cluster)
     : cpu_man_(set_cpu_id) {
     
@@ -124,4 +130,19 @@ void OlsScheduler::SetPolicyMemUtil() {
 
 void OlsScheduler::SetCluster(governor_settings new_cluster) {
     this->cluster_ = new_cluster;
+}
+
+void OlsScheduler::Schedule() {
+    std::cout << "Starting the Scheduler" << std::endl;
+    
+    while (true) {
+    	time_point<steady_clock> start = steady_clock::now();
+        time_point<steady_clock> wake_time = start + std::chrono::milliseconds(1000);
+        
+        this->SetPolicyCpuUtil();
+        sleep_until(wake_time);
+        
+        duration<double> elapsed_seconds = steady_clock::now() - start;
+        std::cout << "Time elapsed for one cycle: " << elapsed_seconds.count() << std::endl;
+    }
 }
