@@ -134,10 +134,10 @@ void OlsScheduler::SetCluster(governor_settings new_cluster) {
 
 void OlsScheduler::Schedule() {
     std::cout << "Starting the Scheduler" << std::endl;
-    
+
     while (true) {
     	time_point<steady_clock> start = steady_clock::now();
-        time_point<steady_clock> wake_time = start + std::chrono::milliseconds(1000);
+        time_point<steady_clock> wake_time = start + std::chrono::milliseconds(this->polling_time_);
         
         this->SetPolicyCpuUtil();
         sleep_until(wake_time);
