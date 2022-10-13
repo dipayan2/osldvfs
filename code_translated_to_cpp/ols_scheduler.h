@@ -16,8 +16,8 @@ class OlsScheduler {
 private:
 public:
     // Move to private
-    int               cpu_id_; // Why do we need this????? cpu_man_.cpu_id_?????
-    int               gpu_id_; // Why do we need this????? gpu_man_.gpu_id_????? GpuClock has no id??????
+    int               cpu_id_; 
+    int               gpu_id_; 
     int               polling_time_; //vs polling_s???? What unit is this in???
     CpuClock          cpu_man_; // https://stackoverflow.com/a/12927220 Initialize member objects!!!
     GpuClock          gpu_man_;
@@ -41,8 +41,6 @@ public:
      *
      */
     OlsScheduler(int set_cpu_id, int set_gpu_id, int set_polling_time, governor_settings set_cluster);
-
-    // Naming??? 
 
     /**
      * We select the best configuration for all resources based
@@ -70,18 +68,15 @@ public:
      * on the current CPU utilization
      * 
      */
-    void SetPolicyCpuUtil(); // Getting utilization is not implemented???? Name different????
+    void SetPolicyCpuUtil();
 
     /**
      * We select the best configuration for all resources based
      * on the current memory utilization
      * 
      */
-    void SetPolicyMemUtil(); // Getting utilization is not implemented???? Name different????
-    
-    
-    // No policy for setting frequencies based on GPU utilization???
-    
+    void SetPolicyMemUtil();
+        
     /**
      * Setter for cluster_
      * 

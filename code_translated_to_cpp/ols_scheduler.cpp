@@ -143,6 +143,7 @@ void OlsScheduler::Schedule() {
         sleep_until(wake_time);
         
         duration<double> elapsed_seconds = steady_clock::now() - start;
+        // Want overhead of 10 milliseconds or less
         std::cout << "Time elapsed for one cycle: " << elapsed_seconds.count() << std::endl;
     }
 }

@@ -48,21 +48,22 @@ void CpuClock::SetClock(long long new_freq) {
 
     // Did not check if new_freq is different because it was not causing issues
 
-    int increase_flag = 0;
-    if (new_freq > this->cpu_freq_) {
-        increase_flag = 1;
-    }
+    if (new_freq != this->cpu_freq_) {
+        int increase_flag = 0;
+        if (new_freq > this->cpu_freq_) {
+            increase_flag = 1;
+        }
 
-    char command[256];
-    sprintf(command, "bash ../scripts/cpu_set_clock.sh %d %lld %d", this->cpu_id_, new_freq, increase_flag);
+        char command[256];
+        sprintf(command, "bash ../scripts/cpu_set_clock.sh %d %lld %d", this->cpu_id_, new_freq, increase_flag);
     
-    if (system(command) != 0) {
-        std::cout << "Could not set clock frequency for CPU number " << this->cpu_id_ << std::endl;
-        exit(1);
+        if (system(command) != 0) {
+            std::cout << "Could not set clock frequency for CPU number " << this->cpu_id_ << std::endl;
+            exit(1);
+        }
+
+        this->cpu_freq_ = new_freq;
     }
-
-    this->cpu_freq_ = new_freq;
-
     return;
 }
 
