@@ -1,7 +1,10 @@
 #include<iostream>
 #include "HWCPipe/hwcpipe.h"
 
+using namespace hwcpipe;
+
 int main(int argc, char* argv[]){
-    hwcpipe::HWCPipe h;
+    HWCPipe h;
+
     return 0;
 }
