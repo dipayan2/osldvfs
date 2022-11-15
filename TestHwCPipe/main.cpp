@@ -1,5 +1,5 @@
 #include<iostream>
-#include "hwcpipe.h"
+#include "HWCPipe/hwcpipe.h"
 
 int main(int *argc, char* argv[]){
     hwcpipe::HWCPipe h;
