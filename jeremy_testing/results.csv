@@ -1,2 +1,0 @@
-,CPU Frequencies,GPU Frequencies,Mem Frequencies,Initialization Time,Allocation Time,Copy To Device Time,Kernel Time,Copy Back and Merge Time,Deallocation Time,Real Time,User Time,System Time
-0,200000.0,177000000.0,165000000.0,14009.01,80.845,1827.828,1819.228,1310.447,152.994,30554.0,22316.0,5477.0
