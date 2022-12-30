@@ -75,27 +75,33 @@ def get_benchmark_information(benchmark_to_run = "sssp",
                        "User Time":                pd.Series(dtype = "float"),
                        "System Time":              pd.Series(dtype = "float")})
 
-    # We move to the directory containing the benchmark
-    # Because I see "Mali-T628	Unable to open ./kernel.cl. Exiting..."
-    # when I try to use one of the testing executibles from a different directory
-    os.chdir(directory_of_benchmark)
-
-    # Create instances of the classes for controlling clock frequencies
-    cpu_clock = cpuclock.CPUClock(0)
-    cpu_clock.get_clock()
-    gpu_clock = gpuclock.GPUClock()
-    gpu_clock.get_clock()
-    mem_clock = memclock.MemClock()
-    mem_clock.get_clock()
-
     # Record which directory we were originally in, so we can return to it to save our results
     original_directory = os.getcwd()
+
+    # Record the directory we have to go to in order to use the various clock commands (which rely on)
+    # relative paths to access the scripts they use
+    os.chdir("..")
+    directory_for_clock_functions = os.getcwd()
 
     # Here, we figure out the path to the directory containing the test to be run
     directory_of_benchmark = "/home/odroid/benchmark/chai/OpenCL-D/" + benchmark_to_run.upper()
     # Here, we generate the command to be used to run our test 1 or more times
     # for each combination of frequencies
     command_for_test = "time run 1 taskset -c 0 ./" + benchmark_to_run.lower()
+
+    # We move to the directory containing the benchmark
+    # Because I see "Mali-T628	Unable to open ./kernel.cl. Exiting..."
+    # when I try to use one of the testing executibles from a different directory
+    os.chdir(directory_of_benchmark)
+
+    # Create instances of the taskset -c 7classes for controlling clock frequencies
+    os.chdir(directory_for_clock_functions)
+    cpu_clock = cpuclock.CPUClock(0)
+    cpu_clock.get_clock()
+    gpu_clock = gpuclock.GPUClock()
+    gpu_clock.get_clock()
+    mem_clock = memclock.MemClock()
+    mem_clock.get_clock()
 
     # For each combination of frequencies, we run the requested test the specified
     # number of times and store the results
@@ -104,11 +110,13 @@ def get_benchmark_information(benchmark_to_run = "sssp",
             for mem_freq in mem_frequencies:
                 for i in range(trials_per_combination):
                     # Set the frequencies
+                    os.chdir(directory_for_clock_functions)
                     cpu_clock.set_clock(cpu_freq)
                     gpu_clock.set_clock(gpu_freq)
                     mem_clock.set_clock(mem_freq)
 
                     # Run the requested test
+                    os.chdir(directory_of_benchmark)
                     output = subprocess.check_output(command_for_test, shell = True).decode('ascii')                
                     
                     # Extract all times provided by Chai
