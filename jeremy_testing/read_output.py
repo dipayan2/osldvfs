@@ -14,7 +14,6 @@ import memclock
 # Good to assume just one call of the benchmark executible, repeat multiple times????
 
 def get_benchmark_information(benchmark_to_run = "sssp",
-                              output_file_name = "results.csv",
                               trials_per_combination = 1):
     """
     For every combination of low, medium, and high frequencies for the CPU, GPU, and memory,
@@ -46,6 +45,12 @@ def get_benchmark_information(benchmark_to_run = "sssp",
     :param int trials_per_combination: The number of times the given benchmark is to be run for each combination
                                        of frequencies. Should be a positive integer. Equals 1 by default
     """
+    # Determine name of output file
+    # Originally, you could specify this as an argument, but we
+    # need a way to remember what tests were run, so it will now
+    # be determined automatically
+    output_file_name = str(trials_per_combination) + "_trials_" + benchmark_to_run.lower() + "_results.csv"
+
     # These are the low, medium, and high frequencies for each component
     cpu_frequencies = [200000,    800000,    1400000  ]
     gpu_frequencies = [177000000, 420000000, 600000000]
