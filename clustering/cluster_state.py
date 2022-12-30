@@ -16,10 +16,10 @@ DATA_PATH = "./PowerDVFS.csv"
 # just set one to True
 PRINT_3D_PCA = False
 PRINT_2D_PCA = False
-PRINT_3D_CPU_GPU = False
+PRINT_3D_CPU_GPU = True
 ONE_DIM_CLUSTERING_ELBOW = False
 ONE_DIM_CLUSTERING = False
-FIND_CORRELATION = True
+FIND_CORRELATION = False
 
 
 # If ANALYZE_SINGLE_APP is true, only look at a single
@@ -112,6 +112,7 @@ def main():
        
         clusters = [ [] for i in range(NUM_CLUSTERS)  ]
         distances = cdist(df[["Mem"]], kmeanModel.cluster_centers_, "euclidean")
+
         for idx, latency in enumerate(df["Mem"]):
             clusters[np.argmin(distances[idx])].append(latency)
              
@@ -131,7 +132,7 @@ def main():
                 gpu_freq = df[df["Mem"] == point]["GPUFreq"].values[0]
                 cpu_freq = df[df["Mem"] == point]["CPUBig"].values[0]
                 mem_freq = df[df["Mem"] == point]["MemFreq"].values[0]
-        
+
                 # Can be kind of useful to see the actual values
                 if idx == np.argmin(kmeanModel.cluster_centers_):
                     print(df[df["Mem"] == point])

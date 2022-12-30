@@ -75,6 +75,11 @@ def get_benchmark_information(benchmark_to_run = "sssp",
                        "User Time":                pd.Series(dtype = "float"),
                        "System Time":              pd.Series(dtype = "float")})
 
+    # We move to the directory containing the benchmark
+    # Because I see "Mali-T628	Unable to open ./kernel.cl. Exiting..."
+    # when I try to use one of the testing executibles from a different directory
+    os.chdir(directory_of_benchmark)
+
     # Create instances of the classes for controlling clock frequencies
     cpu_clock = cpuclock.CPUClock(0)
     cpu_clock.get_clock()
@@ -88,12 +93,6 @@ def get_benchmark_information(benchmark_to_run = "sssp",
 
     # Here, we figure out the path to the directory containing the test to be run
     directory_of_benchmark = "/home/odroid/benchmark/chai/OpenCL-D/" + benchmark_to_run.upper()
-
-    # We move to the directory containing the benchmark
-    # Because I see "Mali-T628	Unable to open ./kernel.cl. Exiting..."
-    # when I try to use one of the testing executibles from a different directory
-    os.chdir(directory_of_benchmark)
-
     # Here, we generate the command to be used to run our test 1 or more times
     # for each combination of frequencies
     command_for_test = "time run 1 taskset -c 0 ./" + benchmark_to_run.lower()
