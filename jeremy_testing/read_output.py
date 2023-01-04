@@ -86,8 +86,8 @@ def get_benchmark_information(benchmark_to_run = "sssp",
     # Here, we figure out the path to the directory containing the test to be run
     directory_of_benchmark = "/home/odroid/benchmark/chai/OpenCL-D/" + benchmark_to_run.upper()
     # Here, we generate the command to be used to run our test 1 or more times
-    # for each combination of frequencies
-    command_for_test = "time run 1 taskset -c 0 ./" + benchmark_to_run.lower()
+    # for each combination of frequencies (call this command once each time)
+    command_for_test = "time taskset -c 0 ./" + benchmark_to_run.lower()
 
     # We move to the directory containing the benchmark
     # Because I see "Mali-T628	Unable to open ./kernel.cl. Exiting..."
@@ -117,7 +117,7 @@ def get_benchmark_information(benchmark_to_run = "sssp",
 
                     # Run the requested test
                     os.chdir(directory_of_benchmark)
-                    output = subprocess.check_output(command_for_test, shell = True).decode('ascii')                
+                    output = subprocess.check_output(command_for_test, shell = True, executable="/bin/bash").decode('ascii')                
                     
                     # Extract all times provided by Chai
                     chai_benchmark_times = re.findall(": [0-9]+.[0-9]+", output)
