@@ -117,7 +117,10 @@ def get_benchmark_information(benchmark_to_run = "sssp",
 
                     # Run the requested test
                     os.chdir(directory_of_benchmark)
-                    output = subprocess.check_output(command_for_test, shell = True, executable="/bin/bash").decode('ascii')                
+                    output = subprocess.check_output(command_for_test,
+                                                     shell = True, 
+                                                     executable="/bin/bash",
+                                                     stderr = subprocess.STDOUT).decode('ascii')                
                     
                     # Extract all times provided by Chai
                     chai_benchmark_times = re.findall(": [0-9]+.[0-9]+", output)
