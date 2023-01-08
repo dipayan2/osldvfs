@@ -89,11 +89,6 @@ def get_benchmark_information(benchmark_to_run = "sssp",
     # for each combination of frequencies (call this command once each time)
     command_for_test = "time taskset -c 0 ./" + benchmark_to_run.lower()
 
-    # We move to the directory containing the benchmark
-    # Because I see "Mali-T628	Unable to open ./kernel.cl. Exiting..."
-    # when I try to use one of the testing executibles from a different directory
-    os.chdir(directory_of_benchmark)
-
     # Create instances of the taskset -c 7classes for controlling clock frequencies
     os.chdir(directory_for_clock_functions)
     cpu_clock = cpuclock.CPUClock(0)
@@ -108,15 +103,19 @@ def get_benchmark_information(benchmark_to_run = "sssp",
     for cpu_freq in cpu_frequencies:
         for gpu_freq in gpu_frequencies:
             for mem_freq in mem_frequencies:
+                # Set the frequencies
+                os.chdir(directory_for_clock_functions)
+                cpu_clock.set_clock(cpu_freq)
+                gpu_clock.set_clock(gpu_freq)
+                mem_clock.set_clock(mem_freq)
+
                 for i in range(trials_per_combination):
-                    # Set the frequencies
-                    os.chdir(directory_for_clock_functions)
-                    cpu_clock.set_clock(cpu_freq)
-                    gpu_clock.set_clock(gpu_freq)
-                    mem_clock.set_clock(mem_freq)
+                    # We move to the directory containing the benchmark
+                    # Because I see "Mali-T628	Unable to open ./kernel.cl. Exiting..."
+                    # when I try to use one of the testing executibles from a different directory
+                    os.chdir(directory_of_benchmark)
 
                     # Run the requested test
-                    os.chdir(directory_of_benchmark)
                     output = subprocess.check_output(command_for_test,
                                                      shell = True, 
                                                      executable="/bin/bash",
