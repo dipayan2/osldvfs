@@ -52,9 +52,14 @@ def get_benchmark_information(benchmark_to_run = "sssp",
     output_file_name = str(trials_per_combination) + "_trials_" + benchmark_to_run.lower() + "_results.csv"
 
     # These are the low, medium, and high frequencies for each component
-    cpu_frequencies = [200000,    800000,    1400000  ]
-    gpu_frequencies = [177000000, 420000000, 600000000]
-    mem_frequencies = [165000000, 543000000, 825000000]
+    # cpu_frequencies = [200000,    800000,    1400000  ]
+    # gpu_frequencies = [177000000, 420000000, 600000000]
+    # mem_frequencies = [165000000, 543000000, 825000000]
+
+    # Using all possible frequencies instead of just 3 for each component
+    cpu_frequencies = [200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000]
+    gpu_frequencies = [600000000,543000000,480000000,420000000,350000000,266000000,177000000]
+    mem_frequencies = [165000000,206000000,275000000,413000000,543000000,633000000,728000000,825000000]
 
     # What do all of these mean???
     # Kernel time in output does not equal "sys" from "time" command???
