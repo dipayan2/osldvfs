@@ -3,6 +3,7 @@ import pandas as pd
 import re
 import subprocess
 import sys
+import time
 
 # Get the functions for getting and setting frequencies for CPU, GPU, and memory
 # https://stackoverflow.com/a/40612922
@@ -58,10 +59,12 @@ def get_benchmark_information(benchmark_to_run = "sssp",
 
     # Using all possible frequencies instead of just 3 for each component
     # cpu_frequencies = [200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000]
-    cpu_frequencies = [200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000,1500000,1600000,1700000,1800000,1900000,2000000]
-    gpu_frequencies = [600000000,543000000,480000000,420000000,350000000,266000000,177000000]
-    mem_frequencies = [165000000,206000000,275000000,413000000,543000000,633000000,728000000,825000000]
-
+    # cpu_frequencies = [200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000,1500000,1600000,1700000,1800000,1900000,2000000]
+    # gpu_frequencies = [600000000,543000000,480000000,420000000,350000000,266000000,177000000]
+    # mem_frequencies = [165000000,206000000,275000000,413000000,543000000,633000000,728000000,825000000]
+    cpu_frequencies = [200000]
+    mem_frequencies = [165000000]
+    gpu_frequencies = [600000000]
     # What do all of these mean???
     # Kernel time in output does not equal "sys" from "time" command???
     # This table contains the results of running the indicated benchmark a single time
@@ -79,7 +82,9 @@ def get_benchmark_information(benchmark_to_run = "sssp",
                        "Deallocation Time":        pd.Series(dtype = "float"),
                        "Real Time":                pd.Series(dtype = "float"),
                        "User Time":                pd.Series(dtype = "float"),
-                       "System Time":              pd.Series(dtype = "float")})
+                       "System Time":              pd.Series(dtype = "float"),
+                       "Starttime":                pd.Series(dtype="int"),
+                       "Endtime":                pd.Series(dtype="int"),})
 
     # Record which directory we were originally in, so we can return to it to save our results
     original_directory = os.getcwd()
@@ -103,7 +108,7 @@ def get_benchmark_information(benchmark_to_run = "sssp",
     gpu_clock.get_clock()
     mem_clock = memclock.MemClock()
     mem_clock.get_clock()
-
+    init_milisecond = round(time.time()*1000)
     # For each combination of frequencies, we run the requested test the specified
     # number of times and store the results
     for cpu_freq in cpu_frequencies:
@@ -120,7 +125,7 @@ def get_benchmark_information(benchmark_to_run = "sssp",
                     # Because I see "Mali-T628	Unable to open ./kernel.cl. Exiting..."
                     # when I try to use one of the testing executibles from a different directory
                     os.chdir(directory_of_benchmark)
-
+                    start_time = round(time.time()*1000)-init_milisecond
                     # Run the requested test
                     output = subprocess.check_output(command_for_test,
                                                      shell = True, 
@@ -128,6 +133,7 @@ def get_benchmark_information(benchmark_to_run = "sssp",
                                                      stderr = subprocess.STDOUT).decode('ascii')                
                     
                     # Extract all times provided by Chai
+                    end_time = round(time.time()*1000) - init_milisecond
                     chai_benchmark_times = re.findall(": [0-9]+.[0-9]+", output)
                     chai_benchmark_times = [float(time[2:]) for time in chai_benchmark_times]
 
@@ -139,7 +145,7 @@ def get_benchmark_information(benchmark_to_run = "sssp",
                     time_command_times = [(1000 * ((float(minutes_seconds[0]) * 60) + float(minutes_seconds[1][:(len(minutes_seconds[1]) - 1)]))) for minutes_seconds in time_command_times]
 
                     # Store all the times, as well as the frequencies used for all components
-                    df.loc[len(df)] = [cpu_freq, gpu_freq, mem_freq] + chai_benchmark_times + time_command_times
+                    df.loc[len(df)] = [cpu_freq, gpu_freq, mem_freq] + chai_benchmark_times + time_command_times + [start_time, end_time]
     
     # Go back to the original directory
     os.chdir(original_directory)       
