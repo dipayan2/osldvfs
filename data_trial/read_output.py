@@ -59,12 +59,9 @@ def get_benchmark_information(benchmark_to_run = "sssp",
 
     # Using all possible frequencies instead of just 3 for each component
     # cpu_frequencies = [200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000]
-    # cpu_frequencies = [200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000,1500000,1600000,1700000,1800000,1900000,2000000]
-    # gpu_frequencies = [600000000,543000000,480000000,420000000,350000000,266000000,177000000]
-    # mem_frequencies = [165000000,206000000,275000000,413000000,543000000,633000000,728000000,825000000]
-    cpu_frequencies = [200000]
-    mem_frequencies = [165000000]
-    gpu_frequencies = [600000000]
+    cpu_frequencies = [200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000,1500000,1600000,1700000,1800000,1900000,2000000]
+    gpu_frequencies = [600000000,543000000,480000000,420000000,350000000,266000000,177000000]
+    mem_frequencies = [165000000,206000000,275000000,413000000,543000000,633000000,728000000,825000000]
     # What do all of these mean???
     # Kernel time in output does not equal "sys" from "time" command???
     # This table contains the results of running the indicated benchmark a single time
@@ -155,7 +152,7 @@ def get_benchmark_information(benchmark_to_run = "sssp",
     df.to_csv(output_file_name)
 
 # Run SSSP once for each combination of frequencies, store to results.csv
-get_benchmark_information('sssp',1)
+get_benchmark_information('sssp',1,1)
 
 # Exploratory code:
 
