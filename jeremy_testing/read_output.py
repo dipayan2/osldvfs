@@ -14,7 +14,7 @@ import memclock
 # Good to assume just one call of the benchmark executible, repeat multiple times????
 
 def get_benchmark_information(benchmark_to_run = "sssp",
-                              trials_per_combination = 1):
+                              trials_per_combination = 1, file_id=1):
     """
     For every combination of low, medium, and high frequencies for the CPU, GPU, and memory,
     run the provided Chai OpenCL-D benchmark some number of times.
@@ -49,7 +49,7 @@ def get_benchmark_information(benchmark_to_run = "sssp",
     # Originally, you could specify this as an argument, but we
     # need a way to remember what tests were run, so it will now
     # be determined automatically
-    output_file_name = str(trials_per_combination) + "_trials_" + benchmark_to_run.lower() + "_results.csv"
+    output_file_name = str(file_id)+"_num_"+ str(trials_per_combination) + "_trials_" + benchmark_to_run.lower() + "_results.csv"
 
     # These are the low, medium, and high frequencies for each component
     # cpu_frequencies = [200000,    800000,    1400000  ]
@@ -97,7 +97,7 @@ def get_benchmark_information(benchmark_to_run = "sssp",
 
     # Create instances of the taskset -c 7classes for controlling clock frequencies
     os.chdir(directory_for_clock_functions)
-    cpu_clock = cpuclock.CPUClock(0)
+    cpu_clock = cpuclock.CPUClock(4)
     cpu_clock.get_clock()
     gpu_clock = gpuclock.GPUClock()
     gpu_clock.get_clock()
@@ -149,7 +149,7 @@ def get_benchmark_information(benchmark_to_run = "sssp",
     df.to_csv(output_file_name)
 
 # Run SSSP once for each combination of frequencies, store to results.csv
-get_benchmark_information('sssp',4)
+get_benchmark_information('sssp',1)
 
 # Exploratory code:
 
