@@ -1,7 +1,7 @@
-import csv
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+import sys
 import shutil
 
 CPU_FREQ_COL = "CPU Frequencies"
@@ -41,10 +41,16 @@ directories_names = ['fixedcpu_allgpu_mem',
                      'fixedmem_allcpu_gpu',
                      'fixedmem_allgpu_cpu']
 
+print(sys.argv)
+filename = "data.csv"
 print("Loading Data File....")
-data = pd.read_csv("2_trials_sssp_results.csv")
-data = data[::2]
-data_cols = data.columns.tolist()
+if(len(sys.argv) > 1):
+    print(sys.argv.index("-f"))
+    pass
+else:
+    data = pd.read_csv("performance_data.csv")
+    data = data[::2]
+    data_cols = data.columns.tolist()
 
 print("Processing Data File....")
 data_cols.append('Total Data Transfer Latency')
@@ -93,7 +99,6 @@ def generate_result_directories():
         
 generate_result_directories()
 
-print("Generating Graphs....")
 def get_fixedcpu_allgpu_mem():
     # all data points @ Fixed CPU settings analyzing different GPU settings across all MEM settings
     for i, cpu_freq in enumerate(cpu_freq_list):
@@ -186,12 +191,15 @@ def get_fixedmem_allgpu_cpu():
         plt.close()
     print("Generated {} Graphs".format(directories_names[5]))
 
+def generate_all_graphs():
+    print("Generating Graphs....")
+    get_fixedcpu_allgpu_mem()
+    get_fixedcpu_allem_gpu()
+    get_fixedgpu_allcpu_mem()
+    get_fixedgpu_allmem_cpu()
+    get_fixedmem_allcpu_gpu()
+    get_fixedmem_allgpu_cpu()
+    print("Graph Generation Done.")
+    
+# generate_all_graphs()
 
-get_fixedcpu_allgpu_mem()
-get_fixedcpu_allem_gpu()
-get_fixedgpu_allcpu_mem()
-get_fixedgpu_allmem_cpu()
-get_fixedmem_allcpu_gpu()
-get_fixedmem_allgpu_cpu()
-
-print("Graph Generation Done.")
