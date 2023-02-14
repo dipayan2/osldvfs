@@ -24,12 +24,14 @@ TRANSFER_STD_COL = "Transfer STD"
 KERNEL_SCORE_COL = "Kernel Score"
 TRANSFER_SCORE_COL = "Transfer Score"
 TOT_SCORE = "Total Score"
+IDLE_POWER = "IdlePower"
+ACTIVE_POWER = "ActivePower"
 
-cpu_freq_list = [200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000]
+cpu_freq_list = [200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000, 1500000, 1600000, 1700000, 1800000, 1900000, 2000000]
 gpu_freq_list = [177000000,266000000,350000000,420000000,480000000,543000000,600000000]
 mem_freq_list = [165000000,206000000,275000000,413000000,543000000,633000000,728000000,825000000]
 
-cpu_freq_display_list = [200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400]
+cpu_freq_display_list = [200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400, 1500, 1600, 1700, 1800, 1900, 2000]
 gpu_freq_display_list = [177,266,350,420,480,543,600]
 mem_freq_display_list = [165,206,275,413,543,633,728,825]
 
@@ -48,8 +50,8 @@ if(len(sys.argv) > 1):
     print(sys.argv.index("-f"))
     pass
 else:
-    data = pd.read_csv("performance_data.csv")
-    data = data[::2]
+    data = pd.read_csv("combined_perf_pow.csv")
+    # data = data[::2]
     data_cols = data.columns.tolist()
 
 print("Processing Data File....")
@@ -78,9 +80,25 @@ data[TRANSFER_STD_COL] = (data[TOT_DATA_TRANSFER_LATENCY_COL] - avg_tot_data_tra
 kernel_std_min = data[KERNEL_STD_COL].min()
 transfer_std_min = data[TRANSFER_STD_COL].min()
 
-data[KERNEL_SCORE_COL] = round(std_kernel*(1/(data[KERNEL_STD_COL]+2*abs(kernel_std_min)))+avg_kernel, 3)
-data[TRANSFER_SCORE_COL] = round(std_tot_data_transfer_latency*(1/(data[TRANSFER_STD_COL]+2*abs(transfer_std_min)))+avg_tot_data_transfer_latency, 3)
-data[TOT_SCORE] = data[KERNEL_SCORE_COL] + data[TRANSFER_SCORE_COL]
+# data[KERNEL_SCORE_COL] = round(std_kernel*(1/(data[KERNEL_STD_COL]+2*abs(kernel_std_min)))+avg_kernel, 3)
+# data[TRANSFER_SCORE_COL] = round(std_tot_data_transfer_latency*(1/(data[TRANSFER_STD_COL]+2*abs(transfer_std_min)))+avg_tot_data_transfer_latency, 3)
+# data[TOT_SCORE] = data[KERNEL_SCORE_COL] + data[TRANSFER_SCORE_COL]
+
+data[TOT_SCORE] = (data[TOT_LATENCY_COL].max()/data[TOT_LATENCY_COL])
+
+# data[KERNEL_SCORE_COL] = 
+# data[TRANSFER_SCORE_COL] = 
+# data[TOT_SCORE] = data[KERNEL_SCORE_COL] + data[TRANSFER_SCORE_COL]
+
+def get_scatter_perf_power():
+    plt.figure()
+    plt.scatter(data[TOT_SCORE], data[ACTIVE_POWER])
+    plt.title("Scatter perf vs power")
+    plt.xlabel("Performance")
+    plt.ylabel("Power")
+    plt.savefig('{}/scatter.png'.format(results_directory))
+    plt.close()
+    print("Generated scatter plt Graphs")
 
 print("Data processing Done.")
 
@@ -201,5 +219,6 @@ def generate_all_graphs():
     get_fixedmem_allgpu_cpu()
     print("Graph Generation Done.")
     
-# generate_all_graphs()
+generate_all_graphs()
+get_scatter_perf_power()
 
