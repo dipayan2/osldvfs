@@ -2,6 +2,6 @@
 */.DS_Store
 */*.out
 */settings.json
-*.csv
 *.swp
 *.ipynb_checkpoints/
+*.csv
