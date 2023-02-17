@@ -96,19 +96,17 @@ data[TOT_SCORE] = (data[TOT_LATENCY_COL].max()/data[TOT_LATENCY_COL])
 # data[TRANSFER_SCORE_COL] = 
 # data[TOT_SCORE] = data[KERNEL_SCORE_COL] + data[TRANSFER_SCORE_COL]
 
-def get_scatter_perf_power():
+print("Data processing Done.")
+
+def get_scatter_perf_power(data, sub_dir):
     plt.figure()
     plt.scatter(data[TOT_SCORE], data[ACTIVE_POWER])
     plt.title("Scatter perf vs power")
     plt.xlabel("Performance")
     plt.ylabel("Power")
-    plt.savefig('{}/scatter.png'.format(results_directory))
+    plt.savefig(sub_dir+'scatter.png'.format(results_directory))
     plt.close()
-    print("Generated scatter plt Graphs")
-
-print("Data processing Done.")
-
-print("Generting Necessary Data Directories....")
+    print("Generated power/scatter plot")
 
 def generate_results_directories():
     try:
@@ -124,195 +122,95 @@ def generate_results_directories():
         os.mkdir(results_directory+power_directory+directory)
         os.mkdir(results_directory+perf_directory+directory)
     print("Results Directories Generated.")
-        
-generate_results_directories()
 
-def get_perf_fixedcpu_allgpu_mem():
-    # all data points @ Fixed CPU settings analyzing different GPU settings across all MEM settings
-    for i, cpu_freq in enumerate(cpu_freq_list):
-        for j, gpu_freq in enumerate(gpu_freq_list):
-            data_mean = round(data.loc[(data[CPU_FREQ_COL] == cpu_freq) & (data[GPU_FREQ_COL] == gpu_freq)][TRANS_PERCENT_COL].mean(), 1)
-            data_min = round(data.loc[(data[CPU_FREQ_COL] == cpu_freq) & (data[GPU_FREQ_COL] == gpu_freq)][TRANS_PERCENT_COL].min(), 1)
-            data_max = round(data.loc[(data[CPU_FREQ_COL] == cpu_freq) & (data[GPU_FREQ_COL] == gpu_freq)][TRANS_PERCENT_COL].max(), 1)
-            plt.plot(range(len(mem_freq_list)), data.loc[(data[CPU_FREQ_COL] == cpu_freq) & (data[GPU_FREQ_COL] == gpu_freq)][TOT_SCORE], label="@ {}MHz GPU, {}, {}, {}".format(gpu_freq_display_list[j], data_mean, data_min, data_max))
-        plt.xticks(range(len(mem_freq_list)), mem_freq_display_list)
-        plt.title("Overall Scores @ {}MHz CPU".format(cpu_freq_display_list[i]))
-        plt.xlabel("Memory Frequency")
-        plt.ylabel("Overall Score")
-        plt.legend()
-        plt.savefig('{}/{}_{}.png'.format(results_directory + directories_names[0], cpu_freq_display_list[i], directories_names[0]))
-        plt.close()
-    print("Generated {} Graphs".format(directories_names[0]))
-
-def get_perf_fixedcpu_allem_gpu():
-    # all data points @ Fixed CPU settings analyzing different MEM settings across all GPU settings
-    # print(data.loc[(data[CPU_FREQ_COL] == cpu_freq_list[0]) & (data[MEM_FREQ_COL] == mem_freq_list[0])][TOT_SCORE])
-    for i, cpu_freq in enumerate(cpu_freq_list):
-        for j, mem_freq in enumerate(mem_freq_list):
-            plt.plot(range(len(gpu_freq_list)), data.loc[(data[CPU_FREQ_COL] == cpu_freq) & (data[MEM_FREQ_COL] == mem_freq)][TOT_SCORE][::-1], label="@ {}MHz MEM".format(mem_freq_display_list[j]))
-        plt.xticks(range(len(gpu_freq_list)), gpu_freq_display_list)
-        plt.title("Overall Scores @ {}MHz CPU".format(cpu_freq_display_list[i]))
-        plt.xlabel("GPU Frequency")
-        plt.ylabel("Overall Score")
-        plt.legend()
-        plt.savefig('{}/{}.png'.format(results_directory + directories_names[1], str(cpu_freq_display_list[i]) + directories_names[1]))
-        plt.close()
-    print("Generated {} Graphs".format(directories_names[1]))
-
-def get_perf_fixedgpu_allcpu_mem():
-    # all data points @ Fixed GPU settings analyzing different CPU settings across all MEM settings
-    # print(data.loc[(data[[GPU_FREQ_COL]] == gpu_freq_list[0]) & (data[[CPU_FREQ_COL]] == cpu_freq_list[0])])
-    for i, gpu_freq in enumerate(gpu_freq_list):
-        for j, cpu_freq in enumerate(cpu_freq_list):
-            plt.plot(range(len(mem_freq_list)), data.loc[(data[GPU_FREQ_COL] == gpu_freq) & (data[CPU_FREQ_COL] == cpu_freq)][TOT_SCORE], label="@ {}MHz CPU".format(cpu_freq_display_list[j]))
-        plt.xticks(range(len(mem_freq_list)), mem_freq_display_list)
-        plt.title("Overall Scores @ {}MHz GPU".format(gpu_freq_display_list[i]))
-        plt.xlabel("Memory Frequency")
-        plt.ylabel("Overall Score")
-        plt.legend()
-        plt.savefig('{}/{}.png'.format(results_directory + directories_names[2], str(gpu_freq_display_list[i]) + directories_names[2]))
-        plt.close()
-    print("Generated {} Graphs".format(directories_names[2]))
-
-def get_perf_fixedgpu_allmem_cpu():
-    # all data points @ Fixed GPU settings analyzing different CPU settings across all MEM settings
-    # print(data.loc[(data[[GPU_FREQ_COL]] == gpu_freq_list[0]) & (data[[CPU_FREQ_COL]] == cpu_freq_list[0])])
-    for i, gpu_freq in enumerate(gpu_freq_list):
-        for j, mem_freq in enumerate(mem_freq_list):
-            plt.plot(range(len(cpu_freq_list)), data.loc[(data[GPU_FREQ_COL] == gpu_freq) & (data[MEM_FREQ_COL] == mem_freq)][TOT_SCORE], label="@ {}MHz MEM".format(mem_freq_display_list[j]))
-        plt.xticks(range(len(cpu_freq_list)), cpu_freq_display_list)
-        plt.title("Overall Scores @ {}MHz GPU".format(gpu_freq_display_list[i]))
-        plt.xlabel("CPU Frequency")
-        plt.ylabel("Overall Score")
-        plt.legend()
-        plt.savefig('{}/{}.png'.format(results_directory + directories_names[3], str(gpu_freq_display_list[i]) + directories_names[3]))
-        plt.close()
-    print("Generated {} Graphs".format(directories_names[3]))
-
-def get_perf_fixedmem_allcpu_gpu():
-    # all data points @ Fixed GPU settings analyzing different CPU settings across all MEM settings
-    # print(data.loc[(data[[GPU_FREQ_COL]] == gpu_freq_list[0]) & (data[[CPU_FREQ_COL]] == cpu_freq_list[0])])
-    for i, mem_freq in enumerate(mem_freq_list):
-        for j, cpu_freq in enumerate(cpu_freq_list):
-            plt.plot(range(len(gpu_freq_list)), data.loc[(data[MEM_FREQ_COL] == mem_freq) & (data[CPU_FREQ_COL] == cpu_freq)][TOT_SCORE][::-1], label="@ {}MHz CPU".format(cpu_freq_display_list[j]))
-        plt.xticks(range(len(gpu_freq_list)), gpu_freq_display_list)
-        plt.title("Overall Scores @ {}MHz MEM".format(mem_freq_display_list[i]))
-        plt.xlabel("GPU Frequency")
-        plt.ylabel("Overall Score")
-        plt.legend()
-        plt.savefig('{}/{}.png'.format(results_directory + directories_names[4], str(mem_freq_display_list[i]) + directories_names[4]))
-        plt.close()
-    print("Generated {} Graphs".format(directories_names[4]))
-
-def get_perf_fixedmem_allgpu_cpu():
-    # all data points @ Fixed GPU settings analyzing different CPU settings across all MEM settings
-    # print(data.loc[(data[[GPU_FREQ_COL]] == gpu_freq_list[0]) & (data[[CPU_FREQ_COL]] == cpu_freq_list[0])])
-    for i, mem_freq in enumerate(mem_freq_list):
-        for j, gpu_freq in enumerate(gpu_freq_list):
-            plt.plot(range(len(cpu_freq_list)), data.loc[(data[MEM_FREQ_COL] == mem_freq) & (data[GPU_FREQ_COL] == gpu_freq)][TOT_SCORE], label="@ {}MHz GPU".format(gpu_freq_display_list[j]))
-        plt.xticks(range(len(cpu_freq_list)), cpu_freq_display_list)
-        plt.title("Overall Scores @ {}MHz MEM".format(mem_freq_display_list[i]))
-        plt.xlabel("CPU Frequency")
-        plt.ylabel("Overall Score")
-        plt.legend()
-        plt.savefig('{}/{}.png'.format(results_directory + directories_names[5], str(mem_freq_display_list[i]) + directories_names[5]))
-        plt.close()
-    print("Generated {} Graphs".format(directories_names[5]))
-
-### power graphs
-
-def get_power_fixedcpu_allgpu_mem():
+def get_fixedcpu_allgpu_mem(data, sub_dir, col, label):
     # all data points @ Fixed CPU settings analyzing different GPU settings across all MEM settings
     xs = mem_freq_list
-    directory = results_directory + power_directory + directories_names[0] + "/"
+    directory = results_directory + sub_dir + directories_names[0] + "/"
     for i, cpu_freq in enumerate(cpu_freq_list):
         ys = []
         ys_label = []
         graph_name = str(cpu_freq_display_list[i]) + "_" + directories_names[0]
         for j, gpu_freq in enumerate(gpu_freq_list):
-            ys.append(data.loc[(data[CPU_FREQ_COL] == cpu_freq) & (data[GPU_FREQ_COL] == gpu_freq)][ACTIVE_POWER])
+            ys.append(data.loc[(data[CPU_FREQ_COL] == cpu_freq) & (data[GPU_FREQ_COL] == gpu_freq)][col])
             ys_label.append("@ {}MHz GPU".format(gpu_freq_display_list[j]))
-        get_graph(xs, ys=ys, ys_label=ys_label, xticks=mem_freq_display_list, title="Overall Scores @ {}MHz CPU".format(cpu_freq_display_list[i]), 
-                  xlabel="Memory Frequency", ylabel="Active Power", directory=directory, name=graph_name)
+        get_graph(xs, ys=ys, ys_label=ys_label, xticks=mem_freq_display_list, title=label+" @ {}MHz CPU".format(cpu_freq_display_list[i]), 
+                  xlabel="Memory Frequency", ylabel=label, directory=directory, name=graph_name)
     print("Generated {} Graphs".format(directory))
 
-def get_power_fixedcpu_allem_gpu():
+def get_fixedcpu_allem_gpu(data, sub_dir, col, label):
     # all data points @ Fixed CPU settings analyzing different MEM settings across all GPU settings
-    # print(data.loc[(data[CPU_FREQ_COL] == cpu_freq_list[0]) & (data[MEM_FREQ_COL] == mem_freq_list[0])][TOT_SCORE])
     xs = gpu_freq_list
-    directory = results_directory + power_directory + directories_names[1] + "/"
+    directory = results_directory + sub_dir + directories_names[1] + "/"
     for i, cpu_freq in enumerate(cpu_freq_list):
         ys = []
         ys_label = []
         graph_name = str(cpu_freq_display_list[i]) + "_" + directories_names[1]
         for j, mem_freq in enumerate(mem_freq_list):
-            ys.append(data.loc[(data[CPU_FREQ_COL] == cpu_freq) & (data[MEM_FREQ_COL] == mem_freq)][ACTIVE_POWER][::-1])
+            ys.append(data.loc[(data[CPU_FREQ_COL] == cpu_freq) & (data[MEM_FREQ_COL] == mem_freq)][col][::-1])
             ys_label.append("@ {}MHz MEM".format(mem_freq_display_list[j]))
-        get_graph(xs, ys=ys, ys_label=ys_label, xticks=gpu_freq_display_list, title="Overall Scores @ {}MHz CPU".format(cpu_freq_display_list[i]), 
-                  xlabel="GPU Frequency", ylabel="Active Power", directory=directory, name=graph_name)
+        get_graph(xs, ys=ys, ys_label=ys_label, xticks=gpu_freq_display_list, title=label+" @ {}MHz CPU".format(cpu_freq_display_list[i]), 
+                  xlabel="GPU Frequency", ylabel=label, directory=directory, name=graph_name)
     print("Generated {} Graphs".format(directory))
 
-def get_power_fixedgpu_allcpu_mem():
+def get_fixedgpu_allcpu_mem(data, sub_dir, col, label):
     # all data points @ Fixed GPU settings analyzing different CPU settings across all MEM settings
-    # print(data.loc[(data[[GPU_FREQ_COL]] == gpu_freq_list[0]) & (data[[CPU_FREQ_COL]] == cpu_freq_list[0])])
     xs = mem_freq_list
-    directory = results_directory + power_directory + directories_names[2] + "/"
+    directory = results_directory + sub_dir + directories_names[2] + "/"
     for i, gpu_freq in enumerate(gpu_freq_list):
         ys = []
         ys_label = []
         graph_name = str(gpu_freq_display_list[i]) + "_" + directories_names[2]
         for j, cpu_freq in enumerate(cpu_freq_list):
-            ys.append(data.loc[(data[GPU_FREQ_COL] == gpu_freq) & (data[CPU_FREQ_COL] == cpu_freq)][ACTIVE_POWER])
+            ys.append(data.loc[(data[GPU_FREQ_COL] == gpu_freq) & (data[CPU_FREQ_COL] == cpu_freq)][col])
             ys_label.append("@ {}MHz CPU".format(cpu_freq_display_list[j]))
-        get_graph(xs, ys=ys, ys_label=ys_label, xticks=mem_freq_display_list, title="Overall Scores @ {}MHz GPU".format(gpu_freq_display_list[i]), 
-                  xlabel="Memory Frequency", ylabel="Active Power", directory=directory, name=graph_name)
+        get_graph(xs, ys=ys, ys_label=ys_label, xticks=mem_freq_display_list, title=label+" @ {}MHz GPU".format(gpu_freq_display_list[i]), 
+                  xlabel="Memory Frequency", ylabel=label, directory=directory, name=graph_name)
     print("Generated {} Graphs".format(directory))
 
-def get_power_fixedgpu_allmem_cpu():
+def get_fixedgpu_allmem_cpu(data, sub_dir, col, label):
     # all data points @ Fixed GPU settings analyzing different CPU settings across all MEM settings
-    # print(data.loc[(data[[GPU_FREQ_COL]] == gpu_freq_list[0]) & (data[[CPU_FREQ_COL]] == cpu_freq_list[0])])
     xs = cpu_freq_list
-    directory = results_directory + power_directory + directories_names[3] + "/"
+    directory = results_directory + sub_dir + directories_names[3] + "/"
     for i, gpu_freq in enumerate(gpu_freq_list):
         ys = []
         ys_label = []
         graph_name = str(gpu_freq_display_list[i]) + "_" + directories_names[3]
         for j, mem_freq in enumerate(mem_freq_list):
-            ys.append(data.loc[(data[GPU_FREQ_COL] == gpu_freq) & (data[MEM_FREQ_COL] == mem_freq)][ACTIVE_POWER])
+            ys.append(data.loc[(data[GPU_FREQ_COL] == gpu_freq) & (data[MEM_FREQ_COL] == mem_freq)][col])
             ys_label.append("@ {}MHz MEM".format(mem_freq_display_list[j]))
-        get_graph(xs, ys=ys, ys_label=ys_label, xticks=cpu_freq_display_list, title="Overall Scores @ {}MHz GPU".format(gpu_freq_display_list[i]), 
-                  xlabel="CPU Frequency", ylabel="Active Power", directory=directory, name=graph_name)
+        get_graph(xs, ys=ys, ys_label=ys_label, xticks=cpu_freq_display_list, title=label+" @ {}MHz GPU".format(gpu_freq_display_list[i]), 
+                  xlabel="CPU Frequency", ylabel=label, directory=directory, name=graph_name)
     print("Generated {} Graphs".format(directory))
 
-def get_power_fixedmem_allcpu_gpu():
+def get_fixedmem_allcpu_gpu(data, sub_dir, col, label):
     # all data points @ Fixed GPU settings analyzing different CPU settings across all MEM settings
-    # print(data.loc[(data[[GPU_FREQ_COL]] == gpu_freq_list[0]) & (data[[CPU_FREQ_COL]] == cpu_freq_list[0])])
     xs = gpu_freq_list
-    directory = results_directory + power_directory + directories_names[4] + "/"
+    directory = results_directory + sub_dir + directories_names[4] + "/"
     for i, mem_freq in enumerate(mem_freq_list):
         ys = []
         ys_label = []
         graph_name = str(mem_freq_display_list[i]) + "_" + directories_names[4]
         for j, cpu_freq in enumerate(cpu_freq_list):
-            ys.append(data.loc[(data[MEM_FREQ_COL] == mem_freq) & (data[CPU_FREQ_COL] == cpu_freq)][ACTIVE_POWER][::-1])
+            ys.append(data.loc[(data[MEM_FREQ_COL] == mem_freq) & (data[CPU_FREQ_COL] == cpu_freq)][col][::-1])
             ys_label.append("@ {}MHz CPU".format(cpu_freq_display_list[j]))
-        get_graph(xs, ys=ys, ys_label=ys_label, xticks=gpu_freq_display_list, title="Overall Scores @ {}MHz MEM".format(mem_freq_display_list[i]), 
-                  xlabel="GPU Frequency", ylabel="Active Power", directory=directory, name=graph_name)
+        get_graph(xs, ys=ys, ys_label=ys_label, xticks=gpu_freq_display_list, title=label+" @ {}MHz MEM".format(mem_freq_display_list[i]), 
+                  xlabel="GPU Frequency", ylabel=label, directory=directory, name=graph_name)
     print("Generated {} Graphs".format(directory))
 
-def get_power_fixedmem_allgpu_cpu():
+def get_fixedmem_allgpu_cpu(data, sub_dir, col, label):
     # all data points @ Fixed GPU settings analyzing different CPU settings across all MEM settings
     xs = cpu_freq_list
-    directory = results_directory + power_directory + directories_names[5] + "/"
+    directory = results_directory + sub_dir + directories_names[5] + "/"
     for i, mem_freq in enumerate(mem_freq_list):
         ys = []
         ys_label = []
         graph_name = str(mem_freq_display_list[i]) + "_" + directories_names[5]
         for j, gpu_freq in enumerate(gpu_freq_list):
-            ys.append(data.loc[(data[MEM_FREQ_COL] == mem_freq) & (data[GPU_FREQ_COL] == gpu_freq)][ACTIVE_POWER])
+            ys.append(data.loc[(data[MEM_FREQ_COL] == mem_freq) & (data[GPU_FREQ_COL] == gpu_freq)][col])
             ys_label.append("@ {}MHz GPU".format(gpu_freq_display_list[j]))
-        get_graph(xs, ys=ys, ys_label=ys_label, xticks=cpu_freq_display_list, title="Overall Scores @ {}MHz MEM".format(mem_freq_display_list[i]), 
-                xlabel="CPU Frequency", ylabel="Active Power", directory=directory, name=graph_name)
+        get_graph(xs, ys=ys, ys_label=ys_label, xticks=cpu_freq_display_list, title=label+" @ {}MHz MEM".format(mem_freq_display_list[i]), 
+                xlabel="CPU Frequency", ylabel=label, directory=directory, name=graph_name)
     print("Generated {} Graphs".format(directory))
 
 def get_graph(xs, ys, ys_label, xticks, title, xlabel, ylabel, directory, name):
@@ -329,28 +227,28 @@ def get_graph(xs, ys, ys_label, xticks, title, xlabel, ylabel, directory, name):
     plt.close()
 
 def generate_perf_graphs():
-    get_perf_fixedcpu_allgpu_mem()
-    get_perf_fixedcpu_allem_gpu()
-    get_perf_fixedgpu_allcpu_mem()
-    get_perf_fixedgpu_allmem_cpu()
-    get_perf_fixedmem_allcpu_gpu()
-    get_perf_fixedmem_allgpu_cpu()
-    
+    get_fixedcpu_allgpu_mem(data, perf_directory, TOT_SCORE, label="Perf Score")
+    get_fixedcpu_allem_gpu(data, perf_directory, TOT_SCORE, label="Perf Score")
+    get_fixedgpu_allcpu_mem(data, perf_directory, TOT_SCORE, label="Perf Score")
+    get_fixedgpu_allmem_cpu(data, perf_directory, TOT_SCORE, label="Perf Score")
+    get_fixedmem_allcpu_gpu(data, perf_directory, TOT_SCORE, label="Perf Score")
+    get_fixedmem_allgpu_cpu(data, perf_directory, TOT_SCORE, label="Perf Score")
+
 def generate_power_graphs():
-    get_power_fixedcpu_allgpu_mem()
-    get_power_fixedcpu_allem_gpu()
-    get_power_fixedgpu_allcpu_mem()
-    get_power_fixedgpu_allmem_cpu()
-    get_power_fixedmem_allcpu_gpu()
-    get_power_fixedmem_allgpu_cpu()
+    get_fixedcpu_allgpu_mem(data, power_directory, ACTIVE_POWER, label="Power Score")
+    get_fixedcpu_allem_gpu(data, power_directory, ACTIVE_POWER, label="Power Score")
+    get_fixedgpu_allcpu_mem(data, power_directory, ACTIVE_POWER, label="Power Score")
+    get_fixedgpu_allmem_cpu(data, power_directory, ACTIVE_POWER, label="Power Score")
+    get_fixedmem_allcpu_gpu(data, power_directory, ACTIVE_POWER, label="Power Score")
+    get_fixedmem_allgpu_cpu(data, power_directory, ACTIVE_POWER, label="Power Score")
 
 def generate_all_graphs():
+    print("Generting Necessary Data Directories....")
+    generate_results_directories()
     print("Generating Graphs....")
-    # get_scatter_perf_power()
-    # generate_perf_graphs()
+    get_scatter_perf_power(data, sub_dir=results_directory)
+    generate_perf_graphs()
     generate_power_graphs()
     print("Graph Generation Done.")
-    
+
 generate_all_graphs()
-
-
