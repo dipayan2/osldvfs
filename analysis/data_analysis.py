@@ -5,6 +5,8 @@ import sys
 import shutil
 
 FILE_NAME = "combined_perf_pow.csv"
+SUB_DIRECTORY = "SSSP/"
+RESULTS_DIR = "results/"
 
 CPU_FREQ_COL = "CPU Frequencies"
 GPU_FREQ_COL = "GPU Frequencies"
@@ -28,6 +30,7 @@ TRANSFER_SCORE_COL = "Transfer Score"
 TOT_SCORE = "Total Score"
 IDLE_POWER = "IdlePower"
 ACTIVE_POWER = "ActivePower"
+POWER = "Power (W)"
 
 cpu_freq_list = [200000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000, 1500000, 1600000, 1700000, 1800000, 1900000, 2000000]
 gpu_freq_list = [177000000,266000000,350000000,420000000,480000000,543000000,600000000]
@@ -47,11 +50,11 @@ directories_names = ['fixedcpu_allgpu_mem',
                      'fixedmem_allcpu_gpu',
                      'fixedmem_allgpu_cpu']
 
-filename = FILE_NAME
-data = pd.read_csv(filename)
-data_cols = data.columns.tolist()
+# filename = FILE_NAME
+# data = pd.read_csv(filename)
+# data_cols = data.columns.tolist()
 
-print("Loading Data File....")
+# print("Loading Data File....")
 # if(len(sys.argv) > 1):
 #     print(sys.argv.index("-f"))
 #     pass
@@ -59,48 +62,50 @@ print("Loading Data File....")
     
 #     # data = data[::2]
 #     data_cols = data.columns.tolist()
+def process_data(data):
+    print("Processing Data File....")
+    data_cols = data.columns.tolist()
+    data_cols.append('Total Data Transfer Latency')
+    data_cols.append("Total Latency")
+    data_cols.append("Transfer Percentage")
+    data_cols.append("Kernel STD")
+    data_cols.append("Transfer STD")
+    data_cols.append("Kernel Score")
+    data_cols.append("Transfer Score")
+    data_cols.append("Total Score")
 
-print("Processing Data File....")
-data_cols.append('Total Data Transfer Latency')
-data_cols.append("Total Latency")
-data_cols.append("Transfer Percentage")
-data_cols.append("Kernel STD")
-data_cols.append("Transfer STD")
-data_cols.append("Kernel Score")
-data_cols.append("Transfer Score")
-data_cols.append("Total Score")
+    data[TOT_DATA_TRANSFER_LATENCY_COL] = data[CP_HTD_COL] + data[CP_DTH_COL]
+    data[TOT_LATENCY_COL] = data[TOT_DATA_TRANSFER_LATENCY_COL] + data[KERNEL_TIME_COL]
+    data[TRANS_PERCENT_COL] = round((data[TOT_DATA_TRANSFER_LATENCY_COL] / data[TOT_LATENCY_COL]) * 100, 2)
 
-data[TOT_DATA_TRANSFER_LATENCY_COL] = data[CP_HTD_COL] + data[CP_DTH_COL]
-data[TOT_LATENCY_COL] = data[TOT_DATA_TRANSFER_LATENCY_COL] + data[KERNEL_TIME_COL]
-data[TRANS_PERCENT_COL] = round((data[TOT_DATA_TRANSFER_LATENCY_COL] / data[TOT_LATENCY_COL]) * 100, 2)
+    avg_kernel = data[KERNEL_TIME_COL].mean()
+    avg_tot_data_transfer_latency = data[TOT_DATA_TRANSFER_LATENCY_COL].mean()
 
-avg_kernel = data[KERNEL_TIME_COL].mean()
-avg_tot_data_transfer_latency = data[TOT_DATA_TRANSFER_LATENCY_COL].mean()
+    std_kernel = data[KERNEL_TIME_COL].std()
+    std_tot_data_transfer_latency = data[TOT_DATA_TRANSFER_LATENCY_COL].std()
 
-std_kernel = data[KERNEL_TIME_COL].std()
-std_tot_data_transfer_latency = data[TOT_DATA_TRANSFER_LATENCY_COL].std()
+    data[KERNEL_STD_COL] = (data[KERNEL_TIME_COL] - avg_kernel) / std_kernel
+    data[TRANSFER_STD_COL] = (data[TOT_DATA_TRANSFER_LATENCY_COL] - avg_tot_data_transfer_latency) / std_tot_data_transfer_latency
 
-data[KERNEL_STD_COL] = (data[KERNEL_TIME_COL] - avg_kernel) / std_kernel
-data[TRANSFER_STD_COL] = (data[TOT_DATA_TRANSFER_LATENCY_COL] - avg_tot_data_transfer_latency) / std_tot_data_transfer_latency
+    kernel_std_min = data[KERNEL_STD_COL].min()
+    transfer_std_min = data[TRANSFER_STD_COL].min()
 
-kernel_std_min = data[KERNEL_STD_COL].min()
-transfer_std_min = data[TRANSFER_STD_COL].min()
+    # data[KERNEL_SCORE_COL] = round(std_kernel*(1/(data[KERNEL_STD_COL]+2*abs(kernel_std_min)))+avg_kernel, 3)
+    # data[TRANSFER_SCORE_COL] = round(std_tot_data_transfer_latency*(1/(data[TRANSFER_STD_COL]+2*abs(transfer_std_min)))+avg_tot_data_transfer_latency, 3)
+    # data[TOT_SCORE] = data[KERNEL_SCORE_COL] + data[TRANSFER_SCORE_COL]
 
-# data[KERNEL_SCORE_COL] = round(std_kernel*(1/(data[KERNEL_STD_COL]+2*abs(kernel_std_min)))+avg_kernel, 3)
-# data[TRANSFER_SCORE_COL] = round(std_tot_data_transfer_latency*(1/(data[TRANSFER_STD_COL]+2*abs(transfer_std_min)))+avg_tot_data_transfer_latency, 3)
-# data[TOT_SCORE] = data[KERNEL_SCORE_COL] + data[TRANSFER_SCORE_COL]
+    data[TOT_SCORE] = (data[TOT_LATENCY_COL].max()/data[TOT_LATENCY_COL])
 
-data[TOT_SCORE] = (data[TOT_LATENCY_COL].max()/data[TOT_LATENCY_COL])
+    # data[KERNEL_SCORE_COL] = 
+    # data[TRANSFER_SCORE_COL] = 
+    # data[TOT_SCORE] = data[KERNEL_SCORE_COL] + data[TRANSFER_SCORE_COL]
+    return data
 
-# data[KERNEL_SCORE_COL] = 
-# data[TRANSFER_SCORE_COL] = 
-# data[TOT_SCORE] = data[KERNEL_SCORE_COL] + data[TRANSFER_SCORE_COL]
+# print("Data processing Done.")
 
-print("Data processing Done.")
-
-def get_scatter_perf_power(data, sub_dir):
+def get_scatter_perf_power(data, sub_dir, perf_col, power_col):
     plt.figure()
-    plt.scatter(data[TOT_SCORE], data[ACTIVE_POWER])
+    plt.scatter(data[perf_col], data[power_col])
     plt.title("Scatter perf vs power")
     plt.xlabel("Performance")
     plt.ylabel("Power")
@@ -108,25 +113,30 @@ def get_scatter_perf_power(data, sub_dir):
     plt.close()
     print("Generated power/scatter plot")
 
-def generate_results_directories():
+def generate_results_directories(subd: str):
     try:
-        shutil.rmtree(results_directory)
+        shutil.rmtree(results_directory+subd)
     except:
         print("Results/ Directory Does not Already Exist. Creating Such Directory...")
 
-    os.mkdir(results_directory)
-    os.mkdir(results_directory+power_directory)
-    os.mkdir(results_directory+perf_directory)
+    sub_dir = results_directory+subd+"/"
+    
+    os.mkdir(sub_dir)
+    os.mkdir(sub_dir+power_directory)
+    os.mkdir(sub_dir+perf_directory)
+    
+    sub_dir_power = sub_dir+power_directory
+    sub_dir_perf = sub_dir+perf_directory
     
     for directory in directories_names:
-        os.mkdir(results_directory+power_directory+directory)
-        os.mkdir(results_directory+perf_directory+directory)
+        os.mkdir(sub_dir_power+directory)
+        os.mkdir(sub_dir_perf+directory)
     print("Results Directories Generated.")
 
 def get_fixedcpu_allgpu_mem(data, sub_dir, col, label):
     # all data points @ Fixed CPU settings analyzing different GPU settings across all MEM settings
     xs = mem_freq_list
-    directory = results_directory + sub_dir + directories_names[0] + "/"
+    directory = sub_dir + directories_names[0] + "/"
     for i, cpu_freq in enumerate(cpu_freq_list):
         ys = []
         ys_label = []
@@ -141,7 +151,7 @@ def get_fixedcpu_allgpu_mem(data, sub_dir, col, label):
 def get_fixedcpu_allem_gpu(data, sub_dir, col, label):
     # all data points @ Fixed CPU settings analyzing different MEM settings across all GPU settings
     xs = gpu_freq_list
-    directory = results_directory + sub_dir + directories_names[1] + "/"
+    directory = sub_dir + directories_names[1] + "/"
     for i, cpu_freq in enumerate(cpu_freq_list):
         ys = []
         ys_label = []
@@ -156,7 +166,7 @@ def get_fixedcpu_allem_gpu(data, sub_dir, col, label):
 def get_fixedgpu_allcpu_mem(data, sub_dir, col, label):
     # all data points @ Fixed GPU settings analyzing different CPU settings across all MEM settings
     xs = mem_freq_list
-    directory = results_directory + sub_dir + directories_names[2] + "/"
+    directory = sub_dir + directories_names[2] + "/"
     for i, gpu_freq in enumerate(gpu_freq_list):
         ys = []
         ys_label = []
@@ -171,7 +181,7 @@ def get_fixedgpu_allcpu_mem(data, sub_dir, col, label):
 def get_fixedgpu_allmem_cpu(data, sub_dir, col, label):
     # all data points @ Fixed GPU settings analyzing different CPU settings across all MEM settings
     xs = cpu_freq_list
-    directory = results_directory + sub_dir + directories_names[3] + "/"
+    directory = sub_dir + directories_names[3] + "/"
     for i, gpu_freq in enumerate(gpu_freq_list):
         ys = []
         ys_label = []
@@ -186,7 +196,7 @@ def get_fixedgpu_allmem_cpu(data, sub_dir, col, label):
 def get_fixedmem_allcpu_gpu(data, sub_dir, col, label):
     # all data points @ Fixed GPU settings analyzing different CPU settings across all MEM settings
     xs = gpu_freq_list
-    directory = results_directory + sub_dir + directories_names[4] + "/"
+    directory = sub_dir + directories_names[4] + "/"
     for i, mem_freq in enumerate(mem_freq_list):
         ys = []
         ys_label = []
@@ -201,7 +211,7 @@ def get_fixedmem_allcpu_gpu(data, sub_dir, col, label):
 def get_fixedmem_allgpu_cpu(data, sub_dir, col, label):
     # all data points @ Fixed GPU settings analyzing different CPU settings across all MEM settings
     xs = cpu_freq_list
-    directory = results_directory + sub_dir + directories_names[5] + "/"
+    directory = sub_dir + directories_names[5] + "/"
     for i, mem_freq in enumerate(mem_freq_list):
         ys = []
         ys_label = []
@@ -226,29 +236,51 @@ def get_graph(xs, ys, ys_label, xticks, title, xlabel, ylabel, directory, name):
     plt.savefig(save_to_name)
     plt.close()
 
-def generate_perf_graphs():
-    get_fixedcpu_allgpu_mem(data, perf_directory, TOT_SCORE, label="Perf Score")
-    get_fixedcpu_allem_gpu(data, perf_directory, TOT_SCORE, label="Perf Score")
-    get_fixedgpu_allcpu_mem(data, perf_directory, TOT_SCORE, label="Perf Score")
-    get_fixedgpu_allmem_cpu(data, perf_directory, TOT_SCORE, label="Perf Score")
-    get_fixedmem_allcpu_gpu(data, perf_directory, TOT_SCORE, label="Perf Score")
-    get_fixedmem_allgpu_cpu(data, perf_directory, TOT_SCORE, label="Perf Score")
+def generate_perf_graphs(data, directory, col):
+    get_fixedcpu_allgpu_mem(data, directory, col, label="Perf Score")
+    get_fixedcpu_allem_gpu(data, directory, col, label="Perf Score")
+    get_fixedgpu_allcpu_mem(data, directory, col, label="Perf Score")
+    get_fixedgpu_allmem_cpu(data, directory, col, label="Perf Score")
+    get_fixedmem_allcpu_gpu(data, directory, col, label="Perf Score")
+    get_fixedmem_allgpu_cpu(data, directory, col, label="Perf Score")
 
-def generate_power_graphs():
-    get_fixedcpu_allgpu_mem(data, power_directory, ACTIVE_POWER, label="Power Score")
-    get_fixedcpu_allem_gpu(data, power_directory, ACTIVE_POWER, label="Power Score")
-    get_fixedgpu_allcpu_mem(data, power_directory, ACTIVE_POWER, label="Power Score")
-    get_fixedgpu_allmem_cpu(data, power_directory, ACTIVE_POWER, label="Power Score")
-    get_fixedmem_allcpu_gpu(data, power_directory, ACTIVE_POWER, label="Power Score")
-    get_fixedmem_allgpu_cpu(data, power_directory, ACTIVE_POWER, label="Power Score")
+def generate_power_graphs(data, directory, col):
+    get_fixedcpu_allgpu_mem(data, directory, col, label="Power Score")
+    get_fixedcpu_allem_gpu(data, directory, col, label="Power Score")
+    get_fixedgpu_allcpu_mem(data, directory, col, label="Power Score")
+    get_fixedgpu_allmem_cpu(data, directory, col, label="Power Score")
+    get_fixedmem_allcpu_gpu(data, directory, col, label="Power Score")
+    get_fixedmem_allgpu_cpu(data, directory, col, label="Power Score")
 
-def generate_all_graphs():
+def generate_all_graphs(data, subd, perf_col = TOT_SCORE, power_col = ACTIVE_POWER):
+    directory = RESULTS_DIR + subd + "/"
     print("Generting Necessary Data Directories....")
-    generate_results_directories()
+    generate_results_directories(subd)
     print("Generating Graphs....")
-    get_scatter_perf_power(data, sub_dir=results_directory)
-    generate_perf_graphs()
-    generate_power_graphs()
+    get_scatter_perf_power(data, directory, perf_col=perf_col , power_col=power_col)
+    directory_perf = directory + "perf/"
+    generate_perf_graphs(data, directory_perf, perf_col)
+    directory_power = directory + "power/"
+    generate_power_graphs(data, directory_power, power_col)
     print("Graph Generation Done.")
 
-generate_all_graphs()
+def get_args():
+    filename = FILE_NAME
+    subd = SUB_DIRECTORY
+    if(len(sys.argv) > 1):
+        filename = sys.argv[1]
+    if(len(sys.argv) > 2):
+        subd = sys.argv[2]
+    return filename, subd
+
+def get_data(filename):
+    return pd.read_csv(filename)
+
+def main():
+    filename, subd = get_args()
+    data = get_data(filename)
+    data_p = process_data(data=data)
+    generate_all_graphs(data_p, subd, power_col=POWER)
+
+if __name__ == "__main__":
+    main()
