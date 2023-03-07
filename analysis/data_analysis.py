@@ -7,6 +7,8 @@ import shutil
 FILE_NAME = "combined_perf_pow.csv"
 SUB_DIRECTORY = "SSSP/"
 RESULTS_DIR = "results/"
+PERF_COL = "Total Score"
+POWER_COL = "ActivePower"
 
 CPU_FREQ_COL = "CPU Frequencies"
 GPU_FREQ_COL = "GPU Frequencies"
@@ -114,10 +116,17 @@ def get_scatter_perf_power(data, sub_dir, perf_col, power_col):
     print("Generated power/scatter plot")
 
 def generate_results_directories(subd: str):
+    # try:
+    #     shutil.rmtree(results_directory)
+    # except:
+    #     print("results/ Directory Does not Already Exist. Creating Such Directory...")
+        
+    # os.mkdir(results_directory)
+        
     try:
         shutil.rmtree(results_directory+subd)
     except:
-        print("Results/ Directory Does not Already Exist. Creating Such Directory...")
+        print("results/{}/ Directory Does not Already Exist. Creating Such Directory...".format(subd))
 
     sub_dir = results_directory+subd+"/"
     
@@ -280,7 +289,7 @@ def main():
     filename, subd = get_args()
     data = get_data(filename)
     data_p = process_data(data=data)
-    generate_all_graphs(data_p, subd, power_col=POWER)
+    generate_all_graphs(data_p, subd, power_col=ACTIVE_POWER)
 
 if __name__ == "__main__":
     main()
