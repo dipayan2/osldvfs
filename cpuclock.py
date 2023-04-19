@@ -21,10 +21,32 @@ class CPUClock:
 			return -1
 		self.cpu_freq = int(curr_freq[:-1])
 		return self.cpu_freq
-	
+
+	def adb_get_clock(self):
+		path = os.path.join(os.getcwd()+"/scripts/adb_get_cpufreq.sh")
+		cmd = path+ " " + str(self.cpu_id)
+		curr_freq = subprocess.check_output(cmd,shell=True)
+		curr_freq = curr_freq.decode('ascii')
+		# print("The frequency of id and cpu"+str(self.cpu_id)+" is"+str(curr_freq))
+		if len(curr_freq) <2:
+			return -1
+		self.cpu_freq = int(curr_freq[:-1])
+		return self.cpu_freq
+
 	def set_clock(self, freq):
 		# print("The frequency of id and cpu"+str(self.cpu_id)+" is"+str(freq))
 		path = os.path.join(os.getcwd() + "/scripts/cpu_set_clock.sh")
+		inc_flag = 0
+		if freq > self.cpu_freq:
+			inc_flag = 1
+		cmd = path+ " "+str(self.cpu_id)+" "+str(freq)+" "+str(inc_flag)
+		subprocess.check_call(cmd, shell=True)
+		# print("The set freq of id and cpu"+str(self.cpu_id)+" is"+str(freq))
+		self.cpu_freq = freq
+		return
+	
+	def adb_set_clock(self):
+		path = os.path.join(os.getcwd() + "/scripts/adb_set_cpufreq.sh")
 		inc_flag = 0
 		if freq > self.cpu_freq:
 			inc_flag = 1
