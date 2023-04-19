@@ -20,6 +20,19 @@ class GPUClock:
 			return -1
 		self.gpu_freq = int(gpu_freq[:-1])
 		return self.gpu_freq
+
+	def adb_get_clock(self):
+		path = os.path.join(os.getcwd() + "/scripts/adb_get_gpufreq.sh")
+		cmd = path 
+		gpu_freq = subprocess.check_output(cmd,shell=True)
+		gpu_freq = gpu_freq.decode('ascii')
+		# gpu_freq = int(gpu_freq)
+		# print("GPUFreq is : "+str(gpu_freq))
+		# print(f"The GPU frequency is {gpu_freq}")
+		if len(gpu_freq) < 2:
+			return -1
+		self.gpu_freq = int(gpu_freq[:-1])
+		return self.gpu_freq		
 	
 	def set_clock(self, freq):
 		# print("... Setting the GPU to"+str(freq))
@@ -31,9 +44,21 @@ class GPUClock:
 			cmd = path+" "+str(freq)+" "+str(inc_flag)
 			subprocess.check_call(cmd, shell=True)
 			self.gpu_freq = freq
-			# print("The clock is in GPU to"+str(freq))
-		
+			# print("The clock is in GPU to"+str(freq))		
 		return
+	
+	def adb_set_clock(self):
+		if freq != self.gpu_freq:
+			path = os.path.join(os.getcwd() + "/scripts/adb_set_gpu.sh")
+			inc_flag = 0
+			if freq > self.gpu_freq:
+				inc_flag = 1
+			cmd = path+" "+str(freq)+" "+str(inc_flag)
+			subprocess.check_call(cmd, shell=True)
+			self.gpu_freq = freq
+			# print("The clock is in GPU to"+str(freq))		
+		return
+
 	
 	def get_all_clock(self):
 		print("... Getting the GPU all frequency")
