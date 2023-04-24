@@ -1,5 +1,4 @@
 #!/bin/sh
-
 if [ "$3" -eq "1" ]
 then 
     echo "Increase"

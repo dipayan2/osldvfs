@@ -37,6 +37,8 @@ class CPUClock:
 		# print("The frequency of id and cpu"+str(self.cpu_id)+" is"+str(freq))
 		path = os.path.join(os.getcwd() + "/scripts/cpu_set_clock.sh")
 		inc_flag = 0
+		if freq == self.cpu_freq:
+			return
 		if freq > self.cpu_freq:
 			inc_flag = 1
 		cmd = path+ " "+str(self.cpu_id)+" "+str(freq)+" "+str(inc_flag)
@@ -45,9 +47,11 @@ class CPUClock:
 		self.cpu_freq = freq
 		return
 	
-	def adb_set_clock(self):
+	def adb_set_clock(self, freq):
 		path = os.path.join(os.getcwd() + "/scripts/adb_set_cpufreq.sh")
 		inc_flag = 0
+		# if freq == self.cpu_freq:
+		# 	return
 		if freq > self.cpu_freq:
 			inc_flag = 1
 		cmd = path+ " "+str(self.cpu_id)+" "+str(freq)+" "+str(inc_flag)

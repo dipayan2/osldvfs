@@ -44,7 +44,7 @@ class MemClock:
 			self.mem_freq = freq
 		return
 	
-	def abd_set_clock(self):
+	def adb_set_clock(self, freq):
 		if self.mem_freq != freq:
 			path = os.path.join(os.getcwd() + "/scripts/adb_set_mem.sh")
 			inc_flag = 0

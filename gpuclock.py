@@ -47,7 +47,7 @@ class GPUClock:
 			# print("The clock is in GPU to"+str(freq))		
 		return
 	
-	def adb_set_clock(self):
+	def adb_set_clock(self, freq):
 		if freq != self.gpu_freq:
 			path = os.path.join(os.getcwd() + "/scripts/adb_set_gpu.sh")
 			inc_flag = 0
