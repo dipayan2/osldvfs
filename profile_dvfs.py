@@ -166,11 +166,20 @@ adb_mem_cluster = {
 933000:{'gpu':543,'small':1400000,'cpu':2000000}
 }						
 
+adb_cpu_clusterSmall={				
+1000000:{'gpu':177,'cpu':1200000,'mem':165000},
+1100000:{'gpu':266,'cpu':1400000,'mem':275000},
+1200000:{'gpu':350,'cpu':1500000,'mem':413000},
+1300000:{'gpu':420,'cpu':1700000,'mem':543000},
+1400000:{'gpu':480,'cpu':1900000,'mem':633000}
+}						
+
 
 power_policy = lamp_dvfs.OSLScheduler()
 ## CPU driven governor
 # power_policy.set_cluster(cpu_nu05_cluster1)
-power_policy.set_cluster(adb_cpu_clusterNew)
+power_policy.set_cluster(cpu_cluster)
+# power_policy.set_cluster(adb_cpu_clusterSmall)
 ## Memory driven governor
 # power_policy.set_cluster(mem_cluster0)
 # GPU driven governor

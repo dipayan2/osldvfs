@@ -118,11 +118,29 @@ class OSLScheduler:
         cpu_freq = self.cpu_man_big.adb_get_clock() # we have the CPU freq 
         # Set the rest of the two frequency
         # print(" Util : "+str(self.cpu_man.get_utilization()))
-        print(cpu_freq,self.cluster[cpu_freq]['small'])
-        ncpu_freq = int(self.cluster[cpu_freq]['small'])
+        print(cpu_freq,self.cluster[cpu_freq]['cpu'])
+        ncpu_freq = int(self.cluster[cpu_freq]['cpu'])
         gpu_freq = int(self.cluster[cpu_freq]['gpu'])
         mem_freq = int(self.cluster[cpu_freq]['mem'])
-        self.cpu_man.adb_set_clock(ncpu_freq)
+        self.cpu_man_big.adb_set_clock(ncpu_freq)
+        self.gpu_man.adb_set_clock(gpu_freq)
+        self.mem_man.adb_set_clock(mem_freq)
+        # print("The freq are , cpu : {}, gpu: {} and mem: {}".format(cpu_freq,self.gpu_man.get_clock(),self.mem_man.get_clock()))
+        return
+
+    def policy_adb_cpusmall(self):
+        '''
+        In this code: we are selecting the best configuration for all the resources based on the state of cpu operating point
+        '''
+
+        cpu_freq = self.cpu_man.adb_get_clock() # we have the CPU freq 
+        # Set the rest of the two frequency
+        # print(" Util : "+str(self.cpu_man.get_utilization()))
+        print(cpu_freq,self.cluster[cpu_freq]['cpu'])
+        ncpu_freq = int(self.cluster[cpu_freq]['cpu'])
+        gpu_freq = int(self.cluster[cpu_freq]['gpu'])
+        mem_freq = int(self.cluster[cpu_freq]['mem'])
+        self.cpu_man_big.adb_set_clock(ncpu_freq)
         self.gpu_man.adb_set_clock(gpu_freq)
         self.mem_man.adb_set_clock(mem_freq)
         # print("The freq are , cpu : {}, gpu: {} and mem: {}".format(cpu_freq,self.gpu_man.get_clock(),self.mem_man.get_clock()))
@@ -170,11 +188,11 @@ class OSLScheduler:
         # self.my_thread.daemon = True
         self.my_thread.start()
         start_time = time.time()
-        # self.policy_cpu()
+        self.policy_cpu()
         # self.policy_mem()
         #self.policy_gpu()
         # self.policy_util()
-        self.policy_adb_cpu()
+        # self.policy_adb_cpusmall()
         # print(" Overhead is {} second".format(time.time()-start_time))
     
     def run(self):
