@@ -184,7 +184,7 @@ class OSLScheduler:
 
     def schedule(self):
         # print("Starting the scheduler")
-        self.my_thread = threading.Timer(1, self.schedule)
+        self.my_thread = threading.Timer(2, self.schedule)
         # self.my_thread.daemon = True
         self.my_thread.start()
         start_time = time.time()
