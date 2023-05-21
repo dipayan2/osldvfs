@@ -178,10 +178,10 @@ adb_cpu_clusterSmall={
 power_policy = lamp_dvfs.OSLScheduler()
 ## CPU driven governor
 # power_policy.set_cluster(cpu_nu05_cluster1)
-# power_policy.set_cluster(cpu_cluster)
+power_policy.set_cluster(cpu_cluster)
 # power_policy.set_cluster(adb_cpu_clusterSmall)
 ## Memory driven governor
-power_policy.set_cluster(mem_cluster)
+# power_policy.set_cluster(mem_cluster)
 # GPU driven governor
 # power_policy.set_cluster(gpu_cluster)
 ## run
