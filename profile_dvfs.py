@@ -98,11 +98,90 @@ Run more clustetring to find the optimal power performance
 
 
 
+cpu_adb_cluster05 ={
+1200000:{'small':1000000,'gpu':350,'mem':933000},
+1300000:{'small':1000000,'gpu':350,'mem':633000},
+1400000:{'small':1100000,'gpu':350,'mem':933000},
+1500000:{'small':1100000,'gpu':480,'mem':728000},
+1600000:{'small':1200000,'gpu':177,'mem':825000},
+1700000:{'small':1200000,'gpu':350,'mem':543000},
+1800000:{'small':1200000,'gpu':543,'mem':633000},
+1900000:{'small':1300000,'gpu':266,'mem':275000},
+2000000:{'small':1400000,'gpu':177,'mem':165000}
+}
+
+mem_adb_cluster05 = {
+165000: {'gpu':177, 'cpu':2000000, 'small':1400000},
+206000: {'gpu':480, 'cpu':1900000, 'small':1400000},
+275000: {'gpu':420, 'cpu':1800000, 'small':1200000},
+413000: {'gpu':177, 'cpu':1700000, 'small':1200000},
+543000: {'gpu':543, 'cpu':1700000, 'small':1200000},
+633000: {'gpu':350, 'cpu':1600000, 'small':1100000},
+728000: {'gpu':350, 'cpu':1500000, 'small':1100000},
+825000: {'gpu':266, 'cpu':1400000, 'small':1100000},
+933000: {'gpu':177, 'cpu':1200000, 'small':1000000}
+}
+
+gpu_adb_cluster05={
+543:{'cpu':1200000,	'small':1000000,'mem':543000},
+480:{'cpu':1500000,	'small':1100000,'mem':413000},
+420:{'cpu':2000000,	'small':1400000,'mem':165000},
+350:{'cpu':1700000,	'small':1200000,'mem':543000},
+266:{'cpu':1600000,	'small':1200000,'mem':633000},
+177:{'cpu':1700000,	'small':1300000,'mem':543000}
+}
+
+
+adb_cpu_clusterNew = {					
+1200000:{'gpu':177,'small':1000000,'mem':165000},
+1300000:{'gpu':177,'small':1100000,'mem':165000},
+1400000:{'gpu':266,'small':1100000,'mem':275000},
+1500000:{'gpu':350,'small':1200000,'mem':413000},
+1600000:{'gpu':350,'small':1200000,'mem':413000},
+1700000:{'gpu':420,'small':1300000,'mem':543000},
+1800000:{'gpu':480,'small':1300000,'mem':633000},
+1900000:{'gpu':480,'small':1400000,'mem':633000},
+2000000:{'gpu':543,'small':1400000,'mem':825000}
+}						
+
+adb_gpu_cluster = {						
+600:{'cpu':2000000,'small':1400000,'mem':825000},
+543:{'cpu':1900000,'small':1400000,'mem':728000},
+480:{'cpu':1600000,'small':1200000,'mem':633000},
+420:{'cpu':1500000,'small':1200000,'mem':543000},
+350:{'cpu':1400000,'small':1200000,'mem':413000},
+266:{'cpu':1300000,'small':1100000,'mem':275000},
+177:{'cpu':1200000,'small':1000000,'mem':165000}
+}						
+
+adb_mem_cluster = {						
+165000:{'gpu':177,'small':1000000,'cpu':1200000},
+206000:{'gpu':177,'small':1000000,'cpu':1300000},
+275000:{'gpu':266,'small':1100000,'cpu':1400000},
+413000:{'gpu':350,'small':1200000,'cpu':1500000},
+543000:{'gpu':420,'small':1200000,'cpu':1600000},
+633000:{'gpu':480,'small':1300000,'cpu':1800000},
+728000:{'gpu':480,'small':1400000,'cpu':1900000},
+825000:{'gpu':543,'small':1400000,'cpu':2000000},
+933000:{'gpu':543,'small':1400000,'cpu':2000000}
+}						
+
+adb_cpu_clusterSmall={				
+1000000:{'gpu':177,'cpu':1200000,'mem':165000},
+1100000:{'gpu':266,'cpu':1400000,'mem':275000},
+1200000:{'gpu':350,'cpu':1500000,'mem':413000},
+1300000:{'gpu':420,'cpu':1700000,'mem':543000},
+1400000:{'gpu':480,'cpu':1900000,'mem':633000}
+}						
+
+
 power_policy = lamp_dvfs.OSLScheduler()
 ## CPU driven governor
-power_policy.set_cluster(cpu_nu05_cluster1)
+# power_policy.set_cluster(cpu_nu05_cluster1)
+power_policy.set_cluster(cpu_cluster)
+# power_policy.set_cluster(adb_cpu_clusterSmall)
 ## Memory driven governor
-# power_policy.set_cluster(mem_cluster0)
+# power_policy.set_cluster(mem_cluster)
 # GPU driven governor
 # power_policy.set_cluster(gpu_cluster)
 ## run

@@ -16,12 +16,14 @@ class OSLScheduler:
         self.polling = polling_s
         # set_up the managers
         self.cpu_man = cpuclock.CPUClock(0)
+        self.cpu_man_big = cpuclock.CPUClock(4)
         self.gpu_man = gpuclock.GPUClock()
         self.mem_man = memclock.MemClock()
         self.cluster = {} # We will hardcode this
         self.my_thread = None
 
     
+
     def policy_cpu(self):
         '''
         In this code: we are selecting the best configuration for all the resources based on the state of cpu operating point
@@ -37,13 +39,30 @@ class OSLScheduler:
         # print("The freq are , cpu : {}, gpu: {} and mem: {}".format(cpu_freq,self.gpu_man.get_clock(),self.mem_man.get_clock()))
         return
 
+
+    def policy_intcpu(self):
+        '''
+        In this code: we are selecting the best configuration for all the resources based on the state of cpu operating point
+        '''
+
+        cpu_freq = self.cpu_man.get_clock() # we have the CPU freq 
+        # Set the rest of the two frequency
+        # print(" Util : "+str(self.cpu_man.get_utilization()))
+        gpu_freq = int(self.cluster[cpu_freq]['gpu'])
+        # mem_freq = int(self.cluster[cpu_freq]['mem'])
+        self.gpu_man.set_clock(gpu_freq)
+        # self.mem_man.set_clock(mem_freq)
+        # print("The freq are , cpu : {}, gpu: {} and mem: {}".format(cpu_freq,self.gpu_man.get_clock(),self.mem_man.get_clock()))
+        return
+
+
     def policy_mem(self):
         '''
         In this code: we are selecting the best configuration for all the resources based on the state of memory operating point
         '''
 
         mem_freq = self.mem_man.get_clock() # we have the CPU freq 
-        print("Util : "+str(self.mem_man.get_utilization()))
+        # print("Util : "+str(self.mem_man.get_utilization()))
         # Set the rest of the two frequency
         gpu_freq = int(self.cluster[mem_freq]['gpu'])
         cpu_freq = int(self.cluster[mem_freq]['cpu'])
@@ -108,6 +127,75 @@ class OSLScheduler:
         self.mem_man.set_clock(mem_freq)
 
 
+    def policy_adb_cpu(self):
+        '''
+        In this code: we are selecting the best configuration for all the resources based on the state of cpu operating point
+        '''
+
+        cpu_freq = self.cpu_man_big.adb_get_clock() # we have the CPU freq 
+        # Set the rest of the two frequency
+        # print(" Util : "+str(self.cpu_man.get_utilization()))
+        print(cpu_freq,self.cluster[cpu_freq]['cpu'])
+        ncpu_freq = int(self.cluster[cpu_freq]['cpu'])
+        gpu_freq = int(self.cluster[cpu_freq]['gpu'])
+        mem_freq = int(self.cluster[cpu_freq]['mem'])
+        self.cpu_man_big.adb_set_clock(ncpu_freq)
+        self.gpu_man.adb_set_clock(gpu_freq)
+        self.mem_man.adb_set_clock(mem_freq)
+        # print("The freq are , cpu : {}, gpu: {} and mem: {}".format(cpu_freq,self.gpu_man.get_clock(),self.mem_man.get_clock()))
+        return
+
+    def policy_adb_cpusmall(self):
+        '''
+        In this code: we are selecting the best configuration for all the resources based on the state of cpu operating point
+        '''
+
+        cpu_freq = self.cpu_man.adb_get_clock() # we have the CPU freq 
+        # Set the rest of the two frequency
+        # print(" Util : "+str(self.cpu_man.get_utilization()))
+        print(cpu_freq,self.cluster[cpu_freq]['cpu'])
+        ncpu_freq = int(self.cluster[cpu_freq]['cpu'])
+        gpu_freq = int(self.cluster[cpu_freq]['gpu'])
+        mem_freq = int(self.cluster[cpu_freq]['mem'])
+        self.cpu_man_big.adb_set_clock(ncpu_freq)
+        self.gpu_man.adb_set_clock(gpu_freq)
+        self.mem_man.adb_set_clock(mem_freq)
+        # print("The freq are , cpu : {}, gpu: {} and mem: {}".format(cpu_freq,self.gpu_man.get_clock(),self.mem_man.get_clock()))
+        return
+
+    def policy_adb_gpu(self):
+        '''
+        In this code: we are selecting the best configuration for all the resources based on the state of gpu operating point
+        '''
+
+        gpu_freq = self.gpu_man.adb_get_clock() # we have the CPU freq 
+        # Set the rest of the two frequency
+        mem_freq = int(self.cluster[gpu_freq]['mem'])
+        cpu_freq = int(self.cluster[gpu_freq]['cpu'])
+        ncpu_freq = int(self.cluster[gpu_freq]['small'])
+        self.mem_man.adb_set_clock(mem_freq)
+        self.cpu_man_big.adb_set_clock(cpu_freq)
+        self.cpu_man.adb_set_clock(ncpu_freq)
+        # print("The freq are  gpu: {}, cpu: {}, mem : {} ".format(gpu_freq,self.cpu_man.get_clock(),self.mem_man.get_clock()))
+        return
+
+    def policy_adb_mem(self):
+        '''
+        In this code: we are selecting the best configuration for all the resources based on the state of memory operating point
+        '''
+
+        mem_freq = self.mem_man.adb_get_clock() # we have the CPU freq 
+        # print("Util : "+str(self.mem_man.get_utilization()))
+        # Set the rest of the two frequency
+        gpu_freq = int(self.cluster[mem_freq]['gpu'])
+        cpu_freq = int(self.cluster[mem_freq]['cpu'])
+        ncpu_freq = int(self.cluster[mem_freq]['small'])
+        self.gpu_man.adb_set_clock(gpu_freq)
+        self.cpu_man_big.adb_set_clock(cpu_freq)
+        self.cpu_man.adb_set_clock(ncpu_freq)
+        # print("The freq are , mem: {}, cpu : {}, gpu: {} ".format(mem_freq,self.cpu_man.get_clock(),self.gpu_man.get_clock()))
+        return           
+
     def set_cluster(self, clk_cluster):
         self.cluster = clk_cluster
 
@@ -117,12 +205,14 @@ class OSLScheduler:
         # self.my_thread.daemon = True
         self.my_thread.start()
         start_time = time.time()
-        self.policy_cpu()
+        # self.policy_cpu()
+        self.policy_intcpu()
         # self.policy_mem()
         #self.policy_gpu()
         # self.policy_util()
-        print(" Overhead is {} second".format(time.time()-start_time))
-        
+        # self.policy_adb_cpusmall()
+        # print(" Overhead is {} second".format(time.time()-start_time))
+    
     def run(self):
         self.schedule()
     

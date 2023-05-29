@@ -20,6 +20,17 @@ class MemClock:
 		self.mem_freq = int(mem_freq[:-1])
 		return self.mem_freq
 	
+	def adb_get_clock(self):
+		path = os.path.join(os.getcwd() + "/scripts/adb_get_memfreq.sh")
+		cmd = path 
+		mem_freq = subprocess.check_output(cmd,shell=True)
+		mem_freq = mem_freq.decode('ascii')
+		# print("The memory frequency is:"+ str (mem_freq))
+		if len(mem_freq) < 2:
+			return -1
+		self.mem_freq = int(mem_freq[:-1])
+		return self.mem_freq
+	
 	def set_clock(self, freq):
 		# print("... Setting the mem to{}".format(freq))
 		if self.mem_freq != freq:
@@ -32,6 +43,18 @@ class MemClock:
 			# print("The clock is in Mem to "+str(freq))
 			self.mem_freq = freq
 		return
+	
+	def adb_set_clock(self, freq):
+		if self.mem_freq != freq:
+			path = os.path.join(os.getcwd() + "/scripts/adb_set_mem.sh")
+			inc_flag = 0
+			if freq > self.mem_freq:
+				inc_flag = 1
+			cmd = path+" "+str(freq)+" "+str(inc_flag)
+			subprocess.check_call(cmd, shell=True)
+			# print("The clock is in Mem to "+str(freq))
+			self.mem_freq = freq
+		return		
 	
 	def get_all_clock(self):
 		print("... Getting the mem all frequency")

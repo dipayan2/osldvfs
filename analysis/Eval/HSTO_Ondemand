@@ -1,0 +1,39 @@
+Mali-T628	Allocation Time (ms): 3.473000
+Initialization Time (ms): 880.288000
+Copy To Device Time (ms): 59.173000
+Kernel Time (ms): 71.071260
+Copy Back and Merge Time (ms): 0.856000
+Deallocation Time (ms): 29.215000
+Test Passed
+Mali-T628	Allocation Time (ms): 2.198000
+Initialization Time (ms): 502.673000
+Copy To Device Time (ms): 30.981000
+Kernel Time (ms): 73.413700
+Copy Back and Merge Time (ms): 0.523000
+Deallocation Time (ms): 24.300000
+Test Passed
+Mali-T628	Allocation Time (ms): 2.289000
+Initialization Time (ms): 506.224000
+Copy To Device Time (ms): 32.771000
+Kernel Time (ms): 69.966240
+Copy Back and Merge Time (ms): 0.422000
+Deallocation Time (ms): 28.922000
+Test Passed
+Mali-T628	Allocation Time (ms): 2.089000
+Initialization Time (ms): 505.760000
+Copy To Device Time (ms): 32.363000
+Kernel Time (ms): 72.655680
+Copy Back and Merge Time (ms): 0.566000
+Deallocation Time (ms): 28.796000
+Test Passed
+Mali-T628	Allocation Time (ms): 2.198000
+Initialization Time (ms): 718.038000
+Copy To Device Time (ms): 45.226000
+Kernel Time (ms): 70.261360
+Copy Back and Merge Time (ms): 0.530000
+Deallocation Time (ms): 28.841000
+Test Passed
+
+real	0m26.134s
+user	1m16.303s
+sys	0m1.510s
