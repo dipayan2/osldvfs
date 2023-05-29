@@ -38,7 +38,7 @@ cpu_freq_list = [200000,300000,400000,500000,600000,700000,800000,900000,1000000
 gpu_freq_list = [177000000,266000000,350000000,420000000,480000000,543000000,600000000]
 mem_freq_list = [165000000,206000000,275000000,413000000,543000000,633000000,728000000,825000000]
 
-cpu_freq_display_list = [200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400, 1500, 1600, 1700, 1800, 1900, 2000]
+cpu_freq_display_list = [0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
 gpu_freq_display_list = [177,266,350,420,480,543,600]
 mem_freq_display_list = [165,206,275,413,543,633,728,825]
 
@@ -234,14 +234,23 @@ def get_fixedmem_allgpu_cpu(data, sub_dir, col, label):
 
 def get_graph(xs, ys, ys_label, xticks, title, xlabel, ylabel, directory, name):
     save_to_name = directory+name+".png"
-    plt.figure()
+    fig = plt.figure()
+    ax = plt.subplot(111)
     for i, y in enumerate(ys):
-        plt.plot(range(len(xs)), y, label=ys_label[i])
+        ax.plot(range(len(xs)), y, label=ys_label[i])
     plt.xticks(range(len(xs)), xticks)
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    plt.legend()
+    # Shrink current axis's height by 10% on the bottom
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0 + box.height * 0.1,
+                    box.width, box.height * 0.9])
+
+    # Put a legend below current axis
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+            fancybox=False, shadow=False, ncol=3)
+    plt.tight_layout()
     plt.savefig(save_to_name)
     plt.close()
 
