@@ -1,4 +1,6 @@
-        Linux kernel release 3.x <http://kernel.org/>
+Source Link for the kernel, incase porting breaks the code: https://github.com/hardkernel/linux/commit/80bc96f0a0b52b862c607bc23c802ec97bb321d3 
+
+Linux kernel release 3.x <http://kernel.org/>
 
 These are the release notes for Linux version 3.  Read them carefully,
 as they tell you what this is all about, explain how to install the
