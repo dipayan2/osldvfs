@@ -3,7 +3,7 @@
  #define _IPT_ECN_H
 
  #include <linux/netfilter/xt_ecn.h>
- #define ipt_ecn_info xt_ecn_info
+ #define ipt_ECN_info xt_ecn_info
 
  enum {
  	IPT_ECN_IP_MASK       = XT_ECN_IP_MASK,
