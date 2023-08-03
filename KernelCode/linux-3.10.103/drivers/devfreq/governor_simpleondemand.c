@@ -37,6 +37,10 @@ static int devfreq_simple_ondemand_notifier(struct notifier_block *nb, unsigned 
 #define DFSO_UPTHRESHOLD	(90)
 #define DFSO_DOWNDIFFERENCTIAL	(5)
 #define DFSO_WEIGHT		(100)
+
+/*
+[CRAVE] This function is called every polling_ms for data
+*/
 static int devfreq_simple_ondemand_func(struct devfreq *df,
 					unsigned long *freq)
 {
@@ -71,6 +75,10 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
 	if (data && data->cal_qos_max)
 		max = (df->max_freq) ? df->max_freq : 0;
 
+/*
+[CRAVE] Print the busy time and the total time here
+*/
+	pr_info("[CRAVE]Memory Busy,%llu, Total,%llu\n",stat.busy_time,stat.total_time);
 	/* Assume MAX if it is going to be divided by zero */
 	if (stat.total_time == 0) {
 		if (data && data->cal_qos_max)

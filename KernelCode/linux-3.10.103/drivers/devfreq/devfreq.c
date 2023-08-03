@@ -165,7 +165,10 @@ int update_devfreq(struct devfreq *devfreq)
 
 	if (!devfreq->governor)
 		return -EINVAL;
-
+	/* 
+	* [CRAVE] We are updating the memory stat here every polling interval and printing it 
+	* We are updating the get_target_freq of the governor
+	*/
 	/* Reevaluate the proper frequency */
 	err = devfreq->governor->get_target_freq(devfreq, &freq);
 	if (err)
