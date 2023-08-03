@@ -75,7 +75,10 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
 	if (data && data->cal_qos_max)
 		max = (df->max_freq) ? df->max_freq : 0;
 
-
+/*
+[CRAVE] Print the busy time and the total time here
+*/
+	// pr_info("[CRAVE]Memory Busy,%llu, Total,%llu\n",stat.busy_time,stat.total_time);
 	/* Assume MAX if it is going to be divided by zero */
 	if (stat.total_time == 0) {
 		if (data && data->cal_qos_max)
@@ -92,10 +95,13 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
 
 	stat.busy_time *= dfso_multiplication_weight;
 	stat.busy_time = div64_u64(stat.busy_time, 100);
+
 	/*
 [CRAVE] Print the busy time and the total time here
 */
+	pr_info("[CRAVE] Bus:%s\n",df->dev.bus->name)
 	pr_info("[CRAVE]Memory Busy,%llu, Total,%llu\n",stat.busy_time,stat.total_time);
+
 	/* Set MAX if it's busy enough */
 	if (stat.busy_time * 100 >
 	    stat.total_time * dfso_upthreshold) {
@@ -214,14 +220,14 @@ static int devfreq_simple_ondemand_handler(struct devfreq *devfreq,
 }
 
 static struct devfreq_governor devfreq_simple_ondemandosl = {
-	.name = "simple_ondemandosl",
+	.name = "simple_odosl",
 	.get_target_freq = devfreq_simple_ondemand_func,
 	.event_handler = devfreq_simple_ondemand_handler,
 };
 
 static int __init devfreq_simple_ondemand_init(void)
 {
-	return devfreq_add_governor(&devfreq_simple_ondemandosl);
+	return devfreq_add_governor(&devfreq_simple_ondemand);
 }
 subsys_initcall(devfreq_simple_ondemand_init);
 
@@ -229,7 +235,7 @@ static void __exit devfreq_simple_ondemand_exit(void)
 {
 	int ret;
 
-	ret = devfreq_remove_governor(&devfreq_simple_ondemandosl);
+	ret = devfreq_remove_governor(&devfreq_simple_ondemand);
 	if (ret)
 		pr_err("%s: failed remove governor %d\n", __func__, ret);
 

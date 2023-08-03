@@ -75,10 +75,7 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
 	if (data && data->cal_qos_max)
 		max = (df->max_freq) ? df->max_freq : 0;
 
-/*
-[CRAVE] Print the busy time and the total time here
-*/
-	// pr_info("[CRAVE]Memory Busy,%llu, Total,%llu\n",stat.busy_time,stat.total_time);
+
 	/* Assume MAX if it is going to be divided by zero */
 	if (stat.total_time == 0) {
 		if (data && data->cal_qos_max)
@@ -95,6 +92,8 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
 
 	stat.busy_time *= dfso_multiplication_weight;
 	stat.busy_time = div64_u64(stat.busy_time, 100);
+	
+
 
 	/* Set MAX if it's busy enough */
 	if (stat.busy_time * 100 >
