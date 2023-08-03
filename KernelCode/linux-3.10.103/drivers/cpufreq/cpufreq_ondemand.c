@@ -170,7 +170,7 @@ static void od_check_cpu(int cpu, unsigned int load)
 	struct od_dbs_tuners *od_tuners = dbs_data->tuners;
 
 	dbs_info->freq_lo = 0;
-
+	pr_info("[CRAVE]CPU Load,%lu",load);
 	/* Check for frequency increase */
 	if (load > od_tuners->up_threshold) {
 		/* If switching to max speed, apply sampling_down_factor */
