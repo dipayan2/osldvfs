@@ -38,5 +38,5 @@ for ((j=1;j<=num_columns;j++)) do
     echo
 done
 
-freq = $(./cpu_get_clock.sh 0)
-echo $freq
+freq=$(./cpu_get_clock.sh 0)
+printf "$freq"
