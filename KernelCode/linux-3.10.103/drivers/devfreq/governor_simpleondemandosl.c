@@ -99,7 +99,7 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
 	/*
 [CRAVE] Print the busy time and the total time here
 */
-	pr_info("[CRAVE] Bus:%s\n",df->dev.bus->name)
+	// pr_info("[CRAVE] Bus:%s\n",df->dev.bus->name);
 	pr_info("[CRAVE]Memory Busy,%llu, Total,%llu\n",stat.busy_time,stat.total_time);
 
 	/* Set MAX if it's busy enough */

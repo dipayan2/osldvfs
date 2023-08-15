@@ -861,7 +861,7 @@ static int exynos5_mif_bus_get_dev_status(struct device *dev,
 }
 
 static struct devfreq_dev_profile exynos5_mif_devfreq_profile = {
-	.initial_freq	= 825000,
+	.initial_freq	= 138000,
 	.polling_ms	= 100,
 	.target		= exynos5_mif_busfreq_target,
 	.get_dev_status	= exynos5_mif_bus_get_dev_status,
