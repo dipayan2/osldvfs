@@ -39,4 +39,4 @@ for ((j=1;j<=num_columns;j++)) do
 done
 
 freq=$(./cpu_get_clock.sh 0)
-printf "$freq"
+printf "$freq\n"
