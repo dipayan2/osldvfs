@@ -45,6 +45,9 @@ cpufreqb=$(./cpu_get_clock.sh 4)
 memfreq=$(./mem_get_clock.sh)
 gpufreq=$(./gpu_get_clock.sh)
 printf "$memfreq\n"
+printf "$cpufreqs\n"
+printf "$cpufreqb\n"
+printf "$gpufreq\n"
 
 
 
