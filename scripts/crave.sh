@@ -11,10 +11,16 @@ done
 
 # 2D matrix
 
-declare -A matrix=()
-matrix+=(0.92 0.63 0.77)
-matrix+=(0.15 0.74 0.07)
-matrix+=(-0.13 0.04 0.54)
+declare -A RIM=()
+RIM[0,0]=0.92
+RIM[0,1]=0.63
+RIM[0,2]=0.77
+RIM[1,0]=0.15
+RIM[1,1]=0.74
+RIM[1,2]=0.07
+RIM[2,0]=-0.13
+RIM[2,1]=0.04
+RIM[2,2]=0.54
 num_rows=3
 num_columns=3
 
@@ -33,10 +39,10 @@ for ((i=1;i<=num_rows;i++)) do
 done
 echo
 
-for ((j=1;j<=num_columns;j++)) do
+for ((j=0;j<num_columns;j++)) do
     printf "$f1" $j
-    for ((i=1;i<=num_rows;i++)) do
-        printf "$f2" ${matrix[$i,$j]}
+    for ((i=0;i<num_rows;i++)) do
+        printf "$f2" ${RIM[$i,$j]}
     done
     echo
 done
