@@ -11,15 +11,18 @@ done
 
 # 2D matrix
 
-declare -A matrix
-num_rows=4
-num_columns=5
+declare -A matrix = ()
+matrix += (0.92 0.63 0.77)
+matrix += (0.15 0.74 0.07)
+matrix += (-0.13 0.04 0.54)
+num_rows=3
+num_columns=3
 
-for ((i=1;i<=num_rows;i++)) do
-    for ((j=1;j<=num_columns;j++)) do
-        matrix[$i,$j]=$RANDOM
-    done
-done
+# for ((i=1;i<=num_rows;i++)) do
+#     for ((j=1;j<=num_columns;j++)) do
+#         matrix[$i,$j]=$RANDOM
+#     done
+# done
 
 f1="%$((${#num_rows}+1))s"
 f2=" %9s"
@@ -38,7 +41,7 @@ for ((j=1;j<=num_columns;j++)) do
     echo
 done
 
-# Test to extract the from a script and recollect the data
+# Getting the util and the frequency data from the system
 
 cpufreqs=$(./cpu_get_clock.sh 0)
 cpufreqb=$(./cpu_get_clock.sh 4)
