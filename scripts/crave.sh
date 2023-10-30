@@ -11,10 +11,10 @@ done
 
 # 2D matrix
 
-declare -A matrix = ()
-matrix += (0.92 0.63 0.77)
-matrix += (0.15 0.74 0.07)
-matrix += (-0.13 0.04 0.54)
+declare -A matrix=()
+matrix+=(0.92 0.63 0.77)
+matrix+=(0.15 0.74 0.07)
+matrix+=(-0.13 0.04 0.54)
 num_rows=3
 num_columns=3
 
