@@ -40,5 +40,12 @@ done
 
 # Test to extract the from a script and recollect the data
 
-freq=$(./cpu_get_clock.sh 0)
-printf "$freq\n"
+cpufreqs=$(./cpu_get_clock.sh 0)
+cpufreqb=$(./cpu_get_clock.sh 4)
+memfreq=$(./mem_get_clock.sh)
+gpufreq=$(./gpu_get_clock.sh)
+printf "$memfreq\n"
+
+
+
+# Idea 1. get all util and freq 2. Get normalized util 3. find dom res 4. set the freq of all
