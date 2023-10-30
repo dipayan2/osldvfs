@@ -49,6 +49,16 @@ printf "$cpufreqs\n"
 printf "$cpufreqb\n"
 printf "$gpufreq\n"
 
+cpuutils=$(./cpu_get_util.sh 0)
+cpuutilb=$(./cpu_get_util.sh 4)
+memutil=$(./mem_get_util.sh)
+gpuutil=$(./gpu_get_util.sh)
+printf "$memutil\n"
+printf "$cpuutils\n"
+printf "$cpuutilb\n"
+printf "$gpuutil\n"
+
+
 
 
 # Idea 1. get all util and freq 2. Get normalized util 3. find dom res 4. set the freq of all
