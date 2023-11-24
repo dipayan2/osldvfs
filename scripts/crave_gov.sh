@@ -41,3 +41,9 @@ IFS=',' read -r value1_1 value1_2 <<< "$value1"
 echo "Value for $key1: ($value1_1, $value1_2)"
 def_mem
 
+cpufreqs=$(./cpu_get_clock.sh 0)
+printf "$cpufreqs\n"
+def_cpu0
+cpufreqs=$(./cpu_get_clock.sh 0)
+printf "$cpufreqs\n"
+
