@@ -48,7 +48,18 @@ set_gpu() {
     fi
 }
 
-
+set_mem() {
+    local memnew=$1
+    memfreq=$(./gpu_get_clock.sh)
+    printf "Mem Freq : $memfreq\n"
+    # Setting the CPU Freq
+    if [ "$memfreq" -lt "$memnew" ]
+    then
+        ./mem_set_clock.sh $memnew 1
+    else
+        ./mem_set_clock.sh $memnew 0
+    fi
+}
 
 
 declare -A MFreqConf
@@ -61,14 +72,21 @@ MFreqConf[633000000]="1100000,480000000"
 MFreqConf[728000000]="1200000,543000000"
 MFreqConf[825000000]="1400000,600000000"
 
-memf=$(./mem_get_clock.sh)
-printf "$key1\n"
-value1="${MFreqConf["$memf"]}"
-IFS=',' read -r valueC valueG <<< "$value1"
-echo "Value for Mem-> $memf: CPU -> $valueC, GPU -> $valueG"
-# def_mem
-set_cpu0 $valueC
-set_gpu $valueG
+mem_policy() {
+    local memf=$(./mem_get_clock.sh)
+    printf "$key1\n"
+    local value1="${MFreqConf["$memf"]}"
+    IFS=',' read -r valueC valueG <<< "$value1"
+    echo "Value for Mem-> $memf: CPU -> $valueC, GPU -> $valueG"
+    # def_mem
+    set_cpu0 $valueC
+    set_gpu $valueG
+}
+
+while true; do
+    mem_policy
+    sleep 0.5
+done
 
 
 
