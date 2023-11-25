@@ -23,7 +23,7 @@ def_gpu() {
 }
 
 set_cpu0() {
-    local $cpuset=$1
+    local cpuset=$1
     cpufreqs=$(./cpu_get_clock.sh 0)
     printf "CPU Freq : $cpufreqs\n"
     # Setting the CPU Freq
@@ -36,7 +36,7 @@ set_cpu0() {
 }
 
 set_gpu() {
-    local $gpuset=$1
+    local gpuset=$1
     gpufreq=$(./gpu_get_clock.sh)
     printf "GPU Freq : $gpufreq\n"
     # Setting the CPU Freq
