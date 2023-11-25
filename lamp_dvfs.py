@@ -201,13 +201,13 @@ class OSLScheduler:
 
     def schedule(self):
         # print("Starting the scheduler")
-        self.my_thread = threading.Timer(1, self.schedule)
+        self.my_thread = threading.Timer(0.5, self.schedule)
         # self.my_thread.daemon = True
         self.my_thread.start()
         start_time = time.time()
         # self.policy_cpu()
-        self.policy_intcpu()
-        # self.policy_mem()
+        # self.policy_intcpu()
+        self.policy_mem()
         #self.policy_gpu()
         # self.policy_util()
         # self.policy_adb_cpusmall()
