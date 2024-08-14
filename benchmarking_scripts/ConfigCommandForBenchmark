@@ -1,0 +1,669 @@
+    1  sudo apt-get update
+    2  sudo apt install git vim
+    3  sudo apt install flex bc libssl-dev bison
+    4  git clone https://github.com/dipayan2/odroidxu5.4.git
+    5  cd odroidxu5.4/linux-5.4.87/
+    6  make odroidxu4_defconfig
+    7  make -j8
+    8  ls
+    9  cd ..
+   10  ls
+   11  cd ..
+   12  ls
+   13  unzip
+   14  unzip linux-5.4.87-218.zip 
+   15  cd linux-5.4.87-218
+   16  l
+   17  make odroidxu4_defconfig
+   18  make -j8
+   19  make clean 
+   20  cd ..
+   21  l
+   22  cd odroidxu5.4/
+   23  cd linux-5.4.87/
+   24  ls
+   25  git pull
+   26  make odroidxu4_defconfig
+   27  make -j8
+   28  sudo make modules_install
+   29  sudo cp -f arch/arm/boot/zImage /media/boot
+   30  sudo cp -f arch/arm/boot/dts/exynos5422-odroid*dtb /media/boot
+   31  sudo cp -f arch/arm/boot/dts/overlays/*.dtbo /media/boot/overlays
+   32  sync
+   33  sudo reboot
+   34  ip addr
+   35  cd /sys/class/
+   36  ls
+   37  cd ..
+   38  cd devices/system/
+   39  ls
+   40  cd cpu/
+   41  ls
+   42  cd cpufreq/
+   43  ls
+   44  cd policy0/
+   45  ls
+   46  cat util 
+   47  cd /home/odroid/odroidxu5.4/linux-5.4.87/
+   48  git pull
+   49  make odroidxu4_defconfig
+   50  make -j8
+   51  sudo make modules_install
+   52  sudo cp -f arch/arm/boot/zImage /media/boot
+   53  sudo cp -f arch/arm/boot/dts/exynos5422-odroid*dtb /media/boot
+   54  sudo cp -f arch/arm/boot/dts/overlays/*.dtbo /media/boot/overlays
+   55  sync
+   56  sudo reboot
+   57  cd /sys/devices/system/
+   58  ls
+   59  cd cpu/
+   60  ls
+   61  cd cpufreq/
+   62  ls
+   63  cd policy0/
+   64  ls
+   65  cat util 
+   66  ls
+   67  cat scaling_governor 
+   68  echo ondemand > scaling_governor 
+   69  sudo su
+   70  cat /sys/class/devfreq/10c20000.memory-controller/cur_freq 
+   71  cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+   72  cat /sys/devices/system/cpu/cpu
+   73  sudo su
+   74  sudo apt install sysbench
+   75  uname -r
+   76  git clone https://github.com/ThomasKaiser/sbc-bench.git
+   77  ls
+   78  cd sbc-bench/
+   79  ls
+   80  ./sbc-bench.sh 
+   81  cat /sys/class/devfreq/10c20000.memory-controller/cur_freq 
+   82  sudo ./sbc-bench.sh 
+   83  sudo su
+   84  ls
+   85  cd ..
+   86  ls
+   87  cd odroidxu5.4/
+   88  cd linux-5.4.87/
+   89  git pull
+   90  make odroidxu4_defconfig
+   91  make -j8
+   92  sudo cp -f arch/arm/boot/zImage /media/boot
+   93  sudo cp -f arch/arm/boot/dts/exynos5422-odroid*dtb /media/boot
+   94  sudo cp -f arch/arm/boot/dts/overlays/*.dtbo /media/boot/overlays
+   95  sync
+   96  sudo reboot
+   97  ls
+   98  cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+   99  cat /sys/class/devfreq/10c20000.memory-controller/cur_freq 
+  100  cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+  101  watch -n 0.5 cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+  102  watch -n 0.5 cat /sys/class/devfreq/11800000.gpu/utilization 
+  103  watch -n 0.5 cat /sys/devices/system/cpu/cpufreq/policy0/util 
+  104  ls
+  105  ls
+  106  sudo su
+  107  ls
+  108  uname -r
+  109  ls
+  110  sudo reboot
+  111  sudo apt-get install libgles2
+  112  sudo apt-get install chromium-browser
+  113  cat /sys/devices/system/cpu/cpufreq/policy0/util 
+  114  cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+  115  cat /sys/class/devfreq/10c20000.memory-controller/cur_freq 
+  116  cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+  117  cat /sys/class/devfreq/10c20000.memory-controller/cur_freq 
+  118  ps aux | grep chr
+  119  kill -9 3334
+  120  ps aux | grep chr
+  121  cat /sys/class/devfreq/10c20000.memory-controller/cur_freq 
+  122  cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+  123  watch -n 0.5 'cat /sys/class/devfreq/10c20000.memory-controller/utilization && cat /sys/class/devfreq/10c20000.memory-controller/cur_freq'
+  124  cat /sys/class/devfreq/10c20000.memory-controller/governor 
+  125  watch -n 0.5 'cat /sys/class/devfreq/10c20000.memory-controller/utilization && cat /sys/class/devfreq/10c20000.memory-controller/cur_freq'
+  126  ps aux
+  127  sudo reboot
+  128  chromium-browser --use-gl=egl
+  129  chromium-browser --use-gl=egl2
+  130  chromium-browser --use-gl=egl
+  131  cat /sys/class/devfreq/10c20000.memory-controller/cur_freq 
+  132  cat /sys/class/devfreq/10c20000.memory-controller/governor 
+  133  cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+  134  cat /sys/class/devfreq/10c20000.memory-controller/governor 
+  135  cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+  136  cat /sys/class/devfreq/10c20000.memory-controller/cur_freq 
+  137  cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+  138  cat /sys/class/devfreq/10c20000.memory-controller/cur_freq 
+  139  cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+  140  sudo reboot
+  141  ls
+  142  rm -rf linux-5.4.87-218.zip 
+  143  ls
+  144  cat /sys/class/devfreq/10c20000.memory-controller/cur_freq 
+  145  cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+  146  ls
+  147  whoami
+  148  time
+  149  date
+  150  date +%s
+  151  date +%s.%N
+  152  ls
+  153  cd /sys/devices/system/cpu/
+  154  s
+  155  cd cpufreq/
+  156  ks
+  157  ls
+  158  cd policy0/
+  159  ls
+  160  car util 
+  161  cat util 
+  162  echo ondemand > scaling_available_governors 
+  163  sudo su
+  164  ls
+  165  mkdir benchmark
+  166  mv tinymembench/ benchmark/
+  167  mv tinymembench benchmark/
+  168  sudo mv tinymembench/ benchmark/tinymembench/
+  169  ls
+  170  cd benchmark/
+  171  ls
+  172  cd tinymembench/
+  173  ks
+  174  ls
+  175  ./tinymembench 
+  176  l
+  177  ls
+  178  cd ..
+  179  kls
+  180  ls
+  181  cd ..
+  182  ls
+  183  sudo mv sbc-bench/ benchmark/sbc-bench/
+  184  ls
+  185  cd benchmark/
+  186  ls
+  187  git clone https://github.com/chai-benchmarks/chai.git
+  188  cd chai/
+  189  ls
+  190  cd OpenCL-D/
+  191  ls
+  192  cd BFS/
+  193  ls
+  194  make
+  195  cd ..
+  196  clinfo
+  197  cd /lib/
+  198  ls
+  199  cd /etc/
+  200  ls
+  201  cd ~/
+  202  sudo apt-get install clinfo
+  203  clinfo
+  204  clinfo 
+  205  cd /usr/
+  206  ls
+  207  cd include/
+  208  ls
+  209  cd CL
+  210  ls
+  211  cd EGL
+  212  ls
+  213  cd .
+  214  cd ..
+  215  ls
+  216  cd EGL/
+  217  ls
+  218  cd ..
+  219  cd CL/
+  220  ls
+  221  cd ../../
+  222  cd lib
+  223  ls
+  224  cd ..
+  225  cd include/
+  226  cd CL
+  227  pwd
+  228  cd /home/odroid/benchmark/chai/
+  229  ls
+  230  export CHAI_OCL_LIB=/usr/include/CL/
+  231  export CHAI_OCL_INC=/usr/include/CL/
+  232  cd OpenCL-D/
+  233  ls
+  234  cd BFS/
+  235  mae
+  236  make
+  237  sudo apt-get install g++
+  238  make
+  239  ls
+  240  ./bfs 
+  241  ls
+  242  sudo su
+  243  logout
+  244  sudo su
+  245  apt-get install clinfo ocl-icd-libopencl1
+  246  sudo apt-get install clinfo ocl-icd-libopencl1
+  247  apt-get download mali-fbdev
+  248  ar -xv mali-fbdev_*
+  249  tar -xvf data.tar.xz 
+  250  rm usr/lib/aarch64-linux-gnu/libOpenCL.so*
+  251  cp -r usr/* /usr/
+  252  sudo cp -r usr/* /usr/
+  253  mkdir /etc/OpenCL
+  254  sudo mkdir /etc/OpenCL
+  255  mkdir /etc/OpenCL/vendors/
+  256  sudo mkdir /etc/OpenCL/vendors/
+  257  sudo echo "libmali.so" > /etc/OpenCL/vendors/mali.icd
+  258  echo "libmali.so" > /etc/OpenCL/vendors/mali.icd
+  259  sudo echo "libmali.so" > /etc/OpenCL/vendors/mali.icd
+  260  sudo su
+  261  ls
+  262  cd benchmark/gpu-rodinia/
+  263  ls
+  264  cd opencl/
+  265  ls
+  266  cd b+tree/
+  267  ls
+  268  make
+  269  ls
+  270  ./b+tree.out 
+  271  ls
+  272  cd ..
+  273  ls
+  274  cd bfs/
+  275  ls
+  276  ./run 
+  277  make
+  278  cd ..
+  279  ls
+  280  cd nn/
+  281  ls
+  282  make
+  283  ls
+  284  ./run 
+  285  ./nn.out 
+  286  ./nn.out filelist.txt 
+  287  cd ..
+  288  ls
+  289  git log
+  290  ls
+  291  cd lud/
+  292  ./run 
+  293  ls
+  294  make
+  295  ls
+  296  ./run 
+  297  ls
+  298  '
+  299  ls
+  300  ./lud.out 
+  301  vim run 
+  302  ./lud.out -s 512
+  303  ./lud.out -s 1024
+  304  ./lud.out -s 2048
+  305  cd ..
+  306  ls
+  307  cd nw/
+  308  ls
+  309  make
+  310  ls
+  311  vim run 
+  312  ./nw.out 
+  313  cat run 
+  314  ./nw.out 1024 20 ./nw.cl -p 0 -d 0
+  315  ./nw.out 2048  20 ./nw.cl -p 0 -d 0
+  316  ./nw.out 2048 20 ./nw.cl -p 0 -d 0
+  317  ./nw.out 4096 20 ./nw.cl -p 0 -d 0
+  318  ./nw.out 8192 20 ./nw.cl -p 0 -d 0
+  319  ./nw.out 5000 20 ./nw.cl -p 0 -d 0
+  320  ./nw.out 4112 20 ./nw.cl -p 0 -d 0
+  321  cd ..
+  322  ls
+  323  cd lavaMD/
+  324  ls
+  325  make
+  326  ls
+  327  vim run 
+  328  ./run 
+  329  cd ..
+  330  ls
+  331  d b+tree/
+  332  cd b+tree/
+  333  ls
+  334  vat run 
+  335  cat run 
+  336  ls
+  337  cd util/
+  338  ls
+  339  cd ..
+  340  ls
+  341  make
+  342  ls
+  343  cd kernel/
+  344  ls
+  345  vim kernel_gpu_opencl_wrapper.c 
+  346  vim kernel_gpu_opencl_wrapper_2.c 
+  347  cd ..
+  348  ls
+  349  cd util/
+  350  ls
+  351  cd num/
+  352  ls
+  353  cd ..
+  354  ls
+  355  cd opencl/
+  356  ls
+  357  cd ..
+  358  ls
+  359  cd timer/
+  360  ls
+  361  cd ..
+  362  ls
+  363  cd ..
+  364  ls
+  365  cd ..
+  366  ls
+  367  cd gaussian/
+  368  ls
+  369  make
+  370  ls
+  371  cat run 
+  372  ./gaussian.out -s 1024
+  373  ./gaussian.out -s 2048
+  374  ./gaussian.out -s 1536
+  375  cd ..
+  376  ls
+  377  cd hybridsort/
+  378  ls
+  379  make
+  380  ls
+  381  cat run 
+  382  ./run 
+  383  cd ..
+  384  ls
+  385  cd l
+  386  cd kmeans/
+  387  ls
+  388  make
+  389  ls
+  390  cat run 
+  391  ls
+  392  cd ..
+  393  ls
+  394  cd ..
+  395  ls
+  396  cd data/
+  397  ls
+  398  cd ..
+  399  ls
+  400  cd o
+  401  cd others/
+  402  ls
+  403  cd rng/
+  404  ls
+  405  cd rng/
+  406  ls
+  407  cd ..
+  408  ls
+  409  cd ..
+  410  ls
+  411  cd opencl/
+  412  ls
+  413  cd pathfinder/
+  414  ls
+  415  make
+  416  ls
+  417  cat run 
+  418  ./run 
+  419  cd ..
+  420  ls
+  421  cd particlefilter/
+  422  ls
+  423  make
+  424  ls
+  425  cat run 
+  426  ./OCL_particlefilter_single.out -x 128 -y 128 -z 10 -np 400000 -p 1 -d 0
+  427  ./run 
+  428  ls
+  429  cd ..
+  430  ls
+  431  cd util/
+  432  ls
+  433  cd ..
+  434  cd streamcluster/
+  435  ls
+  436  make
+  437  cat run 
+  438  ./run 
+  439  ls
+  440  clear
+  441  ls
+  442  cd ..
+  443  ls
+  444  cd srad/
+  445  ls
+  446  make
+  447  ls
+  448  cat run 
+  449  ./run 
+  450  cd ..
+  451  ls
+  452  cd hotspot
+  453  cd ..
+  454  ls
+  455  cd hotspot3D/
+  456  ls
+  457  make
+  458  ls
+  459  vim run 
+  460  ./run 
+  461  cd ..
+  462  ls
+  463  cd leukocyte/
+  464  ls
+  465  make
+  466  ls
+  467  cd ..
+  468  ls
+  469  cd gaussian/
+  470  ls
+  471  ./run 
+  472  cd ..
+  473  cd b+tree/
+  474  ls
+  475  cat run 
+  476  cd ..
+  477  l
+  478  cd dwt2d/
+  479  ls
+  480  make
+  481  ls
+  482  ./run 
+  483  cd ..
+  484  cd gaussian/
+  485  ./run 
+  486  logout
+  487  cd benchmark/
+  488  ls
+  489  cd chai/
+  490  ls
+  491  cd OpenCL-D/
+  492  ls
+  493  cd BFS/
+  494  ls
+  495  cd ..
+  496  ls
+  497  cd SSSP/
+  498  make
+  499  cd ..
+  500  export CHAI_OCL_INC=/usr/include/CL/
+  501  export CHAI_OCL_LIB=/usr/include/CL/
+  502  cd SSSP/
+  503  make
+  504  ls
+  505  ./sssp 
+  506  run 
+  507  sudo su
+  508  cd /home/odroid/
+  509  vim ~/.bashrc 
+  510  source ~/.bashrc 
+  511  run
+  512  sudo su
+  513  ls
+  514  cd benchmark/
+  515  ls
+  516  cd chai/
+  517  ls
+  518  cd OpenCL-D/
+  519  ls
+  520  cd SSSP/
+  521  ls
+  522  run 5 ./sssp 
+  523  7zip
+  524  7z
+  525  7z -b
+  526  7z b
+  527  cd ../..
+  528  cd ..
+  529  git clone https://github.com/yuhc/gpu-rodinia.git
+  530  ls
+  531  cd gpu-rodinia/
+  532  ls
+  533  make 
+  534  ls
+  535  cd common/
+  536  kls
+  537  ls
+  538  cim make.config 
+  539  vim make.config 
+  540  ls
+  541  cd ..
+  542  ls
+  543  cd opencl/
+  544  ls
+  545  cd util/
+  546  ls
+  547  cd ..
+  548  ls
+  549  cd ..
+  550  cd common/
+  551  ls
+  552  vim common.mk 
+  553  vim make.config 
+  554  cd ..
+  555  cd opencl/
+  556  ls
+  557  cd ..
+  558  la
+  559  make
+  560  vim Makefile 
+  561  make 
+  562  vim common/make.config 
+  563  cd /sys/class/dev
+  564  cd /sys/class/devfreq
+  565  cd 11800000.gpu
+  566  watch -n 0.5 cat utilization 
+  567  watch -n 0.2 cat utilization 
+  568  cd ../10c20000.memory-controller
+  569  watch -n 0.2 cat utilization 
+  570  ls
+  571  cat governor 
+  572  watch -n 0.2 'cat utilization && cat cur_freq' 
+  573  cat ../11800000.gpu/utilization 
+  574  cd ../11800000.gpu
+  575  ls
+  576  cat utilization 
+  577  cat ./../10c20000.memory-controller/utilization 
+  578  cat /sys/class/devfreq/10c20000.memory-controller/utilization 
+  579  cat /sys/class/devfreq/10c20000.memory-controller/cur_freq 
+  580  logout
+  581  ls
+  582  cd benchmark/
+  583  ls
+  584  cd ..
+  585  ls
+  586  git clone https://github.com/dipayan2/osldvfs.git
+  587  ls
+  588  cd osldvfs/
+  589  ls
+  590  cd scripts/
+  591  ls
+  592  ./crave.sh 
+  593  vim crave.sh 
+  594  ./crave.sh 
+  595  vim crave.sh 
+  596  ./crave.sh 
+  597  git stash 
+  598  git pull
+  599  ls
+  600  sudo su 
+  601  logout
+  602  ls
+  603  cd osldvfs/
+  604  ls
+  605  cd KernelCode/
+  606  cd ..
+  607  sudo vim /etc/bash.bashrc 
+  608  source /etc/bash.bashrc 
+  609  cd osldvfs/
+  610  ls
+  611  cd KernelCode/
+  612  ls
+  613  cd linux-3.10.103/
+  614  ls
+  615  exit
+  616  cd /lib/modules/`
+  617  cd /lib/modules/
+  618  ls
+  619  cd 5.4.87-dip7/
+  620  ls
+  621  cd source
+  622  ls
+  623  cd ..
+  624  ls
+  625  cd kernel/
+  626  ls
+  627  cd lib/
+  628  ks
+  629  cd libcrc32c.ko 
+  630  ls
+  631  cd ..
+  632  ls
+  633  cd drivers/
+  634  ls
+  635  cd gpu/
+  636  ls
+  637  cd arm/
+  638  ks
+  639  ls
+  640  cd midgard/
+  641  ls
+  642  cd tests/
+  643  ls
+  644  cd kutf/k
+  645  cd kutf/
+  646  ls
+  647  clear
+  648  ls
+  649  sudo su
+  650  ls
+  651  cd /sys/devices/system/cpu/
+  652  ls
+  653  cd cpufreq/
+  654  cd policy0/
+  655  watch -n 0.4 'cat util'
+  656  uname -r
+  657  ls
+  658  cd /home/odroid/
+  659  ls
+  660  vim get_data.sh 
+  661  sudo su
+  662  ls
+  663  logout
+  664  ls
+  665  sudo su
+  666  ls
+  667  history
+  668  cat history > StoreCommand
+  669  history > StoreCommand
