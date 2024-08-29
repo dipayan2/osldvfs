@@ -1,0 +1,50 @@
+BaselineInfo:
+  WebDBID: -1
+  TimeStamp: 20240828021449
+Version:
+  Major: 11
+  Minor: 0
+  Build: 1002
+  SpecialBuildName: ""
+  ptArchitecture: aarch64_linux
+Results:
+  Results Complete: true
+  NumTestProcesses: 6
+  CPU_INTEGER_MATH: 2851.3600000000001
+  CPU_FLOATINGPOINT_MATH: 424.84238723301434
+  CPU_PRIME: 0
+  CPU_SORTING: 24.088476100759642
+  CPU_ENCRYPTION: 97.416596823525452
+  CPU_COMPRESSION: 0
+  CPU_SINGLETHREAD: 187.72709772474192
+  CPU_PHYSICS: 0
+  CPU_MATRIX_MULT_SSE: 78.850738191344689
+  CPU_mm: 26.499626354109399
+  CPU_sse: 62.888533241859427
+  CPU_fma: 120.35030705976295
+  CPU_avx: 0
+  CPU_avx512: 0
+  m_CPU_enc_SHA: 92617308.478181973
+  m_CPU_enc_AES: 53855592.9857006
+  m_CPU_enc_ECDSA: 25985546.960879982
+  ME_ALLOC_S: 0
+  ME_READ_S: 0
+  ME_READ_L: 0
+  ME_WRITE: 0
+  ME_LARGE: 0
+  ME_LATENCY: 0
+  ME_THREADED: 0
+  SUMM_CPU: 0
+  SUMM_ME: 0
+SystemInformation:
+  OSName: Ubuntu 18.04.6 LTS
+  Kernel: 4.9.337-tegra
+  Device: quill
+  Processor: ARM Cortex-A57 6 Core 2035 MHz
+  NumSockets: 2
+  Manufacturer: ARM
+  NumCores: 6
+  NumLogicals: 6
+  CPUFrequency: 2035
+  Memory: 7850
+Checksum: 57D164DA56B5E43E656A8D4545A16D6FF75DFC32
