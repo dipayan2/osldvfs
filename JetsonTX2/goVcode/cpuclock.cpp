@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <stdlib.h>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/regex.hpp>
@@ -28,61 +29,76 @@ CpuClock::CpuClock(int set_cpu_id) {
 }
 
 long long CpuClock::GetClock() {
-    // std::cout << "Getting the frequency for cpu number " << this->cpu_id_ << std::endl;
+    char cpu_read[256];
+    snprintf(cpu_read,256, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_cur_freq", this->cpu_id_);
+    // std::cout << "The file name for cpu_read is : " << cpu_read << std::endl;
 
-    // Seems to work:
-    // char* command = "bash ../scripts/1_test_get_num_script.sh";
+    std::ifstream cpuread_file(cpu_read);
 
-    // DO NOT KNOW IF THIS WORKS!!!!?????
-    // Relative path???? Python got absolute path????
-    char command[256];
-    snprintf(command,256, "bash ../scripts/cpu_get_clock.sh %d", this->cpu_id_);
-
-    char buffer[128];
-
-    // Based on https://stackoverflow.com/a/478960
-    FILE* pipe = popen(command, "r");
-    if (pipe == NULL) {
-        std::cout << "popen() failed while trying to get the CPU frequency for CPU number " << this->cpu_id_ << std::endl;
-        exit(1);
+    if (!cpuread_file.is_open()) {
+        std::cerr << "Error: Unable to open " << cpu_read << std::endl;
+        return 0;
     }
-    else {
-        if (fgets(buffer, sizeof(buffer), pipe) != NULL) {
-            // There was some error checking here in Python code?????
-            this->cpu_freq_ = atoll(buffer); // Newline at end is fine???? Format of files being read???
-            // std::cout << "The frequency for cpu number " << this->cpu_id_ << " is " << this->cpu_freq_ << std::endl;
-        }
-        else {
-            std::cout << "fgets() failed while trying to get the CPU frequency for CPU number " << this->cpu_id_ << std::endl; 
-            exit(1);
-        }
-    }
-    pclose(pipe);
 
+    std::string value;
+    std::getline(cpuread_file, value); 
+
+    // Close the file
+    cpuread_file.close();
+    // Not checking for the breaking of the output, hopefully sysfs is better designed than that
+    this->cpu_freq_ =  std::stoll(value); 
     return this->cpu_freq_;
 }
 
+
 void CpuClock::SetClock(long long new_freq) {
-    // std::cout << "Setting frequency of cpu number " << this->cpu_id_ << " to " << new_freq << std::endl;
 
-    // Did not check if new_freq is different because it was not causing issues
+    // Checking if we need to modify the file at all?
+    if (new_freq == this->cpu_freq_){ // If the frequency is the same as the current do not need to do anything
+         return;
+     }   
 
-    if (new_freq != this->cpu_freq_) {
-        int increase_flag = 0;
-        if (new_freq > this->cpu_freq_) {
-            increase_flag = 1;
-        }
+    // If the frequencies are different we need to modify the max and min files for the CPU min max frequency
+    char cpu_min_file[256];
+    char cpu_max_file[256];
 
-        char command[256];
-        snprintf(command,256, "bash ../scripts/cpu_set_clock.sh %d %lld %d", this->cpu_id_, new_freq, increase_flag);
-    
-        if (system(command) != 0) {
-            std::cout << "Could not set clock frequency for CPU number " << this->cpu_id_ << std::endl;
-            exit(1);
-        }
+    // Getting the file name
+    snprintf(cpu_min_file,256, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_min_freq", this->cpu_id_);    
+    snprintf(cpu_max_file,256, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_max_freq", this->cpu_id_);
 
-        this->cpu_freq_ = new_freq;
+    int increase_flag = (new_freq > this->cpu_freq_)? 1: 0; // The test flag is set.
+
+    std::ofstream cpu_min(cpu_min_file);
+    std::ofstream cpu_max(cpu_max_file);
+
+    // Check if both the files were successfully opened
+
+    if ( (!cpu_min.is_open()) || (!cpu_max.is_open())){
+        std::cerr << "Error: Unable to open the files for operation"<< std::endl;
+        return;
     }
+
+    std::string freq_val = std::to_string(new_freq);
+
+    // Handling the file order based on the increase_flag
+
+    if(increase_flag == 1){
+        cpu_max << freq_val;
+        cpu_min << freq_val;
+    }
+    else{
+        cpu_min << freq_val;
+        cpu_max << freq_val;
+    }
+
+    //Close the files
+
+    cpu_max.close();
+    cpu_min.close();
+
+    // Setting the values based on file read.... this can be further optimized
+
+    this->cpu_freq_ =  this->GetClock();
     return;
 }
 
@@ -124,8 +140,10 @@ double CpuClock::GetUtilization() {
         idle_time_list.push_back( idle_time);
 			
 	}
+    cpuload.close();
 
-    // The file has been read, updated the values for calculation
+
+    // The file has been read, updated the values for calculation, and then closed
     if (total_time_list.size() < 6){
         std::cerr << " The CPU data is incomplete" << std::endl;
         return -1.0;

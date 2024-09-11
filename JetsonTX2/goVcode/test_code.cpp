@@ -18,6 +18,10 @@ int main(int argc, char** argv){
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     std::cout<< "The CPU Utilization " << myCPU.GetUtilization() << std::endl;
     std::cout<< "The CPU Clock: " << myCPU.GetClock() << std::endl;
+    myCPU.SetClock(1420800);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::cout<< "The CPU Utilization " << myCPU.GetUtilization() << std::endl;
+    std::cout<< "The CPU Clock: " << myCPU.GetClock() << std::endl;
     
     return 0;
 }
