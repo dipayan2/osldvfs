@@ -1,9 +1,9 @@
 # OBJS = profile_dvfs.o ols_scheduler.o cpuclock.o gpuclock.o memclock.o
-OBJS = cpuclock.o
+OBJS = test_code.o cpuclock.o
 # HEADER = ols_scheduler.h cpuclock.h gpuclock.h memclock.h
 HEADER = cpuclock.h
 # OUT = profile_dvfs
-OUT = cpuclock
+OUT = test_code
 CXX = g++
 CXXFLAGS = -g -O2 -Wall -Wextra -pedantic 
 
@@ -15,6 +15,8 @@ all : $(OBJS)
 
 # ols_scheduler.o : ols_scheduler.cpp $(HEADER)
 # 	$(CXX) $(CXXFLAGS) -c ols_scheduler.cpp -pthread
+test_code.o : test_code.cpp $(HEADER)
+	$(CXX) $(CXXFLAGS) -c test_code.cpp -pthread
 
 cpuclock.o : cpuclock.cpp cpuclock.h
 	$(CXX) $(CXXFLAGS) -c cpuclock.cpp -pthread

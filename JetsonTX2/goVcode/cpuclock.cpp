@@ -134,17 +134,19 @@ double CpuClock::GetUtilization() {
 
     for(int idx = 0; idx < 6; idx++){
         if (this->cpu_time_[idx] == 0){
+            // printf("I'm in 0 condition\n");
             this->cpu_util_[idx] = -1;
             this->cpu_time_[idx] = total_time_list[idx];
-            this->cpu_idle_[idx] = total_time_list[idx];
+            this->cpu_idle_[idx] = idle_time_list[idx];
         }
         else{
             unsigned long long dtime = total_time_list[idx] - this->cpu_time_[idx];
-            unsigned long long id_time = total_time_list[idx] - this->cpu_idle_[idx];
-
+            unsigned long long id_time = idle_time_list[idx] - this->cpu_idle_[idx];
+            
             this->cpu_util_[idx] = 100.0 * ( 1.0 - ( (double) id_time / (double) dtime ));
+            // printf("I'm in non zero condition %llu, %llu,  %lf \n",id_time, dtime, this->cpu_util_[idx] );
             this->cpu_time_[idx] = total_time_list[idx];
-            this->cpu_idle_[idx] = total_time_list[idx];
+            this->cpu_idle_[idx] = idle_time_list[idx];
         }
 
         if (this-> cpu_util_[idx] > temp_load ){
