@@ -74,7 +74,7 @@ void CpuClock::SetClock(long long new_freq) {
     // Check if both the files were successfully opened
 
     if ( (!cpu_min.is_open()) || (!cpu_max.is_open())){
-        std::cerr << "Error: Unable to open the files for operation"<< std::endl;
+        std::cerr << "[CPU]Error: Unable to open the files for operation"<< std::endl;
         return;
     }
 

@@ -1,7 +1,7 @@
 # OBJS = profile_dvfs.o ols_scheduler.o cpuclock.o gpuclock.o memclock.o
-OBJS = test_code.o cpuclock.o
+OBJS = test_code.o cpuclock.o memclock.o
 # HEADER = ols_scheduler.h cpuclock.h gpuclock.h memclock.h
-HEADER = cpuclock.h
+HEADER = cpuclock.h memclock.h
 # OUT = profile_dvfs
 OUT = test_code
 CXX = g++
@@ -15,6 +15,7 @@ all : $(OBJS)
 
 # ols_scheduler.o : ols_scheduler.cpp $(HEADER)
 # 	$(CXX) $(CXXFLAGS) -c ols_scheduler.cpp -pthread
+
 test_code.o : test_code.cpp $(HEADER)
 	$(CXX) $(CXXFLAGS) -c test_code.cpp -pthread
 
@@ -24,8 +25,8 @@ cpuclock.o : cpuclock.cpp cpuclock.h
 # gpuclock.o : gpuclock.cpp gpuclock.h
 # 	$(CXX) $(CXXFLAGS) -c gpuclock.cpp -pthread
 
-# memclock.o : memclock.cpp memclock.h
-# 	$(CXX) $(CXXFLAGS) -c memclock.cpp -pthread
+memclock.o : memclock.cpp memclock.h
+	$(CXX) $(CXXFLAGS) -c memclock.cpp -pthread
 
 clean:
 	rm -f $(OBJS) $(OUT)
