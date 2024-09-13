@@ -27,6 +27,7 @@ int main(int argc, char** argv){
     std::cout<< "The CPU Utilization " << myCPU.GetUtilization() << std::endl;
     std::cout<< "The CPU Clock: " << myCPU.GetClock() << std::endl;
 
+    myCPU.unSetDevice();
     // Test the memory system.
 
 
@@ -44,7 +45,7 @@ int main(int argc, char** argv){
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     std::cout<< "My Memorry utilization is : "<< myMem.GetUtilization() << std::endl;
     std::cout<< "The Memory Clock: " << myMem.GetClock() << std::endl;
-
+    myMem.unSetDevice();
 
     // Test the GPU system.
 
@@ -62,6 +63,7 @@ int main(int argc, char** argv){
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     std::cout<< "My GPU utilization is : "<< myGpu.GetUtilization() << std::endl;
     std::cout<< "The GPU Clock: " << myGpu.GetClock() << std::endl;
+    myGpu.unSetDevice();
 
     return 0;
 }

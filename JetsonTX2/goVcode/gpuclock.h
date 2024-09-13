@@ -12,10 +12,10 @@
 #include <algorithm>
 #include <stdlib.h>
 
-#include <boost/lexical_cast.hpp>
-#include <boost/regex.hpp>
-#include <boost/date_time.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+// #include <boost/lexical_cast.hpp>
+// #include <boost/regex.hpp>
+// #include <boost/date_time.hpp>
+// #include <boost/date_time/posix_time/posix_time.hpp>
 
 /**
  * An class for representing the clock of a GPU
@@ -51,6 +51,8 @@ public:
 	void SetClock(long long new_freq);
 
 	std::vector<long long> GetAllClock(); // Not implemented
+
+	void unSetDevice(); // This function will set this device to our chosen governor settings, and then allow it move freely
 	
-	double GetUtilization(); // Not implemented
+	double GetUtilization();
 };

@@ -39,7 +39,7 @@ void MemClock::SetClock(long long new_freq) {
     char mem_rate_file[256];
 
     strcpy(mem_mrq_file, "/sys/kernel/debug/bpmp/debug/clk/emc/mrq_rate_locked");
-    strcpy(mem_state_file, "/sys/kernel/debug/bpmp/debug/clk/emc/mrq_rate_locked");
+    strcpy(mem_state_file, "/sys/kernel/debug/bpmp/debug/clk/emc/state");
     strcpy(mem_rate_file, "/sys/kernel/debug/bpmp/debug/clk/emc/rate");
 
     std::ofstream mem_mrq(mem_mrq_file);
@@ -81,7 +81,7 @@ double MemClock::GetUtilization() {
     std::ifstream memutil_file(mem_util_fname);
 
     if (!memutil_file.is_open()) {
-        std::cerr << "Error: Unable to open " << mem_util_fname << std::endl;
+        std::cerr << "[Mem] Error: Unable to open " << mem_util_fname << std::endl;
         return 0;
     }
 
@@ -94,4 +94,47 @@ double MemClock::GetUtilization() {
     double temp_util = ((double)std::stoll(value) * 100.0 )/ ((double) freq_KHz);
     this->mem_util_ =  temp_util;
     return this->mem_util_;
+}
+
+void MemClock::unSetDevice(){
+
+    char mem_mrq_file[256];
+    // char mem_state_file[256];
+    char mem_min_file[256];
+    char mem_max_file[256];
+
+    // Getting the file name
+
+    strcpy(mem_mrq_file, "/sys/kernel/debug/bpmp/debug/clk/emc/mrq_rate_locked");
+    // strcpy(mem_state_file, "/sys/kernel/debug/bpmp/debug/clk/emc/state");
+    strcpy(mem_min_file, "/sys/kernel/debug/bpmp/debug/clk/emc/min_rate");
+    strcpy(mem_max_file, "/sys/kernel/debug/bpmp/debug/clk/emc/max_rate");
+
+    // Creating ofstream to write to these sysfs files
+
+    std::ofstream mem_min(mem_min_file);
+    std::ofstream mem_max(mem_max_file);
+    std::ofstream mem_mrq(mem_mrq_file);
+    // std::ofstream mem_state(mem_state_file);
+
+    // Check if these files were successfully opened otherwise state that the operation failed
+
+    if ( (!mem_min.is_open()) || (!mem_max.is_open()) || (!mem_mrq.is_open())){       
+        std::cerr << "[Mem]Error: Unable to open the files for unseting the device"<< std::endl;
+        return;
+    }
+
+    std::string min_freq_val = "40800000";
+    std::string max_freq_val = "1866000000";
+    std::string mrq_val = "0";
+
+    mem_mrq << mrq_val;
+    mem_max << max_freq_val;
+    mem_min << min_freq_val;
+
+    mem_mrq.close();
+    mem_max.close();
+    mem_min.close();
+ 
+    return;
 }

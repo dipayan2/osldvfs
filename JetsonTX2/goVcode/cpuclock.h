@@ -51,6 +51,8 @@ public:
     void SetClock(long long new_freq);
 
 	// std::vector<long long> GetAllClock(); // Not implemented
+
+	void unSetDevice(); // This function will set this device to our chosen governor settings, and then allow it move freely
 	
 	double GetUtilization(); // Will be impleneted in this version
 };
