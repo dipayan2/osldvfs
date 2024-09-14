@@ -106,7 +106,7 @@ void GpuClock::unSetDevice(){
     /**
      * This code will remove the max and min settings forced by our governor, and will
      * allow the device to operate in the default kernel specified governor.
-     * We will use the 'schedutil' governor as the default.
+     * We will use the 'nvhost_podgov' governor as the default.
     **/
     char gpu_min_file[256];
     char gpu_max_file[256];
