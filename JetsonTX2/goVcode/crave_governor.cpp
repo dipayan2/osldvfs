@@ -6,33 +6,65 @@ using std::chrono::steady_clock;
 using std::chrono::time_point;
 using std::this_thread::sleep_until;
 
-CRAVEGovernor::CRAVEGovernor(int set_cpu_id, int set_gpu_id, int set_polling_time, governor_settings set_cluster)
+CRAVEGovernor::CRAVEGovernor(int set_cpu_id, int set_gpu_id, int set_polling_time, governor_settings c_clust, governor_settings m_clust, governor_settings g_clust);
     : cpu_man_(set_cpu_id) {
     
     this->cpu_id_       = set_cpu_id;
-    this->gpu_id_       = set_gpu_id;
+    this->gpu_id_       = set_gpu_id; // Not used in this analysis
     this->polling_time_ = set_polling_time;
-    this->cluster_      = set_cluster;
+    this->cpu_cluster_  = c_clust;
+    this->mem_cluster_  = m_clust;
+    this->gpu_cluster_  = g_clust;
+    this->max_freq[CPU] = 1420800;
+    this->max_freq[MEM] = 1866000000;
+    this->max_freq[GPU] = 1300500000;
+    // Set the matrix for our analysis
+
+    this->RI[0][0] = 0.75; this->RI[0][1] = 0.36; this->RI[0][2] = 0.01;
+    this->RI[1][0] = 0.48; this->RI[1][1] = 0.87; this->RI[1][2] = 0.69;
+    this->RI[2][0] = 0.00; this->RI[2][1] = 0.00; this->RI[2][2] = 0.49;
+}
+
+void CRAVEGovernor::getDominantResource(double (&Utility)[3]){
+    // Get the utilzation of the three resources
+
+    double util_[3];
+    long long cur_freq[3];
+
+    double util_[CPU] = this->cpu_man_.GetUtilization(); 
+    long long cur_freq[CPU] = this->cpu_man_.GetClock();
+    double util_[MEM] = this->mem_man_.GetUtilization();
+    long long cur_freq[MEM] = this->mem_man_.GetClock();
+    double util_[GPU] = this->gpu_man_.GetUtilization();
+    long long cur_freq[GPU] = this->gpu_man_.GetClock();
+
+    // Get the cost of the resource
+
+    double cost_[3];
+
+    for (int dev = CPU; dev < OTH; ++dev ){
+        cost_[dev] = (util_[dev] * (double) cur_freq[dev])/((double) this->max_freq[dev]);
+    }
+
+    // double Utility[3];
+
+    for (int dev = CPU; dev < OTH ; ++dev ){
+        Utility[dev] = cost_[CPU] * this->RI[dev][CPU] + cost_[MEM] * this->RI[dev][MEM] + cost_[GPU] * this->RI[dev][GPU];
+    }
+
+    return;
 }
 
 void CRAVEGovernor::SetPolicyCpuFreq() {
     long long cpu_freq = this->cpu_man_.GetClock();
 
-    // Present but commented out????
-    // Not there for GPU, there for memory??????
-    // std::cout << "CPU utilization is " << this->cpu_man_.GetUtilization() << std::endl;
+    std::cout << "CPU utilization is " << this->cpu_man_.GetUtilization() << std::endl;
 
     long long gpu_freq = this->cluster_[cpu_freq]["gpu"];
     long long mem_freq = this->cluster_[cpu_freq]["mem"];
 
     this->gpu_man_.SetClock(gpu_freq);
     this->mem_man_.SetClock(mem_freq);
-
-    // std::cout << "Set GPU frequency to " << gpu_freq
-    //           << " and memory frequency to " << mem_freq
-    //           << " based on the CPU frequency of " << cpu_freq
-    //           << std::endl;
-    
 
     return;
 }
@@ -46,18 +78,13 @@ void CRAVEGovernor::SetPolicyGpuFreq() {
     this->cpu_man_.SetClock(cpu_freq);
     this->mem_man_.SetClock(mem_freq);
 
-    // std::cout << "Set CPU frequency to " << cpu_freq
-    //           << " and memory frequency to " << mem_freq
-    //           << " based on the GPU frequency of " << gpu_freq
-    //           << std::endl;
-
     return;
 }
 
 void CRAVEGovernor::SetPolicyMemFreq() {
     long long mem_freq = this->mem_man_.GetClock();
 
-    // std::cout << "Memory utilization is " << this->mem_man_.GetUtilization() << std::endl;
+    std::cout << "Memory utilization is " << this->mem_man_.GetUtilization() << std::endl;
 
     long long cpu_freq = int(this->cluster_[mem_freq]["cpu"]);
     long long gpu_freq = int(this->cluster_[mem_freq]["gpu"]);
@@ -65,10 +92,30 @@ void CRAVEGovernor::SetPolicyMemFreq() {
     this->cpu_man_.SetClock(cpu_freq);
     this->gpu_man_.SetClock(gpu_freq);
 
-    // std::cout << "Set CPU frequency to " << cpu_freq
-    //           << " and GPU frequency to " << gpu_freq
-    //           << " based on the memory frequency of " << mem_freq
-    //           << std::endl;
+    return;
+}
+
+void CRAVEGovernor::SetPolicyCRAVE(){
+    // Set a vector which will have the dominant resource of the system
+    double Utility[3] = {0.0, 0.0, 0.0};
+    // Get the utility vector which will be used to get the dominant reosurce of the system
+    this->getDominantResource(Utility);
+
+    // We will use the Utility metric to get the actual dominant reosurce
+    double maxUtil = Utility[CPU];
+    int marArg = CPU;
+
+    for (int dev = CPU ; dev < OTH; ++dev){
+        if (Utility[dev] > maxUtil){
+            maxUtil = Utility[dev];
+            maxArg = dev;
+        }
+    }
+    std::cout << "[To be removed] The dominant resource is "<< maxArg << std::endl;
+
+    // unSet the max resource and then set the frequenchy of the rest using the relevant value
+
+    return;
 }
 
 void CRAVEGovernor::SetPolicyCpuUtil() {
@@ -131,7 +178,7 @@ void CRAVEGovernor::SetPolicyMemUtil() {
 }
 
 void CRAVEGovernor::SetCluster(governor_settings new_cluster) {
-    this->cluster_ = new_cluster;
+    this->other_cluster_ = new_cluster;
 }
 
 void CRAVEGovernor::Schedule() {

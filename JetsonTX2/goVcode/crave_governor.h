@@ -14,6 +14,12 @@
  * 
  * **/ 
 typedef std::unordered_map<long long, std::unordered_map<std::string, long long>> governor_settings;
+enum DomR {
+    CPU,
+    MEM,
+    GPU,
+    OTH
+};
 
 class CRAVEGovernor {
 private:
@@ -26,7 +32,16 @@ public:
     GpuClock          gpu_man_;
     // std::thread       my_thread_; //https://stackoverflow.com/a/25525465
     MemClock          mem_man_;
-    governor_settings cluster_;
+
+    long long max_freq[3];
+
+    double RI[3][3];
+
+    governor_settings cpu_cluster_;
+    governor_settings mem_cluster_;
+    governor_settings gpu_cluster_;
+    governor_settings other_cluster_;
+    // We need to set the max values of the each of the resoruces.
 
     // Allow setting cluster here????
     /**
@@ -43,18 +58,23 @@ public:
      * @param set_cluster      Set cluster_ to this value.
      *
      */
-    CRAVEGovernor(int set_cpu_id, int set_gpu_id, int set_polling_time, governor_settings set_cluster);
+    CRAVEGovernor(int set_cpu_id, int set_gpu_id, int set_polling_time, governor_settings c_clust,governor_settings m_clust,governor_settings g_clust);
 
+    /** 
+     * This function is used to determine the dominant resource of the system
+     * **/
+    void getDominantResource(double (&Utility)[3]);
+    
     /**
      * We select the best configuration for all resources based
-     * on the current CPU frequency
+     * on the current CPU frequency. The CPU freq is chosen by the default governor
      * 
      */
     void SetPolicyCpuFreq();
 
     /**
      * We select the best configuration for all resources based
-     * on the current GPU frequency
+     * on the current GPU frequency. The GPU frequency is chosen by the default governor
      * 
      */
     void SetPolicyGpuFreq();
@@ -79,7 +99,11 @@ public:
      * 
      */
     void SetPolicyMemUtil();
-        
+
+    /**
+     * The fuction void setCRAVE is our actual policy where we find the dominant resource and then use it to set the freq
+    **/
+    void SetPolicyCRAVE();       
     /**
      * Setter for cluster_
      * 
