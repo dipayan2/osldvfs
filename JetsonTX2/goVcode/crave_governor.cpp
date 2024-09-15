@@ -18,11 +18,11 @@ CRAVEGovernor::CRAVEGovernor(int set_cpu_id, int set_gpu_id, int set_polling_tim
     this->max_freq[CPU] = 1420800;
     this->max_freq[MEM] = 1866000000;
     this->max_freq[GPU] = 1300500000;
-    // Set the matrix for our analysis
+    // Set the Resource Impact matrix for our analysis
 
-    this->RI[0][0] = 0.75; this->RI[0][1] = 0.36; this->RI[0][2] = 0.01;
-    this->RI[1][0] = 0.48; this->RI[1][1] = 0.87; this->RI[1][2] = 0.69;
-    this->RI[2][0] = 0.00; this->RI[2][1] = 0.00; this->RI[2][2] = 0.49;
+    this->RI[CPU][CPU] = 0.75; this->RI[CPU][MEM] = 0.36; this->RI[CPU][GPU] = 0.01;
+    this->RI[MEM][CPU] = 0.48; this->RI[MEM][MEM] = 0.87; this->RI[MEM][GPU] = 0.69;
+    this->RI[GPU][CPU] = 0.00; this->RI[GPU][MEM] = 0.00; this->RI[GPU][GPU] = 0.49;
 }
 
 void CRAVEGovernor::getDominantResource(double (&Utility)[3]){
@@ -46,7 +46,7 @@ void CRAVEGovernor::getDominantResource(double (&Utility)[3]){
         cost_[dev] = (util_[dev] * (double) cur_freq[dev])/((double) this->max_freq[dev]);
     }
 
-    // double Utility[3];
+    // double Utility[3]; // We will use the value sent by reference
 
     for (int dev = CPU; dev < OTH ; ++dev ){
         Utility[dev] = cost_[CPU] * this->RI[dev][CPU] + cost_[MEM] * this->RI[dev][MEM] + cost_[GPU] * this->RI[dev][GPU];
@@ -103,7 +103,7 @@ void CRAVEGovernor::SetPolicyCRAVE(){
 
     // We will use the Utility metric to get the actual dominant reosurce
     double maxUtil = Utility[CPU];
-    int marArg = CPU;
+    int maxArg = CPU;
 
     for (int dev = CPU ; dev < OTH; ++dev){
         if (Utility[dev] > maxUtil){
@@ -115,65 +115,43 @@ void CRAVEGovernor::SetPolicyCRAVE(){
 
     // unSet the max resource and then set the frequenchy of the rest using the relevant value
 
-    return;
-}
-
-void CRAVEGovernor::SetPolicyCpuUtil() {
-    double cpu_util = this->cpu_man_.GetUtilization();
-
-    std::vector<long long> cpu_freq_list{200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1100000, 1200000, 1300000, 1400000};
-
-    long long cpu_freq = cpu_freq_list[5];
-
-    if (cpu_util > 0.5) {
-        cpu_freq = cpu_freq_list[10];
+    switch(maxArg){
+        case CPU:
+            // Use the CPU as the dominant resource to set other devices
+            this->cpu_man_.unSetDevice();
+            long long cpu_f = this->cpu_man_.GetClock();
+            // Get the clock of the other devices
+            long long gpu_f = this->cpu_cluster_[cpu_f]["gpu"];
+            long long mem_f = this->cpu_cluster_[cpu_f]["mem"];
+            this->gpu_man_.SetClock(gpu_f);
+            this->mem_man_.SetClock(mem_f);
+            break;
+        case MEM:
+            // Use the Mem as the dominant resource to set other devices
+            this->mem_man_.unSetDevice();
+            long long mem_f = this->mem_man_.GetClock();
+            // Get the clock of the other devices
+            long long cpu_f = this->mem_cluster_[mem_f]["cpu"];
+            long long gpu_f = this->mem_cluster_[mem_f]["gpu"];
+            this->cpu_man_.SetClock(cpu_f);
+            this->gpu_man_.SetClock(gpu_f);
+            break;
+        case GPU:
+            // Use the GPU as the dominant resource to set other devices
+            this->gpu_man_.unSetDevice();
+            long long gpu_f = this->gpu_man_.GetClock();
+            // Get the clock of the other devices
+            long long cpu_f = this->gpu_cluster_[gpu_f]["cpu"];
+            long long mem_f = this->gpu_cluster_[gpu_f]["mem"];
+            this->cpu_man_.SetClock(cpu_f);
+            this->mem_man_.SetClock(gpu_f);
+            break;
+        default:
+            // Don't do anything, wait for the next cycle
+            std::cout<<"[ERR] Could not find a dominant resource!!!!" << std::endl;
+            break;
     }
-    else if (cpu_util > 0.3) {
-        cpu_freq = cpu_freq_list[5];
-    }
-    else {
-        cpu_freq = cpu_freq_list[0];
-    }            
-
-    this->cpu_man_.SetClock(cpu_freq);
     
-    long long gpu_freq = this->cluster_[cpu_freq]["gpu"];
-    long long mem_freq = this->cluster_[cpu_freq]["mem"];
-    this->gpu_man_.SetClock(gpu_freq);
-    this->mem_man_.SetClock(mem_freq);
-
-    return;
-}
-
-void CRAVEGovernor::SetPolicyMemUtil() {
-    double mem_util = this->mem_man_.GetUtilization();
-    
-    // Not present for SetPolicyCpuUtil???
-    // std::cout << "Memory utilization is: " << mem_util << std::endl;
-    std::vector<long long> mem_freq_list{165000000, 206000000, 275000000, 413000000, 543000000, 633000000, 728000000, 825000000};
-    
-    long long mem_freq = mem_freq_list[3];
-
-    // This was a stupid logic, and I don't know why we did it this way????
-
-    if (mem_util > 0.6) {
-        mem_freq = mem_freq_list[5];
-    }
-    else if (mem_util > 0.3) {
-        mem_freq = mem_freq_list[3];
-    }
-    else {
-        mem_freq = mem_freq_list[0];
-    }
-
-    this->mem_man_.SetClock(mem_freq);
-
-    long long cpu_freq = this->cluster_[mem_freq]["cpu"];
-    long long gpu_freq = this->cluster_[mem_freq]["gpu"];
-
-    this->cpu_man_.SetClock(cpu_freq);
-    this->gpu_man_.SetClock(gpu_freq);
-
     return;
 }
 
@@ -188,7 +166,8 @@ void CRAVEGovernor::Schedule() {
     	time_point<steady_clock> start = steady_clock::now();
         time_point<steady_clock> wake_time = start + std::chrono::milliseconds(this->polling_time_);
         
-        this->SetPolicyCpuUtil();
+        // this->SetPolicyCpuUtil();
+        this->SetPolicyCRAVE();
         sleep_until(wake_time);
         
         duration<double> elapsed_seconds = steady_clock::now() - start;
