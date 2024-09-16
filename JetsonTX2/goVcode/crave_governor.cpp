@@ -6,7 +6,7 @@ using std::chrono::steady_clock;
 using std::chrono::time_point;
 using std::this_thread::sleep_until;
 
-CRAVEGovernor::CRAVEGovernor(int set_cpu_id, int set_gpu_id, int set_polling_time, governor_settings c_clust, governor_settings m_clust, governor_settings g_clust);
+CRAVEGovernor::CRAVEGovernor(int set_cpu_id, int set_gpu_id, int set_polling_time, governor_settings c_clust, governor_settings m_clust, governor_settings g_clust)
     : cpu_man_(set_cpu_id) {
     
     this->cpu_id_       = set_cpu_id;
@@ -31,12 +31,12 @@ void CRAVEGovernor::getDominantResource(double (&Utility)[3]){
     double util_[3];
     long long cur_freq[3];
 
-    double util_[CPU] = this->cpu_man_.GetUtilization(); 
-    long long cur_freq[CPU] = this->cpu_man_.GetClock();
-    double util_[MEM] = this->mem_man_.GetUtilization();
-    long long cur_freq[MEM] = this->mem_man_.GetClock();
-    double util_[GPU] = this->gpu_man_.GetUtilization();
-    long long cur_freq[GPU] = this->gpu_man_.GetClock();
+    util_[CPU] = this->cpu_man_.GetUtilization(); 
+    cur_freq[CPU] = this->cpu_man_.GetClock();
+    util_[MEM] = this->mem_man_.GetUtilization();
+    cur_freq[MEM] = this->mem_man_.GetClock();
+    util_[GPU] = this->gpu_man_.GetUtilization();
+    cur_freq[GPU] = this->gpu_man_.GetClock();
 
     // Get the cost of the resource
 
@@ -60,8 +60,8 @@ void CRAVEGovernor::SetPolicyCpuFreq() {
 
     std::cout << "CPU utilization is " << this->cpu_man_.GetUtilization() << std::endl;
 
-    long long gpu_freq = this->cluster_[cpu_freq]["gpu"];
-    long long mem_freq = this->cluster_[cpu_freq]["mem"];
+    long long gpu_freq = this->cpu_cluster_[cpu_freq]["gpu"];
+    long long mem_freq = this->cpu_cluster_[cpu_freq]["mem"];
 
     this->gpu_man_.SetClock(gpu_freq);
     this->mem_man_.SetClock(mem_freq);
@@ -72,8 +72,8 @@ void CRAVEGovernor::SetPolicyCpuFreq() {
 void CRAVEGovernor::SetPolicyGpuFreq() {
     long long gpu_freq = this->gpu_man_.GetClock();
 
-    long long cpu_freq = int(this->cluster_[gpu_freq]["cpu"]);
-    long long mem_freq = int(this->cluster_[gpu_freq]["mem"]);
+    long long cpu_freq = int(this->gpu_cluster_[gpu_freq]["cpu"]);
+    long long mem_freq = int(this->gpu_cluster_[gpu_freq]["mem"]);
 
     this->cpu_man_.SetClock(cpu_freq);
     this->mem_man_.SetClock(mem_freq);
@@ -86,8 +86,8 @@ void CRAVEGovernor::SetPolicyMemFreq() {
 
     std::cout << "Memory utilization is " << this->mem_man_.GetUtilization() << std::endl;
 
-    long long cpu_freq = int(this->cluster_[mem_freq]["cpu"]);
-    long long gpu_freq = int(this->cluster_[mem_freq]["gpu"]);
+    long long cpu_freq = int(this->mem_cluster_[mem_freq]["cpu"]);
+    long long gpu_freq = int(this->mem_cluster_[mem_freq]["gpu"]);
 
     this->cpu_man_.SetClock(cpu_freq);
     this->gpu_man_.SetClock(gpu_freq);
@@ -117,6 +117,7 @@ void CRAVEGovernor::SetPolicyCRAVE(){
 
     switch(maxArg){
         case CPU:
+        {
             // Use the CPU as the dominant resource to set other devices
             this->cpu_man_.unSetDevice();
             long long cpu_f = this->cpu_man_.GetClock();
@@ -126,7 +127,9 @@ void CRAVEGovernor::SetPolicyCRAVE(){
             this->gpu_man_.SetClock(gpu_f);
             this->mem_man_.SetClock(mem_f);
             break;
+        }
         case MEM:
+        {
             // Use the Mem as the dominant resource to set other devices
             this->mem_man_.unSetDevice();
             long long mem_f = this->mem_man_.GetClock();
@@ -136,7 +139,9 @@ void CRAVEGovernor::SetPolicyCRAVE(){
             this->cpu_man_.SetClock(cpu_f);
             this->gpu_man_.SetClock(gpu_f);
             break;
+        }
         case GPU:
+        {
             // Use the GPU as the dominant resource to set other devices
             this->gpu_man_.unSetDevice();
             long long gpu_f = this->gpu_man_.GetClock();
@@ -144,14 +149,15 @@ void CRAVEGovernor::SetPolicyCRAVE(){
             long long cpu_f = this->gpu_cluster_[gpu_f]["cpu"];
             long long mem_f = this->gpu_cluster_[gpu_f]["mem"];
             this->cpu_man_.SetClock(cpu_f);
-            this->mem_man_.SetClock(gpu_f);
+            this->mem_man_.SetClock(mem_f);
             break;
+        }
         default:
             // Don't do anything, wait for the next cycle
             std::cout<<"[ERR] Could not find a dominant resource!!!!" << std::endl;
             break;
     }
-    
+
     return;
 }
 

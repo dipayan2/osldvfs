@@ -1,7 +1,7 @@
 # OBJS = profile_dvfs.o ols_scheduler.o cpuclock.o gpuclock.o memclock.o
-OBJS = test_code.o cpuclock.o memclock.o gpuclock.o
+OBJS = test_code.o cpuclock.o memclock.o gpuclock.o crave_governor.o
 # HEADER = ols_scheduler.h cpuclock.h gpuclock.h memclock.h
-HEADER = cpuclock.h memclock.h gpuclock.h 
+HEADER = cpuclock.h memclock.h gpuclock.h crave_governor.h
 # OUT = profile_dvfs
 OUT = test_code
 CXX = g++
@@ -13,8 +13,8 @@ all : $(OBJS)
 # profile_dvfs.o : profile_dvfs.cpp $(HEADER)
 # 	$(CXX) $(CXXFLAGS) -c profile_dvfs.cpp -pthread
 
-# crave_governor.o : crave_governor.cpp $(HEADER)
-# 	$(CXX) $(CXXFLAGS) -c crave_governor.cpp -pthread
+crave_governor.o : crave_governor.cpp $(HEADER)
+	$(CXX) $(CXXFLAGS) -c crave_governor.cpp -pthread
 
 test_code.o : test_code.cpp $(HEADER)
 	@echo "Needs to be in Jetson TX2"
