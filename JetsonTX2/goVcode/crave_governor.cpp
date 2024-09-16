@@ -119,7 +119,7 @@ void CRAVEGovernor::SetPolicyCRAVE(){
         case CPU:
         {
             // Use the CPU as the dominant resource to set other devices
-            std::cout << "CPU is the dominant resource" << stdf::endl;
+            std::cout << "CPU is the dominant resource" << std::endl;
             this->cpu_man_.unSetDevice();
             long long cpu_f = this->cpu_man_.GetClock();
             // Get the clock of the other devices
@@ -132,7 +132,7 @@ void CRAVEGovernor::SetPolicyCRAVE(){
         case MEM:
         {
             // Use the Mem as the dominant resource to set other devices
-            std::cout << "Mem is the dominant resource" << stdf::endl;
+            std::cout << "Mem is the dominant resource" << std::endl;
             this->mem_man_.unSetDevice();
             long long mem_f = this->mem_man_.GetClock();
             // Get the clock of the other devices
@@ -145,7 +145,7 @@ void CRAVEGovernor::SetPolicyCRAVE(){
         case GPU:
         {
             // Use the GPU as the dominant resource to set other devices
-            std::cout << "GPU is the dominant resource" << stdf::endl;
+            std::cout << "GPU is the dominant resource" << std::endl;
             this->gpu_man_.unSetDevice();
             long long gpu_f = this->gpu_man_.GetClock();
             // Get the clock of the other devices

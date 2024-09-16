@@ -1,17 +1,18 @@
 # OBJS = profile_dvfs.o ols_scheduler.o cpuclock.o gpuclock.o memclock.o
-OBJS = test_code.o cpuclock.o memclock.o gpuclock.o crave_governor.o
+# OBJS = test_code.o cpuclock.o memclock.o gpuclock.o crave_governor.o
+OBJS = run_crave.o cpuclock.o memclock.o gpuclock.o crave_governor.o
 # HEADER = ols_scheduler.h cpuclock.h gpuclock.h memclock.h
 HEADER = cpuclock.h memclock.h gpuclock.h crave_governor.h
-# OUT = profile_dvfs
-OUT = test_code
+OUT = run_crave
+# OUT = test_code
 CXX = g++
 CXXFLAGS = -g -O2 -Wall -Wextra -pedantic 
 
 all : $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(OUT) -pthread
 
-# profile_dvfs.o : profile_dvfs.cpp $(HEADER)
-# 	$(CXX) $(CXXFLAGS) -c profile_dvfs.cpp -pthread
+run_crave.o : run_crave.cpp $(HEADER)
+	$(CXX) $(CXXFLAGS) -c run_crave.cpp -pthread
 
 crave_governor.o : crave_governor.cpp $(HEADER)
 	$(CXX) $(CXXFLAGS) -c crave_governor.cpp -pthread
