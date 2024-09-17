@@ -1,4 +1,6 @@
 #include <assert.h>
+#include <iostream>
+#include <csignal>
 
 #include "crave_governor.h"
 
@@ -60,8 +62,8 @@ int main(int argc, char** argv) {
         {1866000000,{{"cpu", 1420800},{"gpu", 624750000}}}
     };
 
-    // Seems right
-    CRAVEGovernor run_governor(0, 0, 200, cpu_cluster,mem_cluster,gpu_cluster);
+    // Create an instance of the governor class, and then we set the polling interval in miliseconds. And then we schedule it.
+    CRAVEGovernor run_governor(0, 0, 200, cpu_cluster,mem_cluster,gpu_cluster); 
     run_governor.Schedule();
 
     return 0;

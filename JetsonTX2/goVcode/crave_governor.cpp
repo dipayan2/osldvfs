@@ -1,10 +1,19 @@
 #include "crave_governor.h"
+#include <iostream>
+#include <csignal>
 
 using std::chrono::duration;
 using std::chrono::milliseconds;
 using std::chrono::steady_clock;
 using std::chrono::time_point;
 using std::this_thread::sleep_until;
+
+volatile sig_atomic_t stopGov = 0;
+
+void handleClose(int sig){
+    std::cout<<"[CRAVE] Handling the signal handler" << std::endl;
+    stopGov = 1;
+}
 
 CRAVEGovernor::CRAVEGovernor(int set_cpu_id, int set_gpu_id, int set_polling_time, governor_settings c_clust, governor_settings m_clust, governor_settings g_clust)
     : cpu_man_(set_cpu_id) {
@@ -170,6 +179,7 @@ void CRAVEGovernor::SetCluster(governor_settings new_cluster) {
 
 void CRAVEGovernor::Schedule() {
     std::cout << "Starting the Scheduler" << std::endl;
+    std::signal(SIGINT, handleClose);
 
     while (true) {
     	time_point<steady_clock> start = steady_clock::now();
@@ -180,7 +190,14 @@ void CRAVEGovernor::Schedule() {
         sleep_until(wake_time);
         
         duration<double> elapsed_seconds = steady_clock::now() - start;
-        // Want overhead of 10 milliseconds or less
+        // Want overhead of 10 milliseconds or less. The new overhead is less than .12 ms
         std::cout << "Time elapsed for one cycle: " << elapsed_seconds.count() << std::endl;
+         if (stopGov == 1){
+            this->cpu_man_.unSetDevice();
+            this->mem_man_.unSetDevice();
+            this->gpu_man_.unSetDevice();
+            std::cout << "[GOV] Unsetting all the devices" << std::endl;
+            break;
+         }
     }
 }
