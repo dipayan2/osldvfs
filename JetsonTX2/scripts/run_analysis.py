@@ -56,7 +56,7 @@ def runAnalysis(benchmark_dir, benchmark_run,benchmark_name,itr_id = 'D0',loop_c
     else:
         df.to_csv(output_file_name,mode='a',header=False)
 
-runAnalysis(sys.argv[1],sys.argv[2],sys.argv[3],int(sys.argv[4]),int(sys.argv[5]))
+runAnalysis(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],int(sys.argv[5]))
 
 
 
