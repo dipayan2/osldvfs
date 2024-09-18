@@ -51,10 +51,11 @@ def runAnalysis(benchmark_dir, benchmark_run,benchmark_name,itr_id = 'D0',loop_c
 
     # Store the results in the file "output_file_name".
     # If it exists, overwrite it. If not, create it 
-    if not os.path.isfile(output_file_name):
-        df.to_csv(output_file_name)
+    output_full_file = "/home/dipayan2/Desktop/Efficient_DVFS/RunTimePerf"+output_file_name
+    if not os.path.isfile(output_full_file):
+        df.to_csv(output_full_file)
     else:
-        df.to_csv(output_file_name,mode='a',header=False)
+        df.to_csv(output_full_file,mode='a',header=False)
 
 runAnalysis(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],int(sys.argv[5]))
 
