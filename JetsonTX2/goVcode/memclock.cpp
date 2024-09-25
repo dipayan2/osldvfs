@@ -138,3 +138,90 @@ void MemClock::unSetDevice(){
  
     return;
 }
+
+void MemClock::setMaxFreq(long long new_freq){
+
+    char mem_mrq_file[256];
+    // char mem_state_file[256];
+    char mem_min_file[256];
+    char mem_max_file[256];
+
+    // Getting the file name
+
+    strcpy(mem_mrq_file, "/sys/kernel/debug/bpmp/debug/clk/emc/mrq_rate_locked");
+    // strcpy(mem_state_file, "/sys/kernel/debug/bpmp/debug/clk/emc/state");
+    strcpy(mem_min_file, "/sys/kernel/debug/bpmp/debug/clk/emc/min_rate");
+    strcpy(mem_max_file, "/sys/kernel/debug/bpmp/debug/clk/emc/max_rate");
+
+    // Creating ofstream to write to these sysfs files
+
+    std::ofstream mem_min(mem_min_file);
+    std::ofstream mem_max(mem_max_file);
+    std::ofstream mem_mrq(mem_mrq_file);
+    // std::ofstream mem_state(mem_state_file);
+
+    // Check if these files were successfully opened otherwise state that the operation failed
+
+    if ( (!mem_min.is_open()) || (!mem_max.is_open()) || (!mem_mrq.is_open())){       
+        std::cerr << "[Mem]Error: Unable to open the files for setMax the device"<< std::endl;
+        return;
+    }
+
+    std::string min_freq_val = "40800000";
+    std::string max_freq_val = std::to_string(new_freq);
+    std::string mrq_val = "0";
+
+    mem_mrq << mrq_val;
+    mem_min << min_freq_val;
+    mem_max << max_freq_val;
+
+    mem_mrq.close();
+    mem_max.close();
+    mem_min.close();
+ 
+    return;
+}
+
+void MemClock::setMinFreq(long long new_freq){
+
+    char mem_mrq_file[256];
+    // char mem_state_file[256];
+    char mem_min_file[256];
+    char mem_max_file[256];
+
+    // Getting the file name
+
+    strcpy(mem_mrq_file, "/sys/kernel/debug/bpmp/debug/clk/emc/mrq_rate_locked");
+    // strcpy(mem_state_file, "/sys/kernel/debug/bpmp/debug/clk/emc/state");
+    strcpy(mem_min_file, "/sys/kernel/debug/bpmp/debug/clk/emc/min_rate");
+    strcpy(mem_max_file, "/sys/kernel/debug/bpmp/debug/clk/emc/max_rate");
+
+    // Creating ofstream to write to these sysfs files
+
+    std::ofstream mem_min(mem_min_file);
+    std::ofstream mem_max(mem_max_file);
+    std::ofstream mem_mrq(mem_mrq_file);
+    // std::ofstream mem_state(mem_state_file);
+
+    // Check if these files were successfully opened otherwise state that the operation failed
+
+    if ( (!mem_min.is_open()) || (!mem_max.is_open()) || (!mem_mrq.is_open())){       
+        std::cerr << "[Mem]Error: Unable to open the files for setMax the device"<< std::endl;
+        return;
+    }
+
+    std::string min_freq_val = std::to_string(new_freq);
+    std::string max_freq_val = "1866000000";
+    std::string mrq_val = "0";
+
+    mem_mrq << mrq_val;
+    mem_max << max_freq_val;
+    mem_min << min_freq_val;
+ 
+
+    mem_mrq.close();
+    mem_max.close();
+    mem_min.close();
+ 
+    return;
+}

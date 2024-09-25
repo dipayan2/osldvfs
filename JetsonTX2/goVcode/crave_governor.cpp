@@ -64,6 +64,30 @@ void CRAVEGovernor::getDominantResource(double (&Utility)[3]){
     return;
 }
 
+void CRAVEGovernor::getCost(double (&Utility)[3]){
+    // Get the utilzation of the three resources
+
+    double util_[3];
+    long long cur_freq[3];
+
+    util_[CPU] = this->cpu_man_.GetUtilization(); 
+    cur_freq[CPU] = this->cpu_man_.GetClock();
+    util_[MEM] = this->mem_man_.GetUtilization();
+    cur_freq[MEM] = this->mem_man_.GetClock();
+    util_[GPU] = this->gpu_man_.GetUtilization();
+    cur_freq[GPU] = this->gpu_man_.GetClock();
+
+    // Get the cost of the resource
+
+    double cost_[3];
+
+    for (int dev = CPU; dev < OTH; ++dev ){
+        Utility[dev] = (util_[dev] * (double) cur_freq[dev])/((double) this->max_freq[dev]);
+    }
+    Utility[MEM] = 0.0;
+    return;
+}
+
 void CRAVEGovernor::SetPolicyCpuFreq() {
     long long cpu_freq = this->cpu_man_.GetClock();
 
@@ -100,7 +124,6 @@ void CRAVEGovernor::SetPolicyMemFreq() {
 
     this->cpu_man_.SetClock(cpu_freq);
     this->gpu_man_.SetClock(gpu_freq);
-
     return;
 }
 
@@ -173,11 +196,68 @@ void CRAVEGovernor::SetPolicyCRAVE(){
     return;
 }
 
+
+void CRAVEGovernor::SetPolicyCoCAP(){
+    // Set a vector which will have the dominant resource of the system
+    double Utility[3] = {0.0, 0.0, 0.0};
+    // Get the utility vector which will be used to get the dominant reosurce of the system
+    // Set Mem to max 
+    this->mem_man_.SetClock(this->max_freq[MEM]);
+
+    this->getCost(Utility);
+
+    // We will use the Utility metric to get the actual dominant reosurce
+    double maxUtil = Utility[CPU];
+    int maxArg = CPU;
+
+    for (int dev = CPU ; dev < OTH; ++dev){
+        if (Utility[dev] > maxUtil){
+            maxUtil = Utility[dev];
+            maxArg = dev;
+        }
+    }
+    std::cout << "[To be removed] The dominant resource is "<< maxArg << std::endl;
+
+    // unSet the max resource and then set the frequenchy of the rest using the relevant value
+
+    switch(maxArg){
+        case CPU:
+        {
+            // Use the CPU as the dominant resource to set other devices
+            std::cout << "CPU is the dominant resource" << std::endl;
+            this->cpu_man_.unSetDevice();
+            long long cpu_f = this->cpu_man_.GetClock();
+            // Get the clock of the other devices
+            long long gpu_f = this->cpu_cluster_[cpu_f]["gpu"];
+            this->gpu_man_.SetClock(gpu_f);
+            break;
+        }
+        case GPU:
+        {
+            // Use the GPU as the dominant resource to set other devices
+            std::cout << "GPU is the dominant resource" << std::endl;
+            this->gpu_man_.unSetDevice();
+            long long gpu_f = this->gpu_man_.GetClock();
+            // Get the clock of the other devices
+            long long cpu_f = this->gpu_cluster_[gpu_f]["cpu"];
+            this->cpu_man_.SetClock(cpu_f);
+            break;
+        }
+        default:
+            // Don't do anything, wait for the next cycle
+            std::cout<<"[ERR] Could not find a dominant resource!!!!" << std::endl;
+            break;
+    }
+
+    return;
+}
+
+
 void CRAVEGovernor::SetCluster(governor_settings new_cluster) {
     this->other_cluster_ = new_cluster;
 }
 
-void CRAVEGovernor::Schedule() {
+void CRAVEGovernor::ScheduleCRAVE() {
     std::cout << "Starting the Scheduler" << std::endl;
     std::signal(SIGINT, handleClose);
 
@@ -187,6 +267,31 @@ void CRAVEGovernor::Schedule() {
         
         // this->SetPolicyCpuUtil();
         this->SetPolicyCRAVE();
+        sleep_until(wake_time);
+        
+        duration<double> elapsed_seconds = steady_clock::now() - start;
+        // Want overhead of 10 milliseconds or less. The new overhead is less than .12 ms
+        std::cout << "Time elapsed for one cycle: " << elapsed_seconds.count() << std::endl;
+         if (stopGov == 1){
+            this->cpu_man_.unSetDevice();
+            this->mem_man_.unSetDevice();
+            this->gpu_man_.unSetDevice();
+            std::cout << "[GOV] Unsetting all the devices" << std::endl;
+            break;
+         }
+    }
+}
+
+void CRAVEGovernor::ScheduleCoCAP() {
+    std::cout << "Starting the CoCAP Scheduler" << std::endl;
+    std::signal(SIGINT, handleClose);
+
+    while (true) {
+    	time_point<steady_clock> start = steady_clock::now();
+        time_point<steady_clock> wake_time = start + std::chrono::milliseconds(this->polling_time_);
+        
+        // this->SetPolicyCpuUtil();
+        this->SetPolicyCoCAP();
         sleep_until(wake_time);
         
         duration<double> elapsed_seconds = steady_clock::now() - start;

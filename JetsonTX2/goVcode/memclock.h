@@ -54,6 +54,10 @@ public:
 	std::vector<long long> GetAllClock(); // This won't be implemented
 
 	void unSetDevice(); // This function will set this device to our chosen governor settings, and then allow it move freely
+
+	void setMaxFreq( long long new_freq); // To set the cap of the frequency
+
+	void setMinFreq(long long new_freq); // To set the min cap of the frequency
 	
 	double GetUtilization(); // We will use the formatting from the CPU style values to get this going.
 };

@@ -62,42 +62,42 @@ python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SSSP s
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SSSP sssp SSSP C2 5
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SSSP sssp SSSP C3 5
 
-echo "SSSP Done"
+echo "SSSP Cone"
 
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTI hsti HSTI C0 100
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTI hsti HSTI C1 50
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTI hsti HSTI C2 20
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTI hsti HSTI C3 10
 
-echo "HSTI Done"
+echo "HSTI Cone"
 
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTO hsto HSTO C0 20
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTO hsto HSTO C1 10
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTO hsto HSTO C2 5
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTO hsto HSTO C3 5
 
-echo "HSTI Done"
+echo "HSTI Cone"
 
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TRNS trns TRNS C0 20
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TRNS trns TRNS C1 10
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TRNS trns TRNS C2 5
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TRNS trns TRNS C3 5
 
-echo "TRNS Done"
+echo "TRNS Cone"
 
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SC sc SC C0 20
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SC sc SC C1 10
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SC sc SC C2 5
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SC sc SC C3 5
 
-echo "SC Done"
+echo "SC Cone"
 
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TQ tq TQ C0 100
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TQ tq TQ C1 50
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TQ tq TQ C2 20
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TQ tq TQ C3 20
 
-echo "TQ Done"
+echo "TQ Cone"
 
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/CEDD cedd CEDD C0 10
 python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/CEDD cedd CEDD C1 5
@@ -108,5 +108,65 @@ python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/CEDD c
 
 sudo kill -INT $PID
 echo "Killed It"
+
+echo "Run in COCAP Mode"
+
+sudo -b taskset -c 0 /home/dipayan2/Desktop/Efficient_DVFS/goVcode/run_crave 1 >/dev/null
+PIDA=$(ps aux | grep 'goVcode/run_crave' | head -1 | awk '{print $2}')
+echo "COCAP PID"
+echo $PIDA
+
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SSSP sssp SSSP P0 20
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SSSP sssp SSSP P1 10
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SSSP sssp SSSP P2 5
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SSSP sssp SSSP P3 5
+
+echo "SSSP Pone"
+
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTI hsti HSTI P0 100
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTI hsti HSTI P1 50
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTI hsti HSTI P2 20
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTI hsti HSTI P3 10
+
+echo "HSTI Pone"
+
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTO hsto HSTO P0 20
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTO hsto HSTO P1 10
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTO hsto HSTO P2 5
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/HSTO hsto HSTO P3 5
+
+echo "HSTI Pone"
+
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TRNS trns TRNS P0 20
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TRNS trns TRNS P1 10
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TRNS trns TRNS P2 5
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TRNS trns TRNS P3 5
+
+echo "TRNS Pone"
+
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SC sc SC P0 20
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SC sc SC P1 10
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SC sc SC P2 5
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/SC sc SC P3 5
+
+echo "SC Pone"
+
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TQ tq TQ P0 100
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TQ tq TQ P1 50
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TQ tq TQ P2 20
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/TQ tq TQ P3 20
+
+echo "TQ Pone"
+
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/CEDD cedd CEDD P0 10
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/CEDD cedd CEDD P1 5
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/CEDD cedd CEDD P2 2
+python3 run_analysis.py /home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/CEDD cedd CEDD P3 2
+
+
+
+sudo kill -INT $PIDA
+echo "Killed It"
+
 
 

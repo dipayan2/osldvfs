@@ -144,3 +144,85 @@ void GpuClock::unSetDevice(){
 
     return;
 }
+
+void GpuClock::setMaxFreq(long long new_freq){
+    /**
+     * Sets the max value
+    **/
+    char gpu_min_file[256];
+    char gpu_max_file[256];
+    char gpu_gov_file[256];
+
+    // Getting the file name
+    strcpy(gpu_max_file, "/sys/devices/17000000.gp10b/devfreq/17000000.gp10b/max_freq");
+    strcpy(gpu_min_file, "/sys/devices/17000000.gp10b/devfreq/17000000.gp10b/min_freq");
+    strcpy(gpu_gov_file, "/sys/devices/17000000.gp10b/devfreq/17000000.gp10b/governor");
+
+    // Creating ofstream to write to these sysfs files
+
+    std::ofstream gpu_min(gpu_min_file);
+    std::ofstream gpu_max(gpu_max_file);
+    std::ofstream gpu_gov(gpu_gov_file);
+
+    // Check if these files were successfully opened otherwise state that the operation failed
+
+    if ( (!gpu_min.is_open()) || (!gpu_max.is_open()) || (!gpu_gov.is_open())){
+        std::cerr << "[GPU]Error: Unable to open the files for unseting the device"<< std::endl;
+        return;
+    }
+
+    std::string min_freq_val = "114750000";
+    std::string max_freq_val = std::to_string(new_freq);
+    std::string gov_name = "nvhost_podgov";
+
+    gpu_min << min_freq_val;
+    gpu_max << max_freq_val;
+    gpu_gov << gov_name;
+
+    gpu_max.close();
+    gpu_min.close();
+    gpu_gov.close();
+
+    return;
+}
+
+void GpuClock::setMinFreq(long long new_freq){
+    /**
+     * Sets the max value
+    **/
+    char gpu_min_file[256];
+    char gpu_max_file[256];
+    char gpu_gov_file[256];
+
+    // Getting the file name
+    strcpy(gpu_max_file, "/sys/devices/17000000.gp10b/devfreq/17000000.gp10b/max_freq");
+    strcpy(gpu_min_file, "/sys/devices/17000000.gp10b/devfreq/17000000.gp10b/min_freq");
+    strcpy(gpu_gov_file, "/sys/devices/17000000.gp10b/devfreq/17000000.gp10b/governor");
+
+    // Creating ofstream to write to these sysfs files
+
+    std::ofstream gpu_min(gpu_min_file);
+    std::ofstream gpu_max(gpu_max_file);
+    std::ofstream gpu_gov(gpu_gov_file);
+
+    // Check if these files were successfully opened otherwise state that the operation failed
+
+    if ( (!gpu_min.is_open()) || (!gpu_max.is_open()) || (!gpu_gov.is_open())){
+        std::cerr << "[GPU]Error: Unable to open the files for unseting the device"<< std::endl;
+        return;
+    }
+
+    std::string min_freq_val = std::to_string(new_freq);
+    std::string max_freq_val = "1300500000";
+    std::string gov_name = "nvhost_podgov";
+
+    gpu_max << max_freq_val;
+    gpu_min << min_freq_val;
+    gpu_gov << gov_name;
+
+    gpu_max.close();
+    gpu_min.close();
+    gpu_gov.close();
+
+    return;
+}

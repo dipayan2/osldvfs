@@ -218,3 +218,85 @@ void CpuClock::unSetDevice(){
 
     return;
 }
+
+void CpuClock::setMaxFreq( long long new_freq){
+     /**
+     * This will set the max frequency for this resource
+    **/
+    char cpu_min_file[256];
+    char cpu_max_file[256];
+    char cpu_gov_file[256];
+
+    // Getting the file name
+    snprintf(cpu_min_file,256, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_min_freq", this->cpu_id_);    
+    snprintf(cpu_max_file,256, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_max_freq", this->cpu_id_);
+    snprintf(cpu_gov_file,256, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_governor", this->cpu_id_);
+
+    // Creating ofstream to write to these sysfs files
+
+    std::ofstream cpu_min(cpu_min_file);
+    std::ofstream cpu_max(cpu_max_file);
+    std::ofstream cpu_gov(cpu_gov_file);
+
+    // Check if these files were successfully opened otherwise state that the operation failed
+
+    if ( (!cpu_min.is_open()) || (!cpu_max.is_open()) || (!cpu_gov.is_open())){
+        std::cerr << "[CPU]Error: Unable to open the files for unseting the device"<< std::endl;
+        return;
+    }
+
+    std::string min_freq_val = "345600";
+    std::string max_freq_val = std::to_string(new_freq);
+    std::string gov_name = "schedutil";
+
+    cpu_min << min_freq_val;
+    cpu_max << max_freq_val;
+    cpu_gov << gov_name;
+
+    cpu_max.close();
+    cpu_min.close();
+    cpu_gov.close();
+
+    return;
+}
+
+void CpuClock::setMinFreq( long long new_freq){
+     /**
+     * This will set the min frequency for this resource
+    **/
+    char cpu_min_file[256];
+    char cpu_max_file[256];
+    char cpu_gov_file[256];
+
+    // Getting the file name
+    snprintf(cpu_min_file,256, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_min_freq", this->cpu_id_);    
+    snprintf(cpu_max_file,256, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_max_freq", this->cpu_id_);
+    snprintf(cpu_gov_file,256, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_governor", this->cpu_id_);
+
+    // Creating ofstream to write to these sysfs files
+
+    std::ofstream cpu_min(cpu_min_file);
+    std::ofstream cpu_max(cpu_max_file);
+    std::ofstream cpu_gov(cpu_gov_file);
+
+    // Check if these files were successfully opened otherwise state that the operation failed
+
+    if ( (!cpu_min.is_open()) || (!cpu_max.is_open()) || (!cpu_gov.is_open())){
+        std::cerr << "[CPU]Error: Unable to open the files for unseting the device"<< std::endl;
+        return;
+    }
+
+    std::string min_freq_val = std::to_string(new_freq);
+    std::string max_freq_val = "1420800";
+    std::string gov_name = "schedutil";
+
+    cpu_max << max_freq_val;
+    cpu_min << min_freq_val;
+    cpu_gov << gov_name;
+
+    cpu_max.close();
+    cpu_min.close();
+    cpu_gov.close();
+
+    return;
+}

@@ -64,6 +64,10 @@ public:
      * This function is used to determine the dominant resource of the system
      * **/
     void getDominantResource(double (&Utility)[3]);
+    /** 
+     * This function is used to determine the max cost resource of the system
+     * **/
+    void getCost(double (&Utility)[3]);
     
     /**
      * We select the best configuration for all resources based
@@ -104,6 +108,14 @@ public:
      * The fuction void setCRAVE is our actual policy where we find the dominant resource and then use it to set the freq
     **/
     void SetPolicyCRAVE();       
+
+
+    /**
+     * The fuction void setCRAVE is our actual policy where we find the cost resource and then use it to set the freq
+    **/
+    void SetPolicyCoCAP();  
+
+
     /**
      * Setter for cluster_
      * 
@@ -117,5 +129,11 @@ public:
      * every polling_time_ milliseconds
      *
      */
-    void Schedule();
+    void ScheduleCRAVE();
+        /**
+     * Sets frequencies based on the current cluster_ 
+     * every polling_time_ milliseconds
+     *
+     */
+    void ScheduleCoCAP();
 };
