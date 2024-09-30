@@ -48,6 +48,26 @@ void CRAVEGovernor::getDominantResource(double (&Utility)[3]){
     cur_freq[GPU] = this->gpu_man_.GetClock();
 
     // Get the cost of the resource
+    // Make some slight order change for the dom resource based on utilization
+    Utility[CPU] = 0.0;
+    Utility[MEM] = 0.0;
+    Utility[GPU] = 0.0;
+
+    // In case of extreme usage set the corresponding resource as the DOM resource 
+    // Otherwise we can get into resource thrashing, where we can never become the max resource
+    
+    if (util_[MEM] > 90.0){
+        Utility[MEM] = 100.0;
+        return;
+    }
+    else if(util_[CPU] > 95.0){
+        Utility[CPU] = 100.0;
+        return;
+    }
+    else if(util_[GPU] > 90.0){
+        Utility[GPU] = 100.0;
+        return;
+    }
 
     double cost_[3];
 
@@ -202,7 +222,7 @@ void CRAVEGovernor::SetPolicyCoCAP(){
     double Utility[3] = {0.0, 0.0, 0.0};
     // Get the utility vector which will be used to get the dominant reosurce of the system
     // Set Mem to max 
-    this->mem_man_.SetClock(this->max_freq[MEM]);
+    this->mem_man_.SetClock(408000000);
 
     this->getCost(Utility);
 

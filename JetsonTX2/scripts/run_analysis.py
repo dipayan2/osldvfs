@@ -7,8 +7,9 @@ import time
 
 
 print(sys.argv) #Testing benchmarks to run order [directory, excutable name, benchmark name ,iteration ID, loop_count]
-def runAnalysis(benchmark_dir, benchmark_run,benchmark_name,itr_id = 'D0',loop_count=20):
+def runAnalysis(benchmark_dir, benchmark_run,benchmark_name,itr_id = 'D0',loop_count=20, logPower = 1):
     # Create a file name for combined time data 
+    pow_logging = 0
     output_file_name = str(benchmark_name).upper()
     df = pd.DataFrame({"BenchmarkName":            pd.Series(dtype = "str"),
                        "IterationID":              pd.Series(dtype="str"),
@@ -19,7 +20,7 @@ def runAnalysis(benchmark_dir, benchmark_run,benchmark_name,itr_id = 'D0',loop_c
 
     original_directory = os.getcwd()
     # directory_of_benchmark = "/home/dipayan2/Desktop/Efficient_DVFS/chai/CUDA-D/" + benchmark_to_run.upper()
-    command_for_test = "source ~/.bashrc && time runosl "+str(loop_count)+" taskset -c 3 ./" + benchmark_run.lower()
+    command_for_test = "source ~/.bashrc && time runosl "+str(loop_count)+" taskset -c 3 ./" + benchmark_run
         # Create instances of the taskset -c 7classes for controlling clock frequencies
     init_milisecond = round(time.time()*1000)
     tegraLogName = "/home/dipayan2/Desktop/Efficient_DVFS/TegraDataAnalysis/"+"Tegra_"+str(benchmark_name).upper()+"_Itr_"+str(itr_id)+"_L_"+str(loop_count)
@@ -27,14 +28,22 @@ def runAnalysis(benchmark_dir, benchmark_run,benchmark_name,itr_id = 'D0',loop_c
     start_time = round(time.time()*1000)-init_milisecond
     tegracmd = "sudo -b tegrastats --interval 100 --logfile "+str(tegraLogName)
     tegraStop = "sudo -b tegrastats --stop"
-    subprocess.check_call(tegracmd, shell=True) # tegra start
+    if logPower==1:
+        pow_logging=1
+        subprocess.check_call(tegracmd, shell=True) # tegra start
     # output = subprocess.check_output(command_for_test,
     #                 shell = True, 
     #                 executable="/bin/bash",
     #                 stderr = subprocess.STDOUT).decode('ascii')  
-    output = subprocess.check_output(['bash', '-c', command_for_test], stderr=subprocess.STDOUT).decode('ascii')
-
-    subprocess.check_call(tegraStop, shell=True)
+    try:
+        output = subprocess.check_output(['bash', '-c', command_for_test], stderr=subprocess.STDOUT).decode('ascii')
+    except subprocess.CalledProcessError as e: 
+        if pow_logging==1:
+            subprocess.check_call(tegraStop, shell=True) # Stopping the tegraprocess
+        print("Could not finish the job\n")
+        return
+    if pow_logging==1:
+        subprocess.check_call(tegraStop, shell=True)
     end_time = round(time.time()*1000) - init_milisecond
     # chai_benchmark_times = re.findall(": [0-9]+.[0-9]+", output)
     # chai_benchmark_times = [float(time[2:]) for time in chai_benchmark_times]
@@ -51,7 +60,7 @@ def runAnalysis(benchmark_dir, benchmark_run,benchmark_name,itr_id = 'D0',loop_c
 
     # Store the results in the file "output_file_name".
     # If it exists, overwrite it. If not, create it 
-    output_full_file = "/home/dipayan2/Desktop/Efficient_DVFS/RunTimePerf"+output_file_name
+    output_full_file = "/home/dipayan2/Desktop/Efficient_DVFS/RunTimePerf/"+output_file_name
     if not os.path.isfile(output_full_file):
         df.to_csv(output_full_file)
     else:
