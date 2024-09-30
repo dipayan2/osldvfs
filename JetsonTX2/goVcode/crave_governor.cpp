@@ -55,16 +55,16 @@ void CRAVEGovernor::getDominantResource(double (&Utility)[3]){
 
     // In case of extreme usage set the corresponding resource as the DOM resource 
     // Otherwise we can get into resource thrashing, where we can never become the max resource
-    
-    if (util_[MEM] > 90.0){
-        Utility[MEM] = 100.0;
-        return;
-    }
-    else if(util_[CPU] > 95.0){
-        Utility[CPU] = 100.0;
-        return;
-    }
-    else if(util_[GPU] > 90.0){
+
+    // if (util_[MEM] > 90.0){
+    //     Utility[MEM] = 100.0;
+    //     return;
+    // }
+    // else if(util_[CPU] > 95.0){
+    //     Utility[CPU] = 100.0;
+    //     return;
+    // }
+    if(util_[GPU] > 90.0){
         Utility[GPU] = 100.0;
         return;
     }
