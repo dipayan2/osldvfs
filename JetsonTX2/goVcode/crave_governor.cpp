@@ -273,6 +273,17 @@ void CRAVEGovernor::SetPolicyCoCAP(){
 }
 
 
+void CRAVEGovernor::SetPolicyGEAR(int state){
+    
+    if(state == 0){
+        this->cpu_man_.unSetDevice("ondemand");
+        this->mem_man_.unSetDevice();
+        this->gpu_man_.unSetDevice("simple_ondemand");
+    }
+    
+    return;
+}
+
 void CRAVEGovernor::SetCluster(governor_settings new_cluster) {
     this->other_cluster_ = new_cluster;
 }
@@ -312,6 +323,32 @@ void CRAVEGovernor::ScheduleCoCAP() {
         
         // this->SetPolicyCpuUtil();
         this->SetPolicyCoCAP();
+        sleep_until(wake_time);
+        
+        duration<double> elapsed_seconds = steady_clock::now() - start;
+        // Want overhead of 10 milliseconds or less. The new overhead is less than .12 ms
+        std::cout << "Time elapsed for one cycle: " << elapsed_seconds.count() << std::endl;
+         if (stopGov == 1){
+            this->cpu_man_.unSetDevice();
+            this->mem_man_.unSetDevice();
+            this->gpu_man_.unSetDevice();
+            std::cout << "[GOV] Unsetting all the devices" << std::endl;
+            break;
+         }
+    }
+}
+
+void CRAVEGovernor::ScheduleGEAR() {
+    std::cout << "Starting the GEAR Scheduler" << std::endl;
+    std::signal(SIGINT, handleClose);
+    int gearState = 0;
+    while (true) {
+    	time_point<steady_clock> start = steady_clock::now();
+        time_point<steady_clock> wake_time = start + std::chrono::milliseconds(this->polling_time_);
+        
+        // this->SetPolicyCpuUtil();
+        this->SetPolicyGEAR(gearState);
+        gearState = 1;
         sleep_until(wake_time);
         
         duration<double> elapsed_seconds = steady_clock::now() - start;

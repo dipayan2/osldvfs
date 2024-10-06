@@ -176,7 +176,7 @@ double CpuClock::GetUtilization() {
     return this->cpu_load;
 }
 
-void CpuClock::unSetDevice(){
+void CpuClock::unSetDevice(std::string gov_set){
     /**
      * This code will remove the max and min settings forced by our governor, and will
      * allow the device to operate in the default kernel specified governor.
@@ -206,7 +206,7 @@ void CpuClock::unSetDevice(){
 
     std::string min_freq_val = "345600";
     std::string max_freq_val = "1420800";
-    std::string gov_name = "schedutil";
+    std::string gov_name = gov_set;
 
     cpu_max << max_freq_val;
     cpu_min << min_freq_val;

@@ -115,7 +115,10 @@ public:
     **/
     void SetPolicyCoCAP();  
 
-
+    /** 
+     * Creating the policy for GEAR DVFS
+     * **/
+    void SetPolicyGEAR(int state = 0);
     /**
      * Setter for cluster_
      * 
@@ -136,4 +139,10 @@ public:
      *
      */
     void ScheduleCoCAP();
+
+    /** 
+     * Sets the system to ondemand allowing us to get close to the 80% utilization, which is common for most systems.
+     * **/
+
+    void ScheduleGEAR();
 };

@@ -102,7 +102,7 @@ double GpuClock::GetUtilization() {
     return this->gpu_util_;
 }
 
-void GpuClock::unSetDevice(){
+void GpuClock::unSetDevice(std::string gov_str){
     /**
      * This code will remove the max and min settings forced by our governor, and will
      * allow the device to operate in the default kernel specified governor.
@@ -132,7 +132,7 @@ void GpuClock::unSetDevice(){
 
     std::string min_freq_val = "114750000";
     std::string max_freq_val = "1300500000";
-    std::string gov_name = "nvhost_podgov";
+    std::string gov_name = gov_str;
 
     gpu_max << max_freq_val;
     gpu_min << min_freq_val;

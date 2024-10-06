@@ -52,7 +52,7 @@ public:
 
 	std::vector<long long> GetAllClock(); // Not implemented
 
-	void unSetDevice(); // This function will set this device to our chosen governor settings, and then allow it move freely
+	void unSetDevice(std::string gov_str = "nvhost_podgov"); // This function will set this device to our chosen governor settings, and then allow it move freely
 
 	void setMaxFreq( long long new_freq); // To set the cap of the frequency
 

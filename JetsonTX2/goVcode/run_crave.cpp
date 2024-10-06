@@ -162,7 +162,8 @@ int main(int argc, char** argv) {
         run_governor.ScheduleCoCAP();
     }
     else if(gov_choice == 2){
-        std::cout << "We will check what can we do .. 2"<<std::endl;
+        std::cout << "GEAR DVFS"<<std::endl;
+        run_governor.ScheduleGEAR();
     }
     else{
         std::cout<< "Incorrect Governor.. Exit"<<std::endl;
